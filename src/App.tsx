@@ -390,7 +390,7 @@ export const Portfolio = () => {
         <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s" }}>
           <div className="photo-wrapper">
             <img
-              src="/bhushan.jpg"
+              src="/bhushan.png"
               alt="Damisetti Bhushanam"
               className="about-photo-img"
             />
