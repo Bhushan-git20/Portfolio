@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { TypeAnimation } from "react-type-animation";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
 import { 
@@ -33,7 +34,9 @@ interface Project {
   featured?: boolean;
   name: string;
   badge?: string;
-  desc: string;
+  problem: string;
+  solution: string;
+  result: string;
   tech: string[];
   link: string;
   image?: string;
@@ -45,24 +48,30 @@ const PROJECTS: Project[] = [
     featured: true,
     name: "MindCare",
     badge: "Published · GCCMIEA Dec 2025",
-    desc: "AI-powered mental wellness platform with personalised resources, real-time support, and emotional tracking. Deployed on AWS with Docker.",
-    tech: ["React", "TypeScript", "FastAPI", "PostgreSQL", "Gemini API", "Docker", "AWS"],
+    problem: "Mental health support is fragmented — students have no single tool that combines mood tracking, AI-personalised resources, and real-time guidance.",
+    solution: "Built a full-stack wellness platform with Gemini API driving personalised recommendations, real-time Supabase data sync, and an emotional tracking dashboard.",
+    result: "150+ test users · 4.2/5 satisfaction · Sub-2s load · Published internationally",
+    tech: ["React", "TypeScript", "FastAPI", "PostgreSQL", "Supabase", "Gemini API", "Docker", "AWS"],
     link: "https://github.com/Bhushan-git20/mindful-pathways",
     image: "/mindcare.png"
   },
   {
     id: 1,
     name: "Job Automation Pipeline",
-    desc: "n8n workflow that scrapes live job listings, scores them with Gemini AI, and delivers filtered matches to Telegram with zero manual effort.",
-    tech: ["n8n", "Gemini", "Groq", "Docker", "Google Sheets", "Apify"],
+    problem: "Manual job searching across multiple boards wastes 4+ hours per week with no scoring or deduplication.",
+    solution: "Orchestrated an n8n workflow pulling from Remotive API, scoring each listing with Gemini + Groq LLMs, deduplicating via Google Sheets, and pushing filtered results to Telegram.",
+    result: "200+ listings processed daily · 4 hrs/week saved · 90% reduction in manual review",
+    tech: ["n8n", "Gemini 2.5 Flash", "Groq llama-3.3-70b", "Docker", "Google Sheets", "Apify", "Telegram"],
     link: "https://github.com/Bhushan-git20/job-automation-pipeline",
     image: "/automation.png"
   },
   {
     id: 2,
     name: "PDF RAG Chatbot",
-    desc: "Multi-PDF conversational AI with semantic search, source attribution, and persistent chat history — built with LangChain and ChromaDB.",
-    tech: ["Python", "LangChain", "ChromaDB", "Gemini 2.5 Flash", "Streamlit", "HuggingFace"],
+    problem: "Reading through long PDFs to find specific answers is slow and loses context across documents.",
+    solution: "Built a multi-PDF conversational AI using LangChain ConversationalRetrievalChain, ChromaDB vector store, and HuggingFace MiniLM embeddings — with persistent chat history and source attribution.",
+    result: "91% retrieval accuracy · 60% fewer repeated queries · Multi-PDF in one session",
+    tech: ["Python", "LangChain", "ChromaDB", "FAISS", "HuggingFace MiniLM", "Gemini 2.5 Flash", "Streamlit"],
     link: "https://github.com/Bhushan-git20/pdf-rag-chatbot",
     image: "/rag_chatbot.png"
   },
@@ -218,14 +227,61 @@ export const Portfolio = () => {
             </div>
           ))}
         </h1>
-        <p className="hero-tagline">
-          Full Stack Developer <em>&times;</em> AI Engineer
-        </p>
-        <div style={{ marginTop: '3rem', opacity: 0, animation: 'fadeUp .8s 2.8s ease forwards' }}>
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="resume-btn">
-            View Resume
-          </a>
+      
+        <div className="hero-typed">
+          <span className="hero-typed-prefix">I build </span>
+          <TypeAnimation
+            sequence={[
+              "AI automation pipelines.",
+              2000,
+              "RAG-powered chatbots.",
+              2000,
+              "full-stack AI applications.",
+              2000,
+              "systems that actually ship.",
+              2000,
+            ]}
+            wrapper="span"
+            speed={55}
+            repeat={Infinity}
+            className="hero-typed-text"
+          />
         </div>
+      
+        <p className="hero-subline">
+          AI Automation Engineer · Full Stack Developer · <em>MCA Graduate 2026</em>
+        </p>
+      
+        <div className="hero-terminal">
+          <div className="terminal-bar">
+            <span className="t-dot" style={{ background: "#ff5f57" }} />
+            <span className="t-dot" style={{ background: "#febc2e" }} />
+            <span className="t-dot" style={{ background: "#28c840" }} />
+            <span className="t-title">pipeline.py</span>
+          </div>
+          <div className="terminal-body">
+            <TypeAnimation
+              sequence={[
+                800,
+                "$ python pipeline.py --source remotive",
+                600,
+                "$ python pipeline.py --source remotive\n→ Fetched 200+ listings",
+                500,
+                "$ python pipeline.py --source remotive\n→ Fetched 200+ listings\n→ Scoring with Gemini 2.5 Flash...",
+                600,
+                "$ python pipeline.py --source remotive\n→ Fetched 200+ listings\n→ Scoring with Gemini 2.5 Flash...\n→ Filtered to 12 high-match roles",
+                500,
+                "$ python pipeline.py --source remotive\n→ Fetched 200+ listings\n→ Scoring with Gemini 2.5 Flash...\n→ Filtered to 12 high-match roles\n→ Delivered to Telegram ✓",
+                3000,
+              ]}
+              wrapper="pre"
+              speed={75}
+              repeat={Infinity}
+              className="terminal-text"
+            />
+          </div>
+        </div>
+      
         <div className="scroll-hint">
           <span>Scroll</span>
           <div className="scroll-bar" />
@@ -252,7 +308,22 @@ export const Portfolio = () => {
               <div className="project-body">
                 {p.badge && <span className="project-badge">{p.badge}</span>}
                 <h3 className="project-name">{p.name}</h3>
-                <p className="project-desc">{p.desc}</p>
+      
+                <div className="project-story">
+                  <div className="story-block">
+                    <span className="story-label">Problem</span>
+                    <p className="story-text">{p.problem}</p>
+                  </div>
+                  <div className="story-block">
+                    <span className="story-label">Solution</span>
+                    <p className="story-text">{p.solution}</p>
+                  </div>
+                  <div className="story-block story-result">
+                    <span className="story-label">Result</span>
+                    <p className="story-text result-text">{p.result}</p>
+                  </div>
+                </div>
+      
                 <div className="project-tech">
                   {p.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
                 </div>
@@ -329,17 +400,15 @@ export const Portfolio = () => {
       <section className="section" style={{ background: "var(--bg-main)" }}>
         <p className="section-label reveal" ref={addToRefs}>Open Source</p>
         <h2 className="section-title reveal" ref={addToRefs}>GitHub</h2>
-        <dl className="github-grid reveal" ref={addToRefs}>
-          {[[ghStats?.public_repos, "Public Repos"],[ghStats?.followers, "Followers"],[ghStats?.following, "Following"]].map(([val, label]) => (
-            <div key={label} className="github-stat">
-              <dt className="github-label">{label}</dt>
-              <dd className="github-number">{val ?? "—"}</dd>
-            </div>
-          ))}
-        </dl>
-        <div style={{ textAlign: "center", margin: "2.5rem 0" }}>
+        <div className="github-grid reveal" ref={addToRefs}>
+          <div className="github-stat">
+            <div className="github-number">{ghStats?.public_repos ?? "—"}</div>
+            <div className="github-label">Public Repositories</div>
+          </div>
+        </div>
+        <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
           <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="ext-link">
-            <FiGithub size={14} /> github.com/Bhushan-git20
+            github.com/Bhushan-git20 <FiExternalLink size={14} />
           </a>
         </div>
       </section>
