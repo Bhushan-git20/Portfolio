@@ -285,14 +285,39 @@ export const Portfolio = () => {
               ref={addToRefs}
               style={{ transitionDelay: `${i * 0.12}s` }}
             >
-              {p.image && !p.featured && (
+              {p.image && (
                 <div className="project-image-wrapper">
                   <img src={p.image} alt={p.name} className="project-image" />
                 </div>
               )}
-              {p.featured && (
-                <div className="card-visual" style={{ background: "var(--visual-bg)", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-                  <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" className="arch-svg">
+              <div className="project-body">
+                {p.badge && <span className="project-badge">{p.badge}</span>}
+                <h3 className="project-name">{p.name}</h3>
+      
+                <div className="project-story">
+                  <div className="story-block">
+                    <span className="story-label">Problem</span>
+                    <p className="story-text">{p.problem}</p>
+                  </div>
+                  <div className="story-block">
+                    <span className="story-label">Solution</span>
+                    <p className="story-text">{p.solution}</p>
+                  </div>
+                  <div className="story-block story-result">
+                    <span className="story-label">Result</span>
+                    <p className="story-text result-text">{p.result}</p>
+                  </div>
+                </div>
+      
+                <div className="project-tech">
+                  {p.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
+                </div>
+                <a href={p.link} target="_blank" rel="noopener noreferrer" className="ext-link">
+                  View on GitHub <FiExternalLink size={14} />
+                </a>
+
+                {p.id === 0 && (
+                  <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" className="arch-svg arch-svg-sm" style={{marginTop: "1.5rem", width: "100%", height: "auto", maxHeight: "200px"}}>
                     {/* Nodes */}
                     <rect x="10"  y="85" width="70" height="34" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
                     <text x="45"  y="97"  textAnchor="middle" fill="#2a2a2a" fontSize="7" fontFamily="monospace">React</text>
@@ -324,33 +349,7 @@ export const Portfolio = () => {
                     {/* Labels */}
                     <text x="170" y="215" textAnchor="middle" fill="#151515" fontSize="6" fontFamily="monospace">MindCare — System Architecture</text>
                   </svg>
-                </div>
-              )}
-              <div className="project-body">
-                {p.badge && <span className="project-badge">{p.badge}</span>}
-                <h3 className="project-name">{p.name}</h3>
-      
-                <div className="project-story">
-                  <div className="story-block">
-                    <span className="story-label">Problem</span>
-                    <p className="story-text">{p.problem}</p>
-                  </div>
-                  <div className="story-block">
-                    <span className="story-label">Solution</span>
-                    <p className="story-text">{p.solution}</p>
-                  </div>
-                  <div className="story-block story-result">
-                    <span className="story-label">Result</span>
-                    <p className="story-text result-text">{p.result}</p>
-                  </div>
-                </div>
-      
-                <div className="project-tech">
-                  {p.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
-                </div>
-                <a href={p.link} target="_blank" rel="noopener noreferrer" className="ext-link">
-                  View on GitHub <FiExternalLink size={14} />
-                </a>
+                )}
 
                 {p.id === 1 && (
                   <svg viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg" className="arch-svg arch-svg-sm" style={{marginTop: "1.5rem", width: "100%", height: "auto", maxHeight: "140px"}}>
