@@ -158,8 +158,7 @@ nav {
 .stat-block { border-top: 1px solid var(--border-color); padding-top: 1rem; }
 .stat-number { font-family: 'Bebas Neue', 'Impact', sans-serif; font-size: 2.2rem; }
 .stat-label { font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: var(--text-muted); margin-top: .2rem; }
-.photo-placeholder { width: 100%; aspect-ratio: 3/4; background: var(--bg-alt); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
-.photo-initials { font-family: 'Bebas Neue', 'Impact', sans-serif; font-size: 6rem; color: var(--visual-text); }
+
 
 /* ── SKILLS ── */
 .skills-grid { display: grid; grid-template-columns: repeat(5, 1fr); background: var(--border-color); border: 1px solid var(--border-color); }
@@ -524,3 +523,18 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
+
+/* ── ABOUT PHOTO & RESUMES ── */
+.photo-wrapper { width: 100%; aspect-ratio: 3/4; overflow: hidden; border: 1px solid #111; }
+.about-photo-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(20%); transition: filter .4s; }
+.about-photo-img:hover { filter: grayscale(0%); }
+
+.resume-selector { margin: 1.75rem 0; }
+.resume-label { font-size: .6rem; letter-spacing: .25em; text-transform: uppercase; color: #2a2a2a; margin-bottom: .75rem; }
+.resume-btns { display: flex; gap: .6rem; flex-wrap: wrap; }
+.resume-btn {
+  font-size: .62rem; letter-spacing: .15em; text-transform: uppercase;
+  padding: .6rem 1.2rem; border: 1px solid #1c1c1c;
+  color: #fff; text-decoration: none; opacity: .5; transition: opacity .25s, border-color .25s;
+}
+.resume-btn:hover { opacity: 1; border-color: #444; }

@@ -118,6 +118,12 @@ const CERTS = [
   "Web Design Fundamentals · IBM SkillsBuild",
 ];
 
+const RESUMES = [
+  { label: "AI Engineer", file: "/resume-ai-engineer.pdf" },
+  { label: "Full Stack Dev", file: "/resume-fullstack.pdf" },
+  { label: "Associate SE", file: "/resume-associate-se.pdf" },
+];
+
 export const Portfolio = () => {
   const [ghStats, setGhStats] = useState<GitHubStats | null>(null);
   const [theme, setTheme] = useState("dark");
@@ -356,6 +362,22 @@ export const Portfolio = () => {
               </div>
             ))}
           </div>
+          <div className="resume-selector">
+            <p className="resume-label">View Resume</p>
+            <div className="resume-btns">
+              {RESUMES.map(r => (
+                <a
+                  key={r.label}
+                  href={r.file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="resume-btn"
+                >
+                  {r.label} ↗
+                </a>
+              ))}
+            </div>
+          </div>
           <dl className="about-stats">
             {[["3+","Projects"],["2","Internships"],["7.86","CGPA"],["3","Certs"]].map(([num, label]) => (
               <div key={label} className="stat-block">
@@ -366,8 +388,12 @@ export const Portfolio = () => {
           </dl>
         </div>
         <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s" }}>
-          <div className="photo-placeholder">
-            <span className="photo-initials">DB</span>
+          <div className="photo-wrapper">
+            <img
+              src="/bhushan.jpg"
+              alt="Damisetti Bhushanam"
+              className="about-photo-img"
+            />
           </div>
         </div>
       </section>
