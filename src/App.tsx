@@ -78,38 +78,19 @@ const PROJECTS: Project[] = [
 ];
 
 const SKILLS = [
-  { cat: "Languages",    items: [
-    { name: "Java SE 11", icon: <FaJava size={14} color="#ED8B00" /> },
-    { name: "Python", icon: <SiPython size={14} color="#3776AB" /> },
-    { name: "JavaScript", icon: <SiJavascript size={14} color="#F7DF1E" /> },
-    { name: "TypeScript", icon: <SiTypescript size={14} color="#3178C6" /> }
-  ] },
-  { cat: "Frontend",     items: [
-    { name: "React", icon: <SiReact size={14} color="#61DAFB" /> },
-    { name: "Tailwind CSS", icon: <SiTailwindcss size={14} color="#06B6D4" /> },
-    { name: "HTML5", icon: <SiHtml5 size={14} color="#E34F26" /> },
-    { name: "CSS3", icon: <SiCss size={14} color="#1572B6" /> }
-  ] },
-  { cat: "Backend",      items: [
-    { name: "FastAPI", icon: <SiFastapi size={14} color="#009688" /> },
-    { name: "Node.js", icon: <SiNodedotjs size={14} color="#339933" /> },
-    { name: "Express.js", icon: <SiExpress size={14} color="var(--logo-black)" /> }, // Adapts to theme
-    { name: "PostgreSQL", icon: <SiPostgresql size={14} color="#4169E1" /> }
-  ] },
-  { cat: "AI / ML",      items: [
-    { name: "LangChain", icon: <FiTerminal size={14} color="#10B981" /> },
-    { name: "ChromaDB", icon: <FiDatabase size={14} color="#3B82F6" /> },
-    { name: "Gemini API", icon: <SiGoogle size={14} color="#4285F4" /> },
-    { name: "n8n", icon: <FiSettings size={14} color="#EA4B71" /> },
-    { name: "Groq", icon: <FiCpu size={14} color="#F55036" /> }
-  ] },
-  { cat: "Cloud / DevOps", items: [
-    { name: "Docker", icon: <SiDocker size={14} color="#2496ED" /> },
-    { name: "AWS EC2/S3", icon: <FaAws size={14} color="#FF9900" /> },
-    { name: "Git", icon: <FaGitAlt size={14} color="#F05032" /> },
-    { name: "Vercel", icon: <SiVercel size={14} color="var(--logo-black)" /> }, // Adapts to theme
-    { name: "Supabase", icon: <SiSupabase size={14} color="#3ECF8E" /> }
-  ] },
+  { cat: "AI / Automation",  items: ["LangChain", "n8n", "Gemini API", "Groq", "ChromaDB", "FAISS", "RAG", "Prompt Engineering"] },
+  { cat: "Backend",          items: ["FastAPI", "Node.js", "Express.js", "PostgreSQL", "MySQL", "REST APIs"] },
+  { cat: "Cloud / DevOps",   items: ["Docker", "AWS EC2", "AWS S3", "IAM", "CloudWatch", "Vercel", "Git"] },
+  { cat: "Frontend",         items: ["React", "TypeScript", "Tailwind CSS", "JavaScript"] },
+  { cat: "Languages",        items: ["Python", "Java SE 11", "TypeScript", "JavaScript"] },
+];
+
+const SYSTEMS = [
+  { name: "AI Job Automation Pipeline",       desc: "n8n + Gemini + Groq · processes 200+ listings/day · zero manual input" },
+  { name: "LLM Document Processing System",   desc: "LangChain + ChromaDB + FAISS · 91% retrieval accuracy · multi-PDF" },
+  { name: "Dockerised Workflow Infrastructure", desc: "Full stack containerisation · AWS EC2 deploy · 3 zero-downtime releases" },
+  { name: "Event-Driven Notification System", desc: "Telegram bot integration · score-filtered delivery · real-time alerts" },
+  { name: "AI-Powered Wellness Platform",     desc: "Gemini API + Supabase real-time · 150+ users · published research" },
 ];
 
 const CERTS = [
@@ -234,29 +215,19 @@ export const Portfolio = () => {
           ))}
         </h1>
       
-        <div className="hero-typed">
-          <span className="hero-typed-prefix">I build </span>
-          <TypeAnimation
-            sequence={[
-              "AI automation pipelines.",
-              2000,
-              "RAG-powered chatbots.",
-              2000,
-              "full-stack AI applications.",
-              2000,
-              "systems that actually ship.",
-              2000,
-            ]}
-            wrapper="span"
-            speed={55}
-            repeat={Infinity}
-            className="hero-typed-text"
-          />
-        </div>
-      
-        <p className="hero-subline">
-          AI Automation Engineer · Full Stack Developer · <em>MCA Graduate 2026</em>
+        <p className="hero-headline">
+          AI Automation Engineer building agentic workflows and scalable AI systems.
         </p>
+
+        <p className="hero-subtext">
+          Specialised in AI automation · FastAPI backends · n8n workflows · LLM integrations · production-ready AI applications
+        </p>
+
+        <div className="hero-ctas">
+          <a href="#work" className="cta-primary">View Projects</a>
+          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="cta-secondary">GitHub</a>
+          <a href="#about" className="cta-secondary">Resume</a>
+        </div>
       
         <div className="hero-terminal">
           <div className="terminal-bar">
@@ -348,12 +319,14 @@ export const Portfolio = () => {
           <p className="section-label">Background</p>
           <h2 className="about-title">More About<br />Bhushan</h2>
           <p className="about-bio">
-            Final-year <strong>MCA student</strong> at Vignan's Institute of Information Technology,
-            Visakhapatnam (CGPA 7.86), graduating July 2026.
+            I build <strong>AI automation systems</strong> — from LLM-powered pipelines and RAG chatbots
+            to full-stack applications that ship to production.
           </p>
           <p className="about-bio">
-            I build AI tools, automate workflows, and develop full-stack applications. Published at
-            the <strong>GCCMIEA International Conference</strong> (Dec 2025). Open to relocation across India.
+            MCA graduate (July 2026) · Published at <strong>GCCMIEA International Conference</strong> · Open to relocation across India.
+          </p>
+          <p className="about-bio" style={{ color: "#222", fontSize: ".78rem", letterSpacing: ".06em" }}>
+            Current focus: agentic AI systems · LangGraph · multi-agent orchestration
           </p>
           <div className="certs-list">
             {CERTS.map(c => (
@@ -409,9 +382,9 @@ export const Portfolio = () => {
                 {[...Array(4)].map((_, idx) => (
                   <div key={idx} className="skills-marquee-group">
                     <span className="skill-cat-pill">{cat.cat}</span>
-                    {cat.items.map(item => (
-                      <div key={item.name} className="skill-item-pill">
-                        {item.icon} <span>{item.name}</span>
+                    {cat.items.map((item, idx) => (
+                      <div key={idx} className="skill-item-pill">
+                        <span>{item}</span>
                       </div>
                     ))}
                   </div>
@@ -422,19 +395,68 @@ export const Portfolio = () => {
         </div>
       </section>
 
+      {/* ── SYSTEMS BUILT ── */}
+      <section className="section" style={{ background: "#000" }}>
+        <p className="section-label reveal" ref={addToRefs}>Engineering Footprint</p>
+        <h2 className="section-title reveal" ref={addToRefs}>Systems Built</h2>
+        <div className="systems-list reveal" ref={addToRefs}>
+          {SYSTEMS.map((s, i) => (
+            <div key={i} className="system-row">
+              <div className="system-index">0{i + 1}</div>
+              <div className="system-info">
+                <div className="system-name">{s.name}</div>
+                <div className="system-desc">{s.desc}</div>
+              </div>
+              <div className="system-line" />
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── GITHUB ── */}
-      <section className="section" style={{ background: "var(--bg-main)" }}>
+      <section className="section" style={{ background: "#080808" }}>
         <p className="section-label reveal" ref={addToRefs}>Open Source</p>
         <h2 className="section-title reveal" ref={addToRefs}>GitHub</h2>
-        <div className="github-grid reveal" ref={addToRefs}>
-          <div className="github-stat">
+      
+        <div className="github-top reveal" ref={addToRefs}>
+          <div className="github-stat-single">
             <div className="github-number">{ghStats?.public_repos ?? "—"}</div>
             <div className="github-label">Public Repositories</div>
           </div>
         </div>
+      
+        <div className="github-contrib reveal" ref={addToRefs}>
+          <p className="contrib-label">Contribution Activity</p>
+          <img
+            src={`https://ghchart.rshah.org/3d8a3d/Bhushan-git20`}
+            alt="GitHub contribution graph"
+            className="contrib-graph"
+          />
+        </div>
+      
+        <div className="github-repos reveal" ref={addToRefs}>
+          {[
+            { name: "mindful-pathways", desc: "AI mental wellness platform · React · FastAPI · Gemini" },
+            { name: "pdf-rag-chatbot", desc: "Multi-PDF RAG chatbot · LangChain · ChromaDB · Streamlit" },
+            { name: "job-automation-pipeline", desc: "n8n job scraper · Gemini scoring · Telegram delivery" },
+          ].map(r => (
+            <a
+              key={r.name}
+              href={`https://github.com/Bhushan-git20/${r.name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="repo-card"
+            >
+              <div className="repo-name">Bhushan-git20 / {r.name}</div>
+              <div className="repo-desc">{r.desc}</div>
+              <div className="repo-arrow">→</div>
+            </a>
+          ))}
+        </div>
+      
         <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
           <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="ext-link">
-            github.com/Bhushan-git20 <FiExternalLink size={14} />
+            github.com/Bhushan-git20 →
           </a>
         </div>
       </section>
