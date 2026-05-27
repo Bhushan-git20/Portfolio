@@ -473,7 +473,7 @@ export const Portfolio = () => {
         </button>
 
         <form action="https://api.web3forms.com/submit" method="POST" className="contact-form reveal" ref={addToRefs}>
-          <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+          <input type="hidden" name="access_key" value="0cf726bd-0957-4f18-92bd-805dc9596b43" />
           <div className="form-group">
             <input type="text" name="name" placeholder="Your Name" required className="form-input" />
             <input type="email" name="email" placeholder="Your Email" required className="form-input" />
