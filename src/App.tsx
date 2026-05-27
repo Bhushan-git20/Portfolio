@@ -99,6 +99,14 @@ const CERTS = [
   "Web Design Fundamentals · IBM SkillsBuild",
 ];
 
+const PIPELINE = [
+  { label: "Remotive API",  sub: "200+ jobs fetched",          dot: "#1a3a1a" },
+  { label: "n8n Workflow",  sub: "Orchestrate + deduplicate",  dot: "#1a1a3a" },
+  { label: "Gemini 2.5",   sub: "LLM scoring per listing",    dot: "#2d1a0a" },
+  { label: "Score Filter",  sub: "Threshold 50+ only",         dot: "#2a1a2a" },
+  { label: "Telegram",      sub: "12 matches delivered",       dot: "#1a3a1a" },
+];
+
 const RESUMES = [
   { label: "AI Engineer", file: "/resume-ai-engineer.pdf" },
   { label: "Full Stack Dev", file: "/resume-fullstack.pdf" },
@@ -277,9 +285,45 @@ export const Portfolio = () => {
               ref={addToRefs}
               style={{ transitionDelay: `${i * 0.12}s` }}
             >
-              {p.image && (
+              {p.image && !p.featured && (
                 <div className="project-image-wrapper">
                   <img src={p.image} alt={p.name} className="project-image" />
+                </div>
+              )}
+              {p.featured && (
+                <div className="card-visual" style={{ background: "var(--visual-bg)", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+                  <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" className="arch-svg">
+                    {/* Nodes */}
+                    <rect x="10"  y="85" width="70" height="34" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
+                    <text x="45"  y="97"  textAnchor="middle" fill="#2a2a2a" fontSize="7" fontFamily="monospace">React</text>
+                    <text x="45"  y="108" textAnchor="middle" fill="#1a1a1a" fontSize="6" fontFamily="monospace">TypeScript</text>
+
+                    <rect x="110" y="50" width="70" height="34" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
+                    <text x="145" y="62"  textAnchor="middle" fill="#2a2a2a" fontSize="7" fontFamily="monospace">FastAPI</text>
+                    <text x="145" y="73" textAnchor="middle" fill="#1a1a1a" fontSize="6" fontFamily="monospace">Python</text>
+
+                    <rect x="110" y="120" width="70" height="34" rx="2" fill="none" stroke="#1a3a1a" strokeWidth="1"/>
+                    <text x="145" y="132" textAnchor="middle" fill="#2d5a2d" fontSize="7" fontFamily="monospace">Gemini API</text>
+                    <text x="145" y="143" textAnchor="middle" fill="#1a2a1a" fontSize="6" fontFamily="monospace">AI Layer</text>
+
+                    <rect x="210" y="50" width="70" height="34" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
+                    <text x="245" y="62"  textAnchor="middle" fill="#2a2a2a" fontSize="7" fontFamily="monospace">PostgreSQL</text>
+                    <text x="245" y="73" textAnchor="middle" fill="#1a1a1a" fontSize="6" fontFamily="monospace">Supabase</text>
+
+                    <rect x="210" y="120" width="70" height="34" rx="2" fill="none" stroke="#1a1a2a" strokeWidth="1"/>
+                    <text x="245" y="132" textAnchor="middle" fill="#2a2a4a" fontSize="7" fontFamily="monospace">Docker</text>
+                    <text x="245" y="143" textAnchor="middle" fill="#1a1a2a" fontSize="6" fontFamily="monospace">AWS EC2</text>
+
+                    {/* Arrows */}
+                    <line x1="80"  y1="102" x2="110" y2="80"  stroke="#111" strokeWidth="1"/>
+                    <line x1="80"  y1="102" x2="110" y2="137" stroke="#111" strokeWidth="1"/>
+                    <line x1="180" y1="67"  x2="210" y2="67"  stroke="#111" strokeWidth="1"/>
+                    <line x1="180" y1="137" x2="210" y2="137" stroke="#111" strokeWidth="1"/>
+                    <line x1="145" y1="84"  x2="145" y2="120" stroke="#111" strokeWidth="1" strokeDasharray="3,3"/>
+
+                    {/* Labels */}
+                    <text x="170" y="215" textAnchor="middle" fill="#151515" fontSize="6" fontFamily="monospace">MindCare — System Architecture</text>
+                  </svg>
                 </div>
               )}
               <div className="project-body">
@@ -307,6 +351,94 @@ export const Portfolio = () => {
                 <a href={p.link} target="_blank" rel="noopener noreferrer" className="ext-link">
                   View on GitHub <FiExternalLink size={14} />
                 </a>
+
+                {p.id === 1 && (
+                  <svg viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg" className="arch-svg arch-svg-sm" style={{marginTop: "1.5rem", width: "100%", height: "auto", maxHeight: "140px"}}>
+                    <rect x="0"   y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
+                    <text x="27"  y="32" textAnchor="middle" fill="#2a2a2a" fontSize="6.5" fontFamily="monospace">Remotive</text>
+                    <text x="27"  y="42" textAnchor="middle" fill="#1a1a1a" fontSize="5.5" fontFamily="monospace">API Source</text>
+
+                    <rect x="70"  y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a2a" strokeWidth="1"/>
+                    <text x="97"  y="32" textAnchor="middle" fill="#2a2a4a" fontSize="6.5" fontFamily="monospace">n8n</text>
+                    <text x="97"  y="42" textAnchor="middle" fill="#1a1a2a" fontSize="5.5" fontFamily="monospace">Orchestrate</text>
+
+                    <rect x="140" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a3a1a" strokeWidth="1"/>
+                    <text x="167" y="32" textAnchor="middle" fill="#2d5a2d" fontSize="6.5" fontFamily="monospace">Gemini AI</text>
+                    <text x="167" y="42" textAnchor="middle" fill="#1a2a1a" fontSize="5.5" fontFamily="monospace">LLM Score</text>
+
+                    <rect x="210" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
+                    <text x="237" y="32" textAnchor="middle" fill="#2a2a2a" fontSize="6.5" fontFamily="monospace">Filter 50+</text>
+                    <text x="237" y="42" textAnchor="middle" fill="#1a1a1a" fontSize="5.5" fontFamily="monospace">Threshold</text>
+
+                    <rect x="280" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a3a1a" strokeWidth="1"/>
+                    <text x="307" y="32" textAnchor="middle" fill="#2d5a2d" fontSize="6.5" fontFamily="monospace">Telegram</text>
+                    <text x="307" y="42" textAnchor="middle" fill="#1a2a1a" fontSize="5.5" fontFamily="monospace">Deliver</text>
+
+                    <line x1="55"  y1="34" x2="70"  y2="34" stroke="#111" strokeWidth="1"/>
+                    <line x1="125" y1="34" x2="140" y2="34" stroke="#111" strokeWidth="1"/>
+                    <line x1="195" y1="34" x2="210" y2="34" stroke="#111" strokeWidth="1"/>
+                    <line x1="265" y1="34" x2="280" y2="34" stroke="#111" strokeWidth="1"/>
+
+                    <text x="170" y="82" textAnchor="middle" fill="#111" fontSize="5.5" fontFamily="monospace">Job Automation — Pipeline Architecture</text>
+                  </svg>
+                )}
+
+                {p.id === 2 && (
+                  <svg viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg" className="arch-svg arch-svg-sm" style={{marginTop: "1.5rem", width: "100%", height: "auto", maxHeight: "140px"}}>
+                    <rect x="0"   y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
+                    <text x="27"  y="32" textAnchor="middle" fill="#2a2a2a" fontSize="6.5" fontFamily="monospace">PDF Upload</text>
+                    <text x="27"  y="42" textAnchor="middle" fill="#1a1a1a" fontSize="5.5" fontFamily="monospace">Streamlit</text>
+
+                    <rect x="70"  y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a2a" strokeWidth="1"/>
+                    <text x="97"  y="32" textAnchor="middle" fill="#2a2a4a" fontSize="6.5" fontFamily="monospace">Chunking</text>
+                    <text x="97"  y="42" textAnchor="middle" fill="#1a1a2a" fontSize="5.5" fontFamily="monospace">LangChain</text>
+
+                    <rect x="140" y="20" width="55" height="28" rx="2" fill="none" stroke="#2a1a1a" strokeWidth="1"/>
+                    <text x="167" y="32" textAnchor="middle" fill="#4a2a2a" fontSize="6.5" fontFamily="monospace">Embeddings</text>
+                    <text x="167" y="42" textAnchor="middle" fill="#2a1a1a" fontSize="5.5" fontFamily="monospace">MiniLM</text>
+
+                    <rect x="210" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a2a" strokeWidth="1"/>
+                    <text x="237" y="32" textAnchor="middle" fill="#2a2a4a" fontSize="6.5" fontFamily="monospace">ChromaDB</text>
+                    <text x="237" y="42" textAnchor="middle" fill="#1a1a2a" fontSize="5.5" fontFamily="monospace">Vector Store</text>
+
+                    <rect x="280" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a3a1a" strokeWidth="1"/>
+                    <text x="307" y="32" textAnchor="middle" fill="#2d5a2d" fontSize="6.5" fontFamily="monospace">Gemini 2.5</text>
+                    <text x="307" y="42" textAnchor="middle" fill="#1a2a1a" fontSize="5.5" fontFamily="monospace">Answer + Cite</text>
+
+                    <line x1="55"  y1="34" x2="70"  y2="34" stroke="#111" strokeWidth="1"/>
+                    <line x1="125" y1="34" x2="140" y2="34" stroke="#111" strokeWidth="1"/>
+                    <line x1="195" y1="34" x2="210" y2="34" stroke="#111" strokeWidth="1"/>
+                    <line x1="265" y1="34" x2="280" y2="34" stroke="#111" strokeWidth="1"/>
+
+                    <text x="170" y="82" textAnchor="middle" fill="#111" fontSize="5.5" fontFamily="monospace">RAG Chatbot — Retrieval Architecture</text>
+                  </svg>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── PIPELINE VISUALISER ── */}
+      <section className="section" style={{ background: "var(--bg-main)", paddingBottom: "2rem" }}>
+        <p className="section-label reveal" ref={addToRefs}>Live Architecture</p>
+        <h2 className="section-title reveal" ref={addToRefs}>Automation Flow</h2>
+        
+        <div className="pipeline-track reveal" ref={addToRefs}>
+          <div className="flow-line" />
+          {PIPELINE.map((node, i) => (
+            <div key={i} className="pipeline-node">
+              <div className="node-icon" style={{ borderColor: node.dot, color: node.dot }}>
+                {i === 0 && <FiDatabase />}
+                {i === 1 && <FiSettings />}
+                {i === 2 && <FiCpu />}
+                {i === 3 && <FiCode />}
+                {i === 4 && <FiTerminal />}
+                <div className="node-pulse" style={{ borderColor: node.dot }} />
+              </div>
+              <div className="node-label">
+                <span style={{ display: 'block', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>{node.label}</span>
+                <span style={{ fontSize: '0.55rem', opacity: 0.6 }}>{node.sub}</span>
               </div>
             </div>
           ))}
