@@ -110,25 +110,25 @@ const SKILLS = [
 
 const getSkillIcon = (skill: string) => {
   switch(skill.toLowerCase()) {
-    case 'python': return <SiPython />;
-    case 'javascript': return <SiJavascript />;
-    case 'typescript': return <SiTypescript />;
-    case 'react': return <SiReact />;
-    case 'tailwindcss': case 'tailwind css': return <SiTailwindcss />;
-    case 'html5': return <SiHtml5 />;
-    case 'css': return <SiCss />;
-    case 'fastapi': return <SiFastapi />;
-    case 'node.js': return <SiNodedotjs />;
-    case 'express.js': return <SiExpress />;
-    case 'postgresql': return <SiPostgresql />;
-    case 'docker': return <SiDocker />;
-    case 'vercel': return <SiVercel />;
-    case 'supabase': return <SiSupabase />;
-    case 'gemini api': return <SiGoogle />;
-    case 'java se 11': return <FaJava />;
-    case 'git': return <FaGitAlt />;
-    case 'aws ec2': case 'aws s3': return <FaAws />;
-    default: return <FiCode />;
+    case 'python': return <SiPython color="#3776AB" />;
+    case 'javascript': return <SiJavascript color="#F7DF1E" />;
+    case 'typescript': return <SiTypescript color="#3178C6" />;
+    case 'react': return <SiReact color="#61DAFB" />;
+    case 'tailwindcss': case 'tailwind css': return <SiTailwindcss color="#06B6D4" />;
+    case 'html5': return <SiHtml5 color="#E34F26" />;
+    case 'css': return <SiCss color="#1572B6" />;
+    case 'fastapi': return <SiFastapi color="#009688" />;
+    case 'node.js': return <SiNodedotjs color="#339933" />;
+    case 'express.js': return <SiExpress color="#888888" />;
+    case 'postgresql': return <SiPostgresql color="#4169E1" />;
+    case 'docker': return <SiDocker color="#2496ED" />;
+    case 'vercel': return <SiVercel color="#ffffff" />;
+    case 'supabase': return <SiSupabase color="#3ECF8E" />;
+    case 'gemini api': return <SiGoogle color="#4285F4" />;
+    case 'java se 11': return <FaJava color="#007396" />;
+    case 'git': return <FaGitAlt color="#F05032" />;
+    case 'aws ec2': case 'aws s3': return <FaAws color="#FF9900" />;
+    default: return <FiCode color="#888888" />;
   }
 };
 
