@@ -95,7 +95,8 @@ const PROJECTS: Project[] = [
     solution: "Developed an AI-powered platform with Gemini 1.5 Flash and Supabase Edge Functions for predictive job fit scoring and smart resume parsing.",
     result: "Real-time market intelligence and a personalized AI career coach for students.",
     tech: ["React", "TypeScript", "Supabase", "Gemini 1.5 Flash", "Tailwind CSS"],
-    link: "https://github.com/Bhushan-git20/placement-prospect-ai"
+    link: "https://github.com/Bhushan-git20/placement-prospect-ai",
+    image: "/placement_prospect.png"
   }
 ];
 
