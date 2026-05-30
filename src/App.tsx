@@ -121,13 +121,22 @@ const getSkillIcon = (skill: string) => {
     case 'node.js': return <SiNodedotjs color="#339933" />;
     case 'express.js': return <SiExpress color="#888888" />;
     case 'postgresql': return <SiPostgresql color="#4169E1" />;
+    case 'mysql': return <FiDatabase color="#4479A1" />;
     case 'docker': return <SiDocker color="#2496ED" />;
     case 'vercel': return <SiVercel color="#ffffff" />;
     case 'supabase': return <SiSupabase color="#3ECF8E" />;
     case 'gemini api': return <SiGoogle color="#4285F4" />;
     case 'java se 11': return <FaJava color="#007396" />;
     case 'git': return <FaGitAlt color="#F05032" />;
-    case 'aws ec2': case 'aws s3': return <FaAws color="#FF9900" />;
+    case 'aws ec2': case 'aws s3': case 'iam': case 'cloudwatch': return <FaAws color="#FF9900" />;
+    case 'langchain': return <FiCpu color="#10B981" />;
+    case 'n8n': return <FiSettings color="#FF6B6B" />;
+    case 'groq': return <FiCpu color="#F55036" />;
+    case 'chromadb': return <FiDatabase color="#E83E8C" />;
+    case 'faiss': return <FiDatabase color="#0052cc" />;
+    case 'rag': return <FiCode color="#a855f7" />;
+    case 'prompt engineering': return <FiTerminal color="#f59e0b" />;
+    case 'rest apis': return <FiCode color="#38bdf8" />;
     default: return <FiCode color="#888888" />;
   }
 };
