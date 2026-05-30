@@ -4,7 +4,7 @@ import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
 import { 
   FiGithub, FiLinkedin, FiMail, FiExternalLink, FiCode, FiPhone, FiAward, 
-  FiSun, FiMoon, FiCpu, FiDatabase, FiSettings, FiTerminal
+  FiSun, FiMoon, FiCpu, FiDatabase, FiSettings, FiTerminal, FiGitMerge
 } from "react-icons/fi";
 import { 
   SiPython, SiJavascript, SiTypescript, SiReact, SiTailwindcss, SiHtml5, SiCss, 
@@ -110,34 +110,34 @@ const SKILLS = [
 
 const getSkillIcon = (skill: string) => {
   switch(skill.toLowerCase()) {
-    case 'python': return <SiPython color="#3776AB" />;
+    case 'python': return <SiPython color="#5A9FD4" />;
     case 'javascript': return <SiJavascript color="#F7DF1E" />;
-    case 'typescript': return <SiTypescript color="#3178C6" />;
+    case 'typescript': return <SiTypescript color="#5FA4F9" />;
     case 'react': return <SiReact color="#61DAFB" />;
-    case 'tailwindcss': case 'tailwind css': return <SiTailwindcss color="#06B6D4" />;
-    case 'html5': return <SiHtml5 color="#E34F26" />;
-    case 'css': return <SiCss color="#1572B6" />;
-    case 'fastapi': return <SiFastapi color="#009688" />;
-    case 'node.js': return <SiNodedotjs color="#339933" />;
-    case 'express.js': return <SiExpress color="#888888" />;
-    case 'postgresql': return <SiPostgresql color="#4169E1" />;
-    case 'mysql': return <FiDatabase color="#4479A1" />;
-    case 'docker': return <SiDocker color="#2496ED" />;
+    case 'tailwindcss': case 'tailwind css': return <SiTailwindcss color="#38BDF8" />;
+    case 'html5': return <SiHtml5 color="#F06529" />;
+    case 'css': return <SiCss color="#4BA4E6" />;
+    case 'fastapi': return <SiFastapi color="#2DD4BF" />;
+    case 'node.js': return <SiNodedotjs color="#4ade80" />;
+    case 'express.js': return <SiExpress color="#ffffff" />;
+    case 'postgresql': return <SiPostgresql color="#6B8CF4" />;
+    case 'mysql': return <FiDatabase color="#63A0CF" />;
+    case 'docker': return <SiDocker color="#53B1FF" />;
     case 'vercel': return <SiVercel color="#ffffff" />;
     case 'supabase': return <SiSupabase color="#3ECF8E" />;
-    case 'gemini api': return <SiGoogle color="#4285F4" />;
-    case 'java se 11': return <FaJava color="#007396" />;
-    case 'git': return <FaGitAlt color="#F05032" />;
+    case 'gemini api': return <SiGoogle color="#6EA3FF" />;
+    case 'java se 11': return <FaJava color="#00A2D3" />;
+    case 'git': return <FaGitAlt color="#F47255" />;
     case 'aws ec2': case 'aws s3': case 'iam': case 'cloudwatch': return <FaAws color="#FF9900" />;
-    case 'langchain': return <FiCpu color="#10B981" />;
-    case 'n8n': return <FiSettings color="#FF6B6B" />;
-    case 'groq': return <FiCpu color="#F55036" />;
-    case 'chromadb': return <FiDatabase color="#E83E8C" />;
-    case 'faiss': return <FiDatabase color="#0052cc" />;
-    case 'rag': return <FiCode color="#a855f7" />;
-    case 'prompt engineering': return <FiTerminal color="#f59e0b" />;
-    case 'rest apis': return <FiCode color="#38bdf8" />;
-    default: return <FiCode color="#888888" />;
+    case 'langchain': return <FiCpu color="#34D399" />;
+    case 'n8n': return <FiGitMerge color="#FF6B6B" />;
+    case 'groq': return <FiCpu color="#FF7A66" />;
+    case 'chromadb': return <FiDatabase color="#F472B6" />;
+    case 'faiss': return <FiDatabase color="#60A5FA" />;
+    case 'rag': return <FiCode color="#C084FC" />;
+    case 'prompt engineering': return <FiTerminal color="#FCD34D" />;
+    case 'rest apis': return <FiCode color="#7DD3FC" />;
+    default: return <FiCode color="#a3a3a3" />;
   }
 };
 
