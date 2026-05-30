@@ -182,6 +182,10 @@ export const Portfolio = () => {
     { sender: 'ai', text: 'Hi! I am Bhushan\'s AI assistant. How can I help you today?' }
   ]);
 
+  // Book Layout State
+  const [isBookOpen, setIsBookOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
@@ -329,155 +333,97 @@ export const Portfolio = () => {
         </div>
       </section>
 
-      {/* ── PROJECTS ── */}
+      {/* ── PROJECTS (3D BOOK LAYOUT) ── */}
       <section id="work" className="section" style={{ background: "var(--bg-alt)" }}>
         <p className="section-label reveal" ref={addToRefs}>Selected Work</p>
         <h2 className="section-title reveal" ref={addToRefs}>Projects</h2>
-        <div className="projects-grid">
-          {PROJECTS.map((p, i) => (
-            <div
-              key={p.id}
-              className={`project-card reveal${p.featured ? " featured" : ""}`}
-              ref={addToRefs}
-              style={{ transitionDelay: `${i * 0.12}s` }}
-            >
-              {p.image && (
-                <div className="project-image-wrapper">
-                  <img src={p.image} alt={p.name} className="project-image" />
-                </div>
-              )}
-              <div className="project-body">
-                {p.badge && <span className="project-badge">{p.badge}</span>}
-                <h3 className="project-name">{p.name}</h3>
+        
+        <div className={`book-container ${isBookOpen ? "book-open" : ""}`} ref={addToRefs}>
+          {/* Cover */}
+          <div 
+            className="book-cover" 
+            onClick={() => setIsBookOpen(true)}
+          >
+            <div className="book-cover-content">
+              <h3>My Projects Portfolio</h3>
+              <p>Click to Open</p>
+              <div className="book-spine-detail"></div>
+            </div>
+          </div>
+          
+          {/* Inside Left Page (Image) */}
+          <div className="book-page book-page-left">
+             <div className="page-content">
+                {PROJECTS[currentPage].image ? (
+                  <img src={PROJECTS[currentPage].image} alt={PROJECTS[currentPage].name} className="book-project-image" />
+                ) : (
+                  <div className="book-no-image">No Image</div>
+                )}
+             </div>
+          </div>
+
+          {/* Inside Right Page (Details) */}
+          <div className="book-page book-page-right">
+             <div className="page-content">
+                <button 
+                  className="book-close-btn" 
+                  onClick={() => setIsBookOpen(false)}
+                  aria-label="Close Book"
+                >
+                  &times;
+                </button>
+                
+                {PROJECTS[currentPage].badge && <span className="project-badge">{PROJECTS[currentPage].badge}</span>}
+                <h3 className="project-name">{PROJECTS[currentPage].name}</h3>
       
                 <div className="project-story">
                   <div className="story-block">
                     <span className="story-label">Problem</span>
-                    <p className="story-text">{p.problem}</p>
+                    <p className="story-text">{PROJECTS[currentPage].problem}</p>
                   </div>
                   <div className="story-block">
                     <span className="story-label">Solution</span>
-                    <p className="story-text">{p.solution}</p>
+                    <p className="story-text">{PROJECTS[currentPage].solution}</p>
                   </div>
                   <div className="story-block story-result">
                     <span className="story-label">Result</span>
-                    <p className="story-text result-text">{p.result}</p>
+                    <p className="story-text result-text">{PROJECTS[currentPage].result}</p>
                   </div>
                 </div>
       
                 <div className="project-tech">
-                  {p.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
+                  {PROJECTS[currentPage].tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
                 </div>
+                
                 <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                  <a href={p.link} target="_blank" rel="noopener noreferrer" className="ext-link">
-                    View on GitHub <FiExternalLink size={14} />
+                  <a href={PROJECTS[currentPage].link} target="_blank" rel="noopener noreferrer" className="ext-link">
+                    GitHub <FiExternalLink size={14} />
                   </a>
-                  {p.demoLink && (
-                    <a href={p.demoLink} target="_blank" rel="noopener noreferrer" className="ext-link" style={{ color: "var(--accent)" }}>
+                  {PROJECTS[currentPage].demoLink && (
+                    <a href={PROJECTS[currentPage].demoLink} target="_blank" rel="noopener noreferrer" className="ext-link" style={{ color: "var(--accent)" }}>
                       Live Demo <FiExternalLink size={14} />
                     </a>
                   )}
                 </div>
 
-                {p.id === 0 && (
-                  <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" className="arch-svg arch-svg-sm" style={{marginTop: "1.5rem", width: "100%", height: "auto", maxHeight: "200px"}}>
-                    {/* Nodes */}
-                    <rect x="10"  y="85" width="70" height="34" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
-                    <text x="45"  y="97"  textAnchor="middle" fill="#2a2a2a" fontSize="7" fontFamily="monospace">React</text>
-                    <text x="45"  y="108" textAnchor="middle" fill="#1a1a1a" fontSize="6" fontFamily="monospace">TypeScript</text>
-
-                    <rect x="110" y="50" width="70" height="34" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
-                    <text x="145" y="62"  textAnchor="middle" fill="#2a2a2a" fontSize="7" fontFamily="monospace">FastAPI</text>
-                    <text x="145" y="73" textAnchor="middle" fill="#1a1a1a" fontSize="6" fontFamily="monospace">Python</text>
-
-                    <rect x="110" y="120" width="70" height="34" rx="2" fill="none" stroke="#1a3a1a" strokeWidth="1"/>
-                    <text x="145" y="132" textAnchor="middle" fill="#2d5a2d" fontSize="7" fontFamily="monospace">Gemini API</text>
-                    <text x="145" y="143" textAnchor="middle" fill="#1a2a1a" fontSize="6" fontFamily="monospace">AI Layer</text>
-
-                    <rect x="210" y="50" width="70" height="34" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
-                    <text x="245" y="62"  textAnchor="middle" fill="#2a2a2a" fontSize="7" fontFamily="monospace">PostgreSQL</text>
-                    <text x="245" y="73" textAnchor="middle" fill="#1a1a1a" fontSize="6" fontFamily="monospace">Supabase</text>
-
-                    <rect x="210" y="120" width="70" height="34" rx="2" fill="none" stroke="#1a1a2a" strokeWidth="1"/>
-                    <text x="245" y="132" textAnchor="middle" fill="#2a2a4a" fontSize="7" fontFamily="monospace">Docker</text>
-                    <text x="245" y="143" textAnchor="middle" fill="#1a1a2a" fontSize="6" fontFamily="monospace">AWS EC2</text>
-
-                    {/* Arrows */}
-                    <line x1="80"  y1="102" x2="110" y2="80"  stroke="#111" strokeWidth="1"/>
-                    <line x1="80"  y1="102" x2="110" y2="137" stroke="#111" strokeWidth="1"/>
-                    <line x1="180" y1="67"  x2="210" y2="67"  stroke="#111" strokeWidth="1"/>
-                    <line x1="180" y1="137" x2="210" y2="137" stroke="#111" strokeWidth="1"/>
-                    <line x1="145" y1="84"  x2="145" y2="120" stroke="#111" strokeWidth="1" strokeDasharray="3,3"/>
-
-                    {/* Labels */}
-                    <text x="170" y="215" textAnchor="middle" fill="#151515" fontSize="6" fontFamily="monospace">MindCare — System Architecture</text>
-                  </svg>
-                )}
-
-                {p.id === 1 && (
-                  <svg viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg" className="arch-svg arch-svg-sm" style={{marginTop: "1.5rem", width: "100%", height: "auto", maxHeight: "140px"}}>
-                    <rect x="0"   y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
-                    <text x="27"  y="32" textAnchor="middle" fill="#2a2a2a" fontSize="6.5" fontFamily="monospace">Remotive</text>
-                    <text x="27"  y="42" textAnchor="middle" fill="#1a1a1a" fontSize="5.5" fontFamily="monospace">API Source</text>
-
-                    <rect x="70"  y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a2a" strokeWidth="1"/>
-                    <text x="97"  y="32" textAnchor="middle" fill="#2a2a4a" fontSize="6.5" fontFamily="monospace">n8n</text>
-                    <text x="97"  y="42" textAnchor="middle" fill="#1a1a2a" fontSize="5.5" fontFamily="monospace">Orchestrate</text>
-
-                    <rect x="140" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a3a1a" strokeWidth="1"/>
-                    <text x="167" y="32" textAnchor="middle" fill="#2d5a2d" fontSize="6.5" fontFamily="monospace">Gemini AI</text>
-                    <text x="167" y="42" textAnchor="middle" fill="#1a2a1a" fontSize="5.5" fontFamily="monospace">LLM Score</text>
-
-                    <rect x="210" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
-                    <text x="237" y="32" textAnchor="middle" fill="#2a2a2a" fontSize="6.5" fontFamily="monospace">Filter 50+</text>
-                    <text x="237" y="42" textAnchor="middle" fill="#1a1a1a" fontSize="5.5" fontFamily="monospace">Threshold</text>
-
-                    <rect x="280" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a3a1a" strokeWidth="1"/>
-                    <text x="307" y="32" textAnchor="middle" fill="#2d5a2d" fontSize="6.5" fontFamily="monospace">Telegram</text>
-                    <text x="307" y="42" textAnchor="middle" fill="#1a2a1a" fontSize="5.5" fontFamily="monospace">Deliver</text>
-
-                    <line x1="55"  y1="34" x2="70"  y2="34" stroke="#111" strokeWidth="1"/>
-                    <line x1="125" y1="34" x2="140" y2="34" stroke="#111" strokeWidth="1"/>
-                    <line x1="195" y1="34" x2="210" y2="34" stroke="#111" strokeWidth="1"/>
-                    <line x1="265" y1="34" x2="280" y2="34" stroke="#111" strokeWidth="1"/>
-
-                    <text x="170" y="82" textAnchor="middle" fill="#111" fontSize="5.5" fontFamily="monospace">Job Automation — Pipeline Architecture</text>
-                  </svg>
-                )}
-
-                {p.id === 2 && (
-                  <svg viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg" className="arch-svg arch-svg-sm" style={{marginTop: "1.5rem", width: "100%", height: "auto", maxHeight: "140px"}}>
-                    <rect x="0"   y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a1a" strokeWidth="1"/>
-                    <text x="27"  y="32" textAnchor="middle" fill="#2a2a2a" fontSize="6.5" fontFamily="monospace">PDF Upload</text>
-                    <text x="27"  y="42" textAnchor="middle" fill="#1a1a1a" fontSize="5.5" fontFamily="monospace">Streamlit</text>
-
-                    <rect x="70"  y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a2a" strokeWidth="1"/>
-                    <text x="97"  y="32" textAnchor="middle" fill="#2a2a4a" fontSize="6.5" fontFamily="monospace">Chunking</text>
-                    <text x="97"  y="42" textAnchor="middle" fill="#1a1a2a" fontSize="5.5" fontFamily="monospace">LangChain</text>
-
-                    <rect x="140" y="20" width="55" height="28" rx="2" fill="none" stroke="#2a1a1a" strokeWidth="1"/>
-                    <text x="167" y="32" textAnchor="middle" fill="#4a2a2a" fontSize="6.5" fontFamily="monospace">Embeddings</text>
-                    <text x="167" y="42" textAnchor="middle" fill="#2a1a1a" fontSize="5.5" fontFamily="monospace">MiniLM</text>
-
-                    <rect x="210" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a1a2a" strokeWidth="1"/>
-                    <text x="237" y="32" textAnchor="middle" fill="#2a2a4a" fontSize="6.5" fontFamily="monospace">ChromaDB</text>
-                    <text x="237" y="42" textAnchor="middle" fill="#1a1a2a" fontSize="5.5" fontFamily="monospace">Vector Store</text>
-
-                    <rect x="280" y="20" width="55" height="28" rx="2" fill="none" stroke="#1a3a1a" strokeWidth="1"/>
-                    <text x="307" y="32" textAnchor="middle" fill="#2d5a2d" fontSize="6.5" fontFamily="monospace">Gemini 2.5</text>
-                    <text x="307" y="42" textAnchor="middle" fill="#1a2a1a" fontSize="5.5" fontFamily="monospace">Answer + Cite</text>
-
-                    <line x1="55"  y1="34" x2="70"  y2="34" stroke="#111" strokeWidth="1"/>
-                    <line x1="125" y1="34" x2="140" y2="34" stroke="#111" strokeWidth="1"/>
-                    <line x1="195" y1="34" x2="210" y2="34" stroke="#111" strokeWidth="1"/>
-                    <line x1="265" y1="34" x2="280" y2="34" stroke="#111" strokeWidth="1"/>
-
-                    <text x="170" y="82" textAnchor="middle" fill="#111" fontSize="5.5" fontFamily="monospace">RAG Chatbot — Retrieval Architecture</text>
-                  </svg>
-                )}
-              </div>
-            </div>
-          ))}
+                {/* Pagination Controls */}
+                <div className="book-pagination">
+                   <button 
+                     disabled={currentPage === 0} 
+                     onClick={() => setCurrentPage(p => p - 1)}
+                   >
+                     &larr; Prev
+                   </button>
+                   <span>{currentPage + 1} / {PROJECTS.length}</span>
+                   <button 
+                     disabled={currentPage === PROJECTS.length - 1} 
+                     onClick={() => setCurrentPage(p => p + 1)}
+                   >
+                     Next &rarr;
+                   </button>
+                </div>
+             </div>
+          </div>
         </div>
       </section>
 

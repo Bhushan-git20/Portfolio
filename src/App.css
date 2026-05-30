@@ -603,3 +603,231 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
 /* SVG Overrides */
 .arch-svg { width: 100%; height: auto; max-height: 200px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)); transition: transform 0.5s; }
 .project-card:hover .arch-svg { transform: scale(1.05) translateY(-5px); }
+
+/* ── 3D BOOK LAYOUT ── */
+.book-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  height: 650px;
+  margin: 0 auto;
+  perspective: 2500px;
+  transform-style: preserve-3d;
+}
+
+.book-cover {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0 12px 12px 0;
+  transform-origin: left center;
+  transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -5px 0 15px rgba(0,0,0,0.1), 15px 15px 30px rgba(0,0,0,0.3);
+  backface-visibility: hidden;
+}
+
+.book-cover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  background: linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0));
+}
+
+.book-cover-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.book-cover h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.5rem;
+  letter-spacing: 2px;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+}
+
+.book-cover p {
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.book-spine-detail {
+  position: absolute;
+  left: 8px;
+  top: 20px;
+  bottom: 20px;
+  width: 2px;
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.book-page {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.02);
+}
+
+.book-page-left {
+  left: 0;
+  width: 50%;
+  border-radius: 12px 0 0 12px;
+  border-right: 1px solid rgba(0,0,0,0.1);
+  align-items: center;
+  justify-content: center;
+  box-shadow: -10px 15px 30px rgba(0,0,0,0.2);
+}
+
+.book-page-right {
+  right: 0;
+  width: 50%;
+  border-radius: 0 12px 12px 0;
+  border-left: none;
+  box-shadow: 10px 15px 30px rgba(0,0,0,0.2);
+}
+
+.book-open .book-cover {
+  transform: rotateY(-180deg);
+}
+
+.page-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.6s;
+}
+
+.book-open .page-content {
+  opacity: 1;
+}
+
+.book-project-image {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.book-no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-family: monospace;
+  background: var(--bg-card-hover);
+  border-radius: 8px;
+}
+
+.book-close-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.3s;
+  z-index: 20;
+}
+.book-close-btn:hover {
+  color: var(--text-main);
+}
+
+.book-pagination {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  font-family: monospace;
+  color: var(--text-muted);
+}
+
+.book-pagination button {
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s;
+}
+
+.book-pagination button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.book-pagination button:not(:disabled):hover {
+  background: var(--text-main);
+  color: var(--bg-main);
+}
+
+/* Fallback for Mobile (Stack normally) */
+@media (max-width: 768px) {
+  .book-container {
+    perspective: none;
+    transform-style: flat;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .book-cover {
+    position: relative;
+    width: 100%;
+    left: 0;
+    height: 250px;
+    border-radius: 12px;
+  }
+  .book-open .book-cover {
+    display: none;
+  }
+  .book-page {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 400px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  .book-page-left {
+    border-right: 1px solid var(--border-color);
+  }
+  .book-page-right {
+    border-left: 1px solid var(--border-color);
+  }
+  .book-close-btn {
+    display: none; /* User can just scroll on mobile */
+  }
+  .page-content {
+    opacity: 1; /* Always visible on mobile if book open */
+  }
+}
