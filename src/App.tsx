@@ -327,7 +327,7 @@ export const Portfolio = () => {
                 "$ python pipeline.py --source remotive\n→ Fetched 200+ listings\n→ Scoring with Gemini 2.5 Flash...\n→ Filtered to 12 high-match roles\n→ Delivered to Telegram ✓",
                 3000,
               ]}
-              wrapper="pre"
+              wrapper="div"
               speed={75}
               repeat={Infinity}
               className="terminal-text"
