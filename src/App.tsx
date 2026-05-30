@@ -190,6 +190,14 @@ export const Portfolio = () => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  // Prevent scroll restoration on refresh
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       document.documentElement.style.setProperty('--cursor-x', `${e.clientX}px`);
