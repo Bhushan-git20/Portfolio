@@ -84,9 +84,18 @@ const PROJECTS: Project[] = [
     solution: "Built a custom AI agent named Ollive and deployed it directly to Hugging Face Spaces for free, scalable public access.",
     result: "Live interactive demo available 24/7 on Hugging Face Spaces",
     tech: ["Python", "HuggingFace Spaces", "Gradio", "LLM APIs"],
-    link: "https://github.com/Bhushan-git20/ollive",
-    demoLink: "https://huggingface.co/spaces/Bhushan-git20/ollive",
+    link: "https://github.com/Bhushan-git20/ollive-ai-assistant",
+    demoLink: "https://huggingface.co/spaces/Bhushan-git20/ollive-ai-assistant",
     image: "/ollive.png"
+  },
+  {
+    id: 4,
+    name: "Placement Prospect AI",
+    problem: "Students lack actionable insights into their career readiness and market demands, making interview preparation inefficient.",
+    solution: "Developed an AI-powered platform with Gemini 1.5 Flash and Supabase Edge Functions for predictive job fit scoring and smart resume parsing.",
+    result: "Real-time market intelligence and a personalized AI career coach for students.",
+    tech: ["React", "TypeScript", "Supabase", "Gemini 1.5 Flash", "Tailwind CSS"],
+    link: "https://github.com/Bhushan-git20/placement-prospect-ai"
   }
 ];
 
@@ -590,7 +599,8 @@ export const Portfolio = () => {
             { name: "mindful-pathways", desc: "AI mental wellness platform · React · FastAPI · Gemini" },
             { name: "pdf-rag-chatbot", desc: "Multi-PDF RAG chatbot · LangChain · ChromaDB · Streamlit" },
             { name: "job-automation-pipeline", desc: "n8n job scraper · Gemini scoring · Telegram delivery" },
-            { name: "ollive", desc: "AI Assistant deployed on Hugging Face Spaces · Python · Gradio" },
+            { name: "ollive-ai-assistant", desc: "AI Assistant deployed on Hugging Face Spaces · Python · Gradio" },
+            { name: "placement-prospect-ai", desc: "AI career coach & resume parsing · React · Supabase · Gemini" },
           ].map(r => (
             <a
               key={r.name}
