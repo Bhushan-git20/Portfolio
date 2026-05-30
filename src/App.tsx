@@ -39,6 +39,7 @@ interface Project {
   result: string;
   tech: string[];
   link: string;
+  demoLink?: string;
   image?: string;
 }
 
@@ -73,8 +74,20 @@ const PROJECTS: Project[] = [
     result: "91% retrieval accuracy · 60% fewer repeated queries · Multi-PDF in one session",
     tech: ["Python", "LangChain", "ChromaDB", "FAISS", "HuggingFace MiniLM", "Gemini 2.5 Flash", "Streamlit"],
     link: "https://github.com/Bhushan-git20/pdf-rag-chatbot",
+    demoLink: "https://huggingface.co/spaces/Bhushan-git20/pdf-rag-chatbot",
     image: "/rag_chatbot.png"
   },
+  {
+    id: 3,
+    name: "Ollive",
+    problem: "Deploying intelligent AI assistants to the web can be complex and expensive without the right hosting.",
+    solution: "Built a custom AI agent named Ollive and deployed it directly to Hugging Face Spaces for free, scalable public access.",
+    result: "Live interactive demo available 24/7 on Hugging Face Spaces",
+    tech: ["Python", "HuggingFace Spaces", "Gradio", "LLM APIs"],
+    link: "https://github.com/Bhushan-git20/ollive",
+    demoLink: "https://huggingface.co/spaces/Bhushan-git20/ollive",
+    image: "/ollive.png"
+  }
 ];
 
 const SKILLS = [
@@ -312,9 +325,16 @@ export const Portfolio = () => {
                 <div className="project-tech">
                   {p.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
                 </div>
-                <a href={p.link} target="_blank" rel="noopener noreferrer" className="ext-link">
-                  View on GitHub <FiExternalLink size={14} />
-                </a>
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                  <a href={p.link} target="_blank" rel="noopener noreferrer" className="ext-link">
+                    View on GitHub <FiExternalLink size={14} />
+                  </a>
+                  {p.demoLink && (
+                    <a href={p.demoLink} target="_blank" rel="noopener noreferrer" className="ext-link" style={{ color: "var(--accent)" }}>
+                      Live Demo <FiExternalLink size={14} />
+                    </a>
+                  )}
+                </div>
 
                 {p.id === 0 && (
                   <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" className="arch-svg arch-svg-sm" style={{marginTop: "1.5rem", width: "100%", height: "auto", maxHeight: "200px"}}>
@@ -570,6 +590,7 @@ export const Portfolio = () => {
             { name: "mindful-pathways", desc: "AI mental wellness platform · React · FastAPI · Gemini" },
             { name: "pdf-rag-chatbot", desc: "Multi-PDF RAG chatbot · LangChain · ChromaDB · Streamlit" },
             { name: "job-automation-pipeline", desc: "n8n job scraper · Gemini scoring · Telegram delivery" },
+            { name: "ollive", desc: "AI Assistant deployed on Hugging Face Spaces · Python · Gradio" },
           ].map(r => (
             <a
               key={r.name}
