@@ -409,10 +409,10 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   letter-spacing: 0.1em;
   color: #ffffff;
   opacity: 1;
-  padding: 0.2rem 1rem;
-  border: 1px solid #ff9800;
+  padding: 0.4rem 1.2rem;
+  background: #ff8c00; /* Solid orange background */
   border-radius: 50px;
-  background: transparent;
+  border: none;
 }
 .skill-item-pill {
   display: flex;
