@@ -108,6 +108,30 @@ const SKILLS = [
   { cat: "Languages",        items: ["Python", "Java SE 11", "TypeScript", "JavaScript"] },
 ];
 
+const getSkillIcon = (skill: string) => {
+  switch(skill.toLowerCase()) {
+    case 'python': return <SiPython />;
+    case 'javascript': return <SiJavascript />;
+    case 'typescript': return <SiTypescript />;
+    case 'react': return <SiReact />;
+    case 'tailwindcss': case 'tailwind css': return <SiTailwindcss />;
+    case 'html5': return <SiHtml5 />;
+    case 'css': return <SiCss />;
+    case 'fastapi': return <SiFastapi />;
+    case 'node.js': return <SiNodedotjs />;
+    case 'express.js': return <SiExpress />;
+    case 'postgresql': return <SiPostgresql />;
+    case 'docker': return <SiDocker />;
+    case 'vercel': return <SiVercel />;
+    case 'supabase': return <SiSupabase />;
+    case 'gemini api': return <SiGoogle />;
+    case 'java se 11': return <FaJava />;
+    case 'git': return <FaGitAlt />;
+    case 'aws ec2': case 'aws s3': return <FaAws />;
+    default: return <FiCode />;
+  }
+};
+
 const SYSTEMS = [
   { name: "AI Job Automation Pipeline",       desc: "n8n + Gemini + Groq · processes 200+ listings/day · zero manual input" },
   { name: "LLM Document Processing System",   desc: "LangChain + ChromaDB + FAISS · 91% retrieval accuracy · multi-PDF" },
@@ -545,6 +569,7 @@ export const Portfolio = () => {
                     <span className="skill-cat-pill">{cat.cat}</span>
                     {cat.items.map((item, idx) => (
                       <div key={idx} className="skill-item-pill">
+                        {getSkillIcon(item)}
                         <span>{item}</span>
                       </div>
                     ))}
