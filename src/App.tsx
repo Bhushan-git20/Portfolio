@@ -15,6 +15,7 @@ import {
 import { FaJava, FaGitAlt, FaAws } from "react-icons/fa";
 import "./App.css";
 
+const t = (s: string) => s;
 const GH_USER = "Bhushan-git20";
 
 interface GitHubStats {
@@ -344,7 +345,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       <div className="cursor-glow"></div>
       {/* ── NAV ── */}
       <nav>
-        <span className="nav-logo">Bhushan</span>
+        <span className="nav-logo">{t('Bhushan')}</span>
         <div className="nav-links">
           {[["#home","Home"],["#work","Work"],["#about","About"],["#contact","Contact"]].map(([href, label]) => (
             <a key={href} href={href}>{label}</a>
@@ -357,7 +358,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
       {/* ── HERO ── */}
       <section id="home" className="hero-section">
-        <p className="hero-intro">Introducing</p>
+        <p className="hero-intro">{t('Introducing')}</p>
         <h1 className="hero-name" aria-label="DAMISETTI BHUSHANAM">
           {NAME_DATA.map((line, li) => (
             <div key={li} className="hero-line" aria-hidden="true">
@@ -377,22 +378,22 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         </p>
 
         <div className="hero-ctas">
-          <a href="#work" className="cta-primary">View Projects</a>
-          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="cta-secondary">GitHub</a>
-          <a href="#about" className="cta-secondary">Resume</a>
+          <a href="#work" className="cta-primary">{t('View Projects')}</a>
+          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="cta-secondary">{t('GitHub')}</a>
+          <a href="#about" className="cta-secondary">{t('Resume')}</a>
         </div>
       
 
         <div className="scroll-hint">
-          <span>Scroll</span>
+          <span>{t('Scroll')}</span>
           <div className="scroll-bar" />
         </div>
       </section>
 
       {/* ── PROJECTS (3D BOOK LAYOUT) ── */}
       <section id="work" className="section" style={{ background: "var(--bg-alt)" }}>
-        <p className="section-label reveal" ref={addToRefs}>Selected Work</p>
-        <h2 className="section-title reveal" ref={addToRefs}>Projects</h2>
+        <p className="section-label reveal" ref={addToRefs}>{t('Selected Work')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('Projects')}</h2>
         
         <div className={`book-container ${isBookOpen ? "book-open" : ""} ${isBookReady ? "book-ready" : ""}`} ref={addToRefs}>
           {/* Cover */}
@@ -401,8 +402,8 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             onClick={() => setIsBookOpen(true)}
           >
             <div className="book-cover-content">
-              <h3>My Projects Portfolio</h3>
-              <p>Click to Open</p>
+              <h3>{t('My Projects Portfolio')}</h3>
+              <p>{t('Click to Open')}</p>
               <div className="book-spine-detail"></div>
             </div>
           </div>
@@ -410,10 +411,10 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           {/* Inside Left Page (Image) */}
           <div className="book-page book-page-left">
              <div className={`page-content ${isPageFlipping ? 'page-transitioning' : ''}`}>
-                {PROJECTS[currentPage].image ? (
-                  <img src={PROJECTS[currentPage].image} alt={PROJECTS[currentPage].name} className="book-project-image" />
+                {(PROJECTS.at(currentPage) || PROJECTS[0]).image ? (
+                  <img src={(PROJECTS.at(currentPage) || PROJECTS[0]).image} alt={(PROJECTS.at(currentPage) || PROJECTS[0]).name} className="book-project-image" />
                 ) : (
-                  <div className="book-no-image">No Image</div>
+                  <div className="book-no-image">{t("No Image")}</div>
                 )}
              </div>
           </div>
@@ -429,34 +430,34 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
                   &times;
                 </button>
                 
-                {PROJECTS[currentPage].badge && <span className="project-badge">{PROJECTS[currentPage].badge}</span>}
-                <h3 className="project-name">{PROJECTS[currentPage].name}</h3>
+                {(PROJECTS.at(currentPage) || PROJECTS[0]).badge && <span className="project-badge">{(PROJECTS.at(currentPage) || PROJECTS[0]).badge}</span>}
+                <h3 className="project-name">{(PROJECTS.at(currentPage) || PROJECTS[0]).name}</h3>
       
                 <div className="project-story">
                   <div className="story-block">
-                    <span className="story-label">Problem</span>
-                    <p className="story-text">{PROJECTS[currentPage].problem}</p>
+                    <span className="story-label">{t('Problem')}</span>
+                    <p className="story-text">{(PROJECTS.at(currentPage) || PROJECTS[0]).problem}</p>
                   </div>
                   <div className="story-block">
-                    <span className="story-label">Solution</span>
-                    <p className="story-text">{PROJECTS[currentPage].solution}</p>
+                    <span className="story-label">{t('Solution')}</span>
+                    <p className="story-text">{(PROJECTS.at(currentPage) || PROJECTS[0]).solution}</p>
                   </div>
                   <div className="story-block story-result">
-                    <span className="story-label">Result</span>
-                    <p className="story-text result-text">{PROJECTS[currentPage].result}</p>
+                    <span className="story-label">{t('Result')}</span>
+                    <p className="story-text result-text">{(PROJECTS.at(currentPage) || PROJECTS[0]).result}</p>
                   </div>
                 </div>
       
                 <div className="project-tech">
-                  {PROJECTS[currentPage].tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
+                  {(PROJECTS.at(currentPage) || PROJECTS[0]).tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
                 </div>
                 
                 <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                  <a href={PROJECTS[currentPage].link} target="_blank" rel="noopener noreferrer" className="ext-link">
+                  <a href={(PROJECTS.at(currentPage) || PROJECTS[0]).link} target="_blank" rel="noopener noreferrer" className="ext-link">
                     GitHub <FiExternalLink size={14} />
                   </a>
-                  {PROJECTS[currentPage].demoLink && (
-                    <a href={PROJECTS[currentPage].demoLink} target="_blank" rel="noopener noreferrer" className="ext-link" style={{ color: "var(--accent)" }}>
+                  {(PROJECTS.at(currentPage) || PROJECTS[0]).demoLink && (
+                    <a href={(PROJECTS.at(currentPage) || PROJECTS[0]).demoLink} target="_blank" rel="noopener noreferrer" className="ext-link" style={{ color: "var(--accent)" }}>
                       Live Demo <FiExternalLink size={14} />
                     </a>
                   )}
@@ -486,14 +487,14 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       {/* ── ABOUT ── */}
       <section id="about" className="about-section">
         <div className="about-text reveal" ref={addToRefs}>
-          <p className="section-label">Background</p>
-          <h2 className="about-title">More About<br />Bhushan</h2>
+          <p className="section-label">{t('Background')}</p>
+          <h2 className="about-title">{t('More About')}<br />Bhushan</h2>
           <p className="about-bio">
-            I build <strong>AI automation systems</strong> — from LLM-powered pipelines and RAG chatbots
+            I build <strong>{t('AI automation systems')}</strong> — from LLM-powered pipelines and RAG chatbots
             to full-stack applications that ship to production.
           </p>
           <p className="about-bio">
-            MCA graduate (July 2026) · Published at <strong>GCCMIEA International Conference</strong> · Open to relocation across India.
+            MCA graduate (July 2026) · Published at <strong>{t('GCCMIEA International Conference')}</strong> · Open to relocation across India.
           </p>
           <p className="about-bio" style={{ color: "#222", fontSize: ".78rem", letterSpacing: ".06em" }}>
             Current focus: agentic AI systems · LangGraph · multi-agent orchestration
@@ -506,7 +507,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             ))}
           </div>
           <div className="resume-selector">
-            <p className="resume-label">View Resume</p>
+            <p className="resume-label">{t('View Resume')}</p>
             <div className="resume-btns">
               {RESUMES.map(r => (
                 <a
@@ -543,8 +544,8 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
       {/* ── SKILLS ── */}
       <section id="skills" className="section" style={{ background: "var(--bg-alt)", overflow: 'hidden' }}>
-        <p className="section-label reveal" ref={addToRefs}>Capabilities</p>
-        <h2 className="section-title reveal" ref={addToRefs}>Tech Stack</h2>
+        <p className="section-label reveal" ref={addToRefs}>{t('Capabilities')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('Tech Stack')}</h2>
         <div className="skills-marquee-wrapper reveal" ref={addToRefs}>
           {SKILLS.map((cat, i) => (
             <div key={cat.cat} className="skills-marquee-row" style={{ animationDirection: i % 2 === 0 ? 'normal' : 'reverse' }}>
@@ -568,8 +569,8 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
       {/* ── SYSTEMS BUILT ── */}
       <section className="section" style={{ background: "#000" }}>
-        <p className="section-label reveal" ref={addToRefs}>Engineering Footprint</p>
-        <h2 className="section-title reveal" ref={addToRefs}>Systems Built</h2>
+        <p className="section-label reveal" ref={addToRefs}>{t('Engineering Footprint')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('Systems Built')}</h2>
         <div className="systems-list reveal" ref={addToRefs}>
           {SYSTEMS.map((s, i) => (
             <div key={i} className="system-row">
@@ -586,18 +587,18 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
       {/* ── GITHUB ── */}
       <section className="section" style={{ background: "#080808" }}>
-        <p className="section-label reveal" ref={addToRefs}>Open Source</p>
-        <h2 className="section-title reveal" ref={addToRefs}>GitHub</h2>
+        <p className="section-label reveal" ref={addToRefs}>{t('Open Source')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('GitHub')}</h2>
       
         <div className="github-top reveal" ref={addToRefs}>
           <div className="github-stat-single">
             <div className="github-number">{ghStats?.public_repos ?? "—"}</div>
-            <div className="github-label">Public Repositories</div>
+            <div className="github-label">{t('Public Repositories')}</div>
           </div>
         </div>
       
         <div className="github-contrib reveal" ref={addToRefs}>
-          <p className="contrib-label">Contribution Activity</p>
+          <p className="contrib-label">{t('Contribution Activity')}</p>
           <img
             src={`https://ghchart.rshah.org/3d8a3d/Bhushan-git20`}
             alt="GitHub contribution graph"
@@ -620,7 +621,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
               rel="noopener noreferrer"
               className="repo-card"
             >
-              <div className="repo-name">Bhushan-git20 / {r.name}</div>
+              <div className="repo-name">{t('Bhushan-git20 / ')}{r.name}</div>
               <div className="repo-desc">{r.desc}</div>
               <div className="repo-arrow">→</div>
             </a>
@@ -636,8 +637,8 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
       {/* ── CONTACT ── */}
       <section id="contact" className="contact-section">
-        <p className="section-label reveal" ref={addToRefs}>Get In Touch</p>
-        <h2 className="contact-title reveal" ref={addToRefs}>Let's Work<br />Together</h2>
+        <p className="section-label reveal" ref={addToRefs}>{t('Get In Touch')}</p>
+        <h2 className="contact-title reveal" ref={addToRefs}>{t("Let's Work")}<br />{t("Together")}</h2>
         <div className="contact-divider reveal" ref={addToRefs} />
         
         <div className="contact-links reveal" ref={addToRefs}>
@@ -662,13 +663,13 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             <input type="email" name="email" placeholder="Your Email" required className="form-input" />
           </div>
           <textarea name="message" placeholder="Your Message" required className="form-input form-textarea"></textarea>
-          <button type="submit" className="form-submit">Send Message</button>
+          <button type="submit" className="form-submit">{t('Send Message')}</button>
         </form>
       </section>
 
       <footer>
         <p>© 2026 Damisetti Bhushanam</p>
-        <p>MCA Graduate · Visakhapatnam, AP</p>
+        <p>{t('MCA Graduate · Visakhapatnam, AP')}</p>
       </footer>
 
       {/* ── AI CHATBOT ── */}
