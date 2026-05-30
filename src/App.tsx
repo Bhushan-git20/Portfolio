@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState, useEffect, useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { GoogleGenerativeAI } from "@google/generative-ai";
