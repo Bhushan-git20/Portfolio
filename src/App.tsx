@@ -57,16 +57,7 @@ const PROJECTS: Project[] = [
     link: "https://github.com/Bhushan-git20/mindful-pathways",
     image: "/mindcare.png"
   },
-  {
-    id: 1,
-    name: "Job Automation Pipeline",
-    problem: "Manual job searching across multiple boards wastes 4+ hours per week with no scoring or deduplication.",
-    solution: "Orchestrated an n8n workflow pulling from Remotive API, scoring each listing with Gemini + Groq LLMs, deduplicating via Google Sheets, and pushing filtered results to Telegram.",
-    result: "200+ listings processed daily · 4 hrs/week saved · 90% reduction in manual review",
-    tech: ["n8n", "Gemini 2.5 Flash", "Groq llama-3.3-70b", "Docker", "Google Sheets", "Apify", "Telegram"],
-    link: "https://github.com/Bhushan-git20/job-automation-pipeline",
-    image: "/automation.png"
-  },
+
   {
     id: 2,
     name: "PDF RAG Chatbot",
@@ -120,7 +111,7 @@ const getSkillIcon = (skill: string) => {
     case 'css': return <SiCss color="#4BA4E6" />;
     case 'fastapi': return <SiFastapi color="#2DD4BF" />;
     case 'node.js': return <SiNodedotjs color="#4ade80" />;
-    case 'express.js': return <SiExpress color="#FFFFFF" />;
+    case 'express.js': return <SiExpress color="#4ade80" />;
     case 'postgresql': return <SiPostgresql color="#6B8CF4" />;
     case 'mysql': return <FiDatabase color="#63A0CF" />;
     case 'docker': return <SiDocker color="#53B1FF" />;
@@ -275,10 +266,9 @@ Bio: Builds AI automation systems — from LLM-powered pipelines and RAG chatbot
 Stats: 3+ Projects, 2 Internships, 7.86 CGPA, 3 Certifications.
 Projects:
 1. MindCare: Full-stack wellness platform with Gemini API driving personalised recommendations, Supabase real-time sync. (Published internationally). Tech: React, TS, FastAPI, PostgreSQL, Supabase, Gemini, Docker, AWS.
-2. Job Automation Pipeline: n8n workflow pulling from Remotive, scoring with Gemini + Groq LLMs, saving 4+ hrs/week. Tech: n8n, Gemini 2.5 Flash, Groq, Docker, Sheets, Apify, Telegram.
-3. PDF RAG Chatbot: Multi-PDF AI using LangChain, ChromaDB, FAISS, HF MiniLM. 91% retrieval accuracy. Tech: Python, LangChain, ChromaDB, FAISS, Gemini 2.5 Flash, Streamlit.
-4. Olive AI Assistant: Custom AI agent deployed to Hugging Face Spaces for free, scalable access. Tech: Python, HF Spaces, Gradio, LLM APIs.
-5. Placement Prospect AI: AI-powered platform for predictive job fit scoring and resume parsing. Tech: React, TS, Supabase, Gemini 1.5 Flash, Tailwind CSS.
+2. PDF RAG Chatbot: Multi-PDF AI using LangChain, ChromaDB, FAISS, HF MiniLM. 91% retrieval accuracy. Tech: Python, LangChain, ChromaDB, FAISS, Gemini 2.5 Flash, Streamlit.
+3. Olive AI Assistant: Custom AI agent deployed to Hugging Face Spaces for free, scalable access. Tech: Python, HF Spaces, Gradio, LLM APIs.
+4. Placement Prospect AI: AI-powered platform for predictive job fit scoring and resume parsing. Tech: React, TS, Supabase, Gemini 1.5 Flash, Tailwind CSS.
 Skills:
 - AI/Automation: LangChain, n8n, Gemini API, Groq, ChromaDB, FAISS, RAG, Prompt Engineering
 - Backend: FastAPI, Node.js, Express.js, PostgreSQL, MySQL, REST APIs

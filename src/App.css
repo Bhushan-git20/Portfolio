@@ -4,7 +4,7 @@
   --bg-card: #ffffff;
   --bg-card-hover: #f0f0f0;
   --text-main: #000000;
-  --text-muted: #666666;
+  --text-muted: #333333;
   --border-color: #e0e0e0;
   --nav-bg: rgba(255,255,255,0.92);
   --badge-bg: #e6f3e6;
@@ -22,7 +22,7 @@
   --bg-card: #000000;
   --bg-card-hover: #060606;
   --text-main: #ffffff;
-  --text-muted: #e0e0e0;
+  --text-muted: #ffffff;
   --border-color: #111111;
   --nav-bg: rgba(0,0,0,0.92);
   --badge-bg: transparent;
@@ -671,12 +671,23 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
 
 .book-spine-detail {
   position: absolute;
-  left: 8px;
-  top: 20px;
-  bottom: 20px;
-  width: 2px;
-  background: var(--border-color);
-  border-radius: 4px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(0,0,0,0.8));
+  border-right: 1px solid var(--border-color);
+  box-shadow: inset -2px 0 5px rgba(0,0,0,0.5);
+}
+
+.page-content {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.page-content.page-transitioning {
+  opacity: 0;
+  transform: scale(0.98);
 }
 
 .book-page {
