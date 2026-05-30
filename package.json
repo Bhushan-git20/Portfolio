@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/bebas-neue": "^5.2.7",
     "@fontsource/dm-sans": "^5.2.8",
+    "@google/generative-ai": "^0.24.1",
     "@vercel/analytics": "^2.0.1",
     "lucide-react": "^1.16.0",
     "react": "^19.2.6",

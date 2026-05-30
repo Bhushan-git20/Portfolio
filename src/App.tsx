@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
 import { 
@@ -79,9 +80,9 @@ const PROJECTS: Project[] = [
   },
   {
     id: 3,
-    name: "Ollive",
+    name: "Olive AI Assistant",
     problem: "Deploying intelligent AI assistants to the web can be complex and expensive without the right hosting.",
-    solution: "Built a custom AI agent named Ollive and deployed it directly to Hugging Face Spaces for free, scalable public access.",
+    solution: "Built a custom AI agent named Olive and deployed it directly to Hugging Face Spaces for free, scalable public access.",
     result: "Live interactive demo available 24/7 on Hugging Face Spaces",
     tech: ["Python", "HuggingFace Spaces", "Gradio", "LLM APIs"],
     link: "https://github.com/Bhushan-git20/ollive-ai-assistant",
@@ -119,7 +120,7 @@ const getSkillIcon = (skill: string) => {
     case 'css': return <SiCss color="#4BA4E6" />;
     case 'fastapi': return <SiFastapi color="#2DD4BF" />;
     case 'node.js': return <SiNodedotjs color="#4ade80" />;
-    case 'express.js': return <SiExpress color="#ffffff" />;
+    case 'express.js': return <SiExpress color="#FFFFFF" />;
     case 'postgresql': return <SiPostgresql color="#6B8CF4" />;
     case 'mysql': return <FiDatabase color="#63A0CF" />;
     case 'docker': return <SiDocker color="#53B1FF" />;
@@ -155,14 +156,6 @@ const CERTS = [
   "Web Design Fundamentals · IBM SkillsBuild",
 ];
 
-const PIPELINE = [
-  { label: "Remotive API",  sub: "200+ jobs fetched",          dot: "#1a3a1a" },
-  { label: "n8n Workflow",  sub: "Orchestrate + deduplicate",  dot: "#1a1a3a" },
-  { label: "Gemini 2.5",   sub: "LLM scoring per listing",    dot: "#2d1a0a" },
-  { label: "Score Filter",  sub: "Threshold 50+ only",         dot: "#2a1a2a" },
-  { label: "Telegram",      sub: "12 matches delivered",       dot: "#1a3a1a" },
-];
-
 const RESUMES = [
   { label: "AI Engineer", file: "/resume-ai-engineer.pdf" },
   { label: "Full Stack Dev", file: "/resume-fullstack.pdf" },
@@ -184,7 +177,40 @@ export const Portfolio = () => {
 
   // Book Layout State
   const [isBookOpen, setIsBookOpen] = useState(false);
+  const [isBookReady, setIsBookReady] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [isPageFlipping, setIsPageFlipping] = useState(false);
+
+  useEffect(() => {
+    if (isBookOpen) {
+      const timer = setTimeout(() => setIsBookReady(true), 1200);
+      return () => clearTimeout(timer);
+    } else {
+      setIsBookReady(false);
+    }
+  }, [isBookOpen]);
+
+  const handleNextPage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (currentPage < PROJECTS.length - 1) {
+      setIsPageFlipping(true);
+      setTimeout(() => {
+        setCurrentPage(p => p + 1);
+        setTimeout(() => setIsPageFlipping(false), 50);
+      }, 300);
+    }
+  };
+
+  const handlePrevPage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (currentPage > 0) {
+      setIsPageFlipping(true);
+      setTimeout(() => {
+        setCurrentPage(p => p - 1);
+        setTimeout(() => setIsPageFlipping(false), 50);
+      }, 300);
+    }
+  };
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -216,11 +242,70 @@ export const Portfolio = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleChatSubmit = (e: React.FormEvent) => {
+  const [isChatTyping, setIsChatTyping] = useState(false);
+
+  const handleChatSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!chatInput.trim()) return;
-    setChatMessages([...chatMessages, { sender: 'user', text: chatInput }, { sender: 'ai', text: 'Connecting to Gemini AI backend... (UI Placeholder)' }]);
+    if (!chatInput.trim() || isChatTyping) return;
+    
+    const userMessage = chatInput;
+    setChatMessages(prev => [...prev, { sender: 'user', text: userMessage }]);
     setChatInput("");
+    setIsChatTyping(true);
+
+    try {
+      const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
+      if (!apiKey) {
+        setChatMessages(prev => [...prev, { sender: 'ai', text: "Error: VITE_GEMINI_API_KEY is not set in the environment variables." }]);
+        setIsChatTyping(false);
+        return;
+      }
+
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash-8b",
+        systemInstruction: `You are Bhushan's AI assistant for his portfolio website. 
+You must ONLY answer questions related to his portfolio, projects, skills, education, and resume. 
+If the user asks about anything else, politely decline and steer the conversation back to his professional background.
+Here is the data about Bhushan:
+Name: Damisetti Bhushanam
+Education: MCA graduate (July 2026). Published at GCCMIEA International Conference. Open to relocation across India.
+Bio: Builds AI automation systems — from LLM-powered pipelines and RAG chatbots to full-stack applications. Current focus: agentic AI systems, LangGraph, multi-agent orchestration.
+Stats: 3+ Projects, 2 Internships, 7.86 CGPA, 3 Certifications.
+Projects:
+1. MindCare: Full-stack wellness platform with Gemini API driving personalised recommendations, Supabase real-time sync. (Published internationally). Tech: React, TS, FastAPI, PostgreSQL, Supabase, Gemini, Docker, AWS.
+2. Job Automation Pipeline: n8n workflow pulling from Remotive, scoring with Gemini + Groq LLMs, saving 4+ hrs/week. Tech: n8n, Gemini 2.5 Flash, Groq, Docker, Sheets, Apify, Telegram.
+3. PDF RAG Chatbot: Multi-PDF AI using LangChain, ChromaDB, FAISS, HF MiniLM. 91% retrieval accuracy. Tech: Python, LangChain, ChromaDB, FAISS, Gemini 2.5 Flash, Streamlit.
+4. Olive AI Assistant: Custom AI agent deployed to Hugging Face Spaces for free, scalable access. Tech: Python, HF Spaces, Gradio, LLM APIs.
+5. Placement Prospect AI: AI-powered platform for predictive job fit scoring and resume parsing. Tech: React, TS, Supabase, Gemini 1.5 Flash, Tailwind CSS.
+Skills:
+- AI/Automation: LangChain, n8n, Gemini API, Groq, ChromaDB, FAISS, RAG, Prompt Engineering
+- Backend: FastAPI, Node.js, Express.js, PostgreSQL, MySQL, REST APIs
+- Cloud/DevOps: Docker, AWS EC2/S3, IAM, CloudWatch, Vercel, Git
+- Frontend: React, TypeScript, Tailwind CSS, JavaScript
+- Languages: Python, Java SE 11, TypeScript, JavaScript
+Keep your answers concise, professional, and directly related to Bhushan's skills and projects.`
+      });
+
+      // Construct history for Gemini
+      const history = chatMessages
+        .filter(msg => msg.text !== "Hi! I am Bhushan's AI assistant. How can I help you today?")
+        .map(msg => ({
+          role: msg.sender === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.text }]
+        }));
+
+      const chat = model.startChat({ history });
+      const result = await chat.sendMessage(userMessage);
+      const response = await result.response;
+      
+      setChatMessages(prev => [...prev, { sender: 'ai', text: response.text() }]);
+    } catch (error) {
+      console.error("Chat API Error:", error);
+      setChatMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I'm having trouble connecting right now. Please try again later or contact Bhushan directly!" }]);
+    } finally {
+      setIsChatTyping(false);
+    }
   };
 
   useEffect(() => {
@@ -305,36 +390,7 @@ export const Portfolio = () => {
           <a href="#about" className="cta-secondary">Resume</a>
         </div>
       
-        <div className="hero-terminal">
-          <div className="terminal-bar">
-            <span className="t-dot" style={{ background: "#ff5f57" }} />
-            <span className="t-dot" style={{ background: "#febc2e" }} />
-            <span className="t-dot" style={{ background: "#28c840" }} />
-            <span className="t-title">pipeline.py</span>
-          </div>
-          <div className="terminal-body">
-            <TypeAnimation
-              sequence={[
-                800,
-                "$ python pipeline.py --source remotive",
-                600,
-                "$ python pipeline.py --source remotive\n→ Fetched 200+ listings",
-                500,
-                "$ python pipeline.py --source remotive\n→ Fetched 200+ listings\n→ Scoring with Gemini 2.5 Flash...",
-                600,
-                "$ python pipeline.py --source remotive\n→ Fetched 200+ listings\n→ Scoring with Gemini 2.5 Flash...\n→ Filtered to 12 high-match roles",
-                500,
-                "$ python pipeline.py --source remotive\n→ Fetched 200+ listings\n→ Scoring with Gemini 2.5 Flash...\n→ Filtered to 12 high-match roles\n→ Delivered to Telegram ✓",
-                3000,
-              ]}
-              wrapper="div"
-              speed={75}
-              repeat={Infinity}
-              className="terminal-text"
-            />
-          </div>
-        </div>
-      
+
         <div className="scroll-hint">
           <span>Scroll</span>
           <div className="scroll-bar" />
@@ -346,7 +402,7 @@ export const Portfolio = () => {
         <p className="section-label reveal" ref={addToRefs}>Selected Work</p>
         <h2 className="section-title reveal" ref={addToRefs}>Projects</h2>
         
-        <div className={`book-container ${isBookOpen ? "book-open" : ""}`} ref={addToRefs}>
+        <div className={`book-container ${isBookOpen ? "book-open" : ""} ${isBookReady ? "book-ready" : ""}`} ref={addToRefs}>
           {/* Cover */}
           <div 
             className="book-cover" 
@@ -361,7 +417,7 @@ export const Portfolio = () => {
           
           {/* Inside Left Page (Image) */}
           <div className="book-page book-page-left">
-             <div className="page-content">
+             <div className={`page-content ${isPageFlipping ? 'page-transitioning' : ''}`}>
                 {PROJECTS[currentPage].image ? (
                   <img src={PROJECTS[currentPage].image} alt={PROJECTS[currentPage].name} className="book-project-image" />
                 ) : (
@@ -372,7 +428,7 @@ export const Portfolio = () => {
 
           {/* Inside Right Page (Details) */}
           <div className="book-page book-page-right">
-             <div className="page-content">
+             <div className={`page-content ${isPageFlipping ? 'page-transitioning' : ''}`}>
                 <button 
                   className="book-close-btn" 
                   onClick={() => setIsBookOpen(false)}
@@ -417,47 +473,21 @@ export const Portfolio = () => {
                 {/* Pagination Controls */}
                 <div className="book-pagination">
                    <button 
-                     disabled={currentPage === 0} 
-                     onClick={() => setCurrentPage(p => p - 1)}
+                     disabled={currentPage === 0 || isPageFlipping} 
+                     onClick={handlePrevPage}
                    >
                      &larr; Prev
                    </button>
                    <span>{currentPage + 1} / {PROJECTS.length}</span>
                    <button 
-                     disabled={currentPage === PROJECTS.length - 1} 
-                     onClick={() => setCurrentPage(p => p + 1)}
+                     disabled={currentPage === PROJECTS.length - 1 || isPageFlipping} 
+                     onClick={handleNextPage}
                    >
                      Next &rarr;
                    </button>
                 </div>
              </div>
           </div>
-        </div>
-      </section>
-
-      {/* ── PIPELINE VISUALISER ── */}
-      <section className="section" style={{ background: "var(--bg-main)", paddingBottom: "2rem" }}>
-        <p className="section-label reveal" ref={addToRefs}>Live Architecture</p>
-        <h2 className="section-title reveal" ref={addToRefs}>Automation Flow</h2>
-        
-        <div className="pipeline-track reveal" ref={addToRefs}>
-          <div className="flow-line" />
-          {PIPELINE.map((node, i) => (
-            <div key={i} className="pipeline-node">
-              <div className="node-icon" style={{ borderColor: node.dot, color: node.dot }}>
-                {i === 0 && <FiDatabase />}
-                {i === 1 && <FiSettings />}
-                {i === 2 && <FiCpu />}
-                {i === 3 && <FiCode />}
-                {i === 4 && <FiTerminal />}
-                <div className="node-pulse" style={{ borderColor: node.dot }} />
-              </div>
-              <div className="node-label">
-                <span style={{ display: 'block', fontWeight: 600, color: 'var(--text-main)', marginBottom: '4px' }}>{node.label}</span>
-                <span style={{ fontSize: '0.55rem', opacity: 0.6 }}>{node.sub}</span>
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -617,23 +647,12 @@ export const Portfolio = () => {
         <p className="section-label reveal" ref={addToRefs}>Get In Touch</p>
         <h2 className="contact-title reveal" ref={addToRefs}>Let's Work<br />Together</h2>
         <div className="contact-divider reveal" ref={addToRefs} />
-        <button onClick={handleCopyEmail} className="contact-email reveal" ref={addToRefs} style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer', fontFamily: 'inherit' }}>
-          <SiGmail size={16} color="#EA4335" style={{ display: 'inline', marginRight: '8px', verticalAlign: 'text-bottom' }} />
-          bhushanam2004@gmail.com
-          {copied && <span className="copied-tooltip">Copied! ✅</span>}
-        </button>
-
-        <form action="https://api.web3forms.com/submit" method="POST" className="contact-form reveal" ref={addToRefs}>
-          <input type="hidden" name="access_key" value="0cf726bd-0957-4f18-92bd-805dc9596b43" />
-          <div className="form-group">
-            <input type="text" name="name" placeholder="Your Name" required className="form-input" />
-            <input type="email" name="email" placeholder="Your Email" required className="form-input" />
-          </div>
-          <textarea name="message" placeholder="Your Message" required className="form-input form-textarea"></textarea>
-          <button type="submit" className="form-submit">Send Message</button>
-        </form>
-
+        
         <div className="contact-links reveal" ref={addToRefs}>
+          <button onClick={handleCopyEmail} className="contact-link" style={{ border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+            <SiGmail size={14} color="#EA4335" /> Gmail
+            {copied && <span className="copied-tooltip" style={{ position: 'absolute', transform: 'translateY(-30px)' }}>Copied! ✅</span>}
+          </button>
           <a href="https://linkedin.com/in/bhushanam-damisetti" target="_blank" rel="noopener noreferrer" className="contact-link">
             <FiLinkedin size={14} color="#0A66C2" /> LinkedIn
           </a>
@@ -644,6 +663,16 @@ export const Portfolio = () => {
             <FiPhone size={14} /> Phone
           </a>
         </div>
+
+        <form action="https://api.web3forms.com/submit" method="POST" className="contact-form reveal" ref={addToRefs}>
+          <input type="hidden" name="access_key" value="0cf726bd-0957-4f18-92bd-805dc9596b43" />
+          <div className="form-group">
+            <input type="text" name="name" placeholder="Your Name" required className="form-input" />
+            <input type="email" name="email" placeholder="Your Email" required className="form-input" />
+          </div>
+          <textarea name="message" placeholder="Your Message" required className="form-input form-textarea"></textarea>
+          <button type="submit" className="form-submit">Send Message</button>
+        </form>
       </section>
 
       <footer>
@@ -667,8 +696,8 @@ export const Portfolio = () => {
               ))}
             </div>
             <form className="chatbot-input" onSubmit={handleChatSubmit}>
-              <input type="text" placeholder="Ask about Bhushan..." value={chatInput} onChange={e => setChatInput(e.target.value)} />
-              <button type="submit">Send</button>
+              <input type="text" placeholder="Ask about Bhushan..." value={chatInput} onChange={e => setChatInput(e.target.value)} disabled={isChatTyping} />
+              <button type="submit" disabled={isChatTyping}>{isChatTyping ? "..." : "Send"}</button>
             </form>
           </div>
         )}

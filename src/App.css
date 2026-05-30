@@ -706,6 +706,19 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   align-items: center;
   justify-content: center;
   box-shadow: -10px 15px 30px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-main) 100%);
+}
+
+.book-page-left::after {
+  content: "PROJECT PREVIEW";
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  opacity: 0.3;
+  font-size: 1.5rem;
 }
 
 .book-page-right {
@@ -714,6 +727,7 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   border-radius: 0 12px 12px 0;
   border-left: none;
   box-shadow: 10px 15px 30px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-card) 100%);
 }
 
 .book-open .book-cover {
@@ -726,11 +740,23 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   flex-direction: column;
   position: relative;
   opacity: 0;
-  transition: opacity 0.5s ease 0.6s;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s;
 }
 
 .book-open .page-content {
   opacity: 1;
+  transform: translateY(0);
+}
+
+.book-open.book-ready .page-content {
+  transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
+.book-open.book-ready .page-content.page-transitioning {
+  opacity: 0;
+  transform: translateY(-10px);
+  filter: blur(4px);
 }
 
 .book-project-image {
@@ -739,7 +765,11 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   max-height: 100%;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.05);
+  z-index: 2;
 }
 
 .book-no-image {
