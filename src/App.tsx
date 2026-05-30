@@ -640,10 +640,9 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         <div className="contact-divider reveal" ref={addToRefs} />
         
         <div className="contact-links reveal" ref={addToRefs}>
-          <button onClick={handleCopyEmail} className="contact-link" style={{ border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+          <a href="mailto:bhushanam2004@gmail.com" className="contact-link">
             <SiGmail size={14} color="#EA4335" /> Gmail
-            {copied && <span className="copied-tooltip" style={{ position: 'absolute', transform: 'translateY(-30px)' }}>Copied! ✅</span>}
-          </button>
+          </a>
           <a href="https://linkedin.com/in/bhushanam-damisetti" target="_blank" rel="noopener noreferrer" className="contact-link">
             <FiLinkedin size={14} color="#0A66C2" /> LinkedIn
           </a>
