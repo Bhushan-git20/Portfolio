@@ -263,7 +263,7 @@ export const Portfolio = () => {
 
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash",
         systemInstruction: `You are Bhushan's AI assistant for his portfolio website. 
 You act like a RAG (Retrieval-Augmented Generation) chatbot. 
 You MUST ONLY answer using the exact data provided below. Do NOT hallucinate, guess, or make up ANY information that is not explicitly written in this prompt. 
@@ -301,9 +301,9 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       const response = await result.response;
       
       setChatMessages(prev => [...prev, { sender: 'ai', text: response.text() }]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Chat API Error:", error);
-      setChatMessages(prev => [...prev, { sender: 'ai', text: "Sorry, I'm having trouble connecting right now. Please try again later or contact Bhushan directly!" }]);
+      setChatMessages(prev => [...prev, { sender: 'ai', text: `Sorry, I'm having trouble: ${error.message || 'Unknown error'}` }]);
     } finally {
       setIsChatTyping(false);
     }
