@@ -263,7 +263,7 @@ export const Portfolio = () => {
 
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash-8b",
+        model: "gemini-1.5-flash",
         systemInstruction: `You are Bhushan's AI assistant for his portfolio website. 
 You act like a RAG (Retrieval-Augmented Generation) chatbot. 
 You MUST ONLY answer using the exact data provided below. Do NOT hallucinate, guess, or make up ANY information that is not explicitly written in this prompt. 
