@@ -22,7 +22,7 @@
   --bg-card: #000000;
   --bg-card-hover: #060606;
   --text-main: #ffffff;
-  --text-muted: #5a5a5a;
+  --text-muted: #e0e0e0;
   --border-color: #111111;
   --nav-bg: rgba(0,0,0,0.92);
   --badge-bg: transparent;
@@ -30,7 +30,7 @@
   --badge-border: #1d3a1d;
   --tag-border: #1c1c1c;
   --visual-bg: #080808;
-  --visual-text: #141414;
+  --visual-text: #444444;
   --logo-black: #ffffff;
 }
 
