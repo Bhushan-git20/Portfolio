@@ -84,12 +84,12 @@ const PROJECTS: Project[] = [
   },
   {
     id: 4,
-    name: "Placement Prospect AI",
+    name: "HireReady",
     problem: "Students lack actionable insights into their career readiness and market demands, making interview preparation inefficient.",
-    solution: "Developed an AI-powered platform with Gemini 1.5 Flash and Supabase Edge Functions for predictive job fit scoring and smart resume parsing.",
+    solution: "Developed an AI-powered open-source job application intelligence platform featuring predictive job fit scoring, real-time market insights, and STAR framework interview preparation.",
     result: "Real-time market intelligence and a personalized AI career coach for students.",
-    tech: ["React", "TypeScript", "Supabase", "Gemini 1.5 Flash", "Tailwind CSS"],
-    link: "https://github.com/Bhushan-git20/placement-prospect-ai",
+    tech: ["React", "TypeScript", "Supabase", "Gemini 2.5 Flash", "Tailwind CSS"],
+    link: "https://github.com/Bhushan-git20/hireready",
     image: "/placement_prospect.png"
   }
 ];
@@ -270,7 +270,7 @@ Projects:
 1. MindCare: Full-stack wellness platform with Gemini API driving personalised recommendations, Supabase real-time sync. (Published internationally). Tech: React, TS, FastAPI, PostgreSQL, Supabase, Gemini, Docker, AWS.
 2. PDF RAG Chatbot: Multi-PDF AI using LangChain, ChromaDB, FAISS, HF MiniLM. 91% retrieval accuracy. Tech: Python, LangChain, ChromaDB, FAISS, Gemini 2.5 Flash, Streamlit.
 3. Olive AI Assistant: Custom AI agent deployed to Hugging Face Spaces for free, scalable access. Tech: Python, HF Spaces, Gradio, LLM APIs.
-4. Placement Prospect AI: AI-powered platform for predictive job fit scoring and resume parsing. Tech: React, TS, Supabase, Gemini 1.5 Flash, Tailwind CSS.
+4. HireReady: AI-powered open-source job application intelligence platform featuring predictive job fit scoring, real-time market insights, and STAR framework interview preparation. Tech: React, TS, Supabase, Gemini 2.5 Flash, Tailwind CSS.
 Skills:
 - AI/Automation: LangChain, n8n, Gemini API, Groq, ChromaDB, FAISS, RAG, Prompt Engineering
 - Backend: FastAPI, Node.js, Express.js, PostgreSQL, MySQL, REST APIs
@@ -612,7 +612,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             { name: "pdf-rag-chatbot", desc: "Multi-PDF RAG chatbot · LangChain · ChromaDB · Streamlit" },
             { name: "job-automation-pipeline", desc: "n8n job scraper · Gemini scoring · Telegram delivery" },
             { name: "ollive-ai-assistant", desc: "AI Assistant deployed on Hugging Face Spaces · Python · Gradio" },
-            { name: "placement-prospect-ai", desc: "AI career coach & resume parsing · React · Supabase · Gemini" },
+            { name: "hireready", desc: "AI career coach & resume parsing · React · Supabase · Gemini" },
           ].map(r => (
             <a
               key={r.name}

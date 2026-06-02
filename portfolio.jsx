@@ -42,10 +42,10 @@ const PROJECTS = [
   },
   {
     id: 4,
-    name: "Placement Prospect AI",
-    desc: "AI-powered platform with predictive job fit scoring, real-time market intelligence, and smart resume parsing.",
-    tech: ["React", "TypeScript", "Supabase", "Gemini 1.5 Flash", "Tailwind CSS"],
-    link: "https://github.com/Bhushan-git20/placement-prospect-ai"
+    name: "HireReady",
+    desc: "AI-powered open-source job application intelligence platform featuring predictive job fit scoring, real-time market insights, and STAR framework interview preparation.",
+    tech: ["React", "TypeScript", "Supabase", "Gemini 2.5 Flash", "Tailwind CSS"],
+    link: "https://github.com/Bhushan-git20/hireready"
   }
 ];
 
