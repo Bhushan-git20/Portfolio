@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { useState, useEffect, useRef } from "react";
-import { TypeAnimation } from "react-type-animation";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
@@ -161,7 +160,6 @@ export const Portfolio = () => {
   const revealRefs = useRef<(HTMLElement | null)[]>([]);
 
   // Premium feature states
-  const [copied, setCopied] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState<{sender: string, text: string}[]>([
@@ -218,22 +216,22 @@ export const Portfolio = () => {
   }, []);
 
   useEffect(() => {
+    let ticking = false;
     const handleMouseMove = (e: MouseEvent) => {
-      document.documentElement.style.setProperty('--cursor-x', `${e.clientX}px`);
-      document.documentElement.style.setProperty('--cursor-y', `${e.clientY}px`);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          document.documentElement.style.setProperty('--cursor-x', `${e.clientX}px`);
+          document.documentElement.style.setProperty('--cursor-y', `${e.clientY}px`);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const toggleTheme = () => setTheme(prev => prev === "dark" ? "light" : "dark");
-
-  const handleCopyEmail = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigator.clipboard.writeText("bhushanam2004@gmail.com");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   const [isChatTyping, setIsChatTyping] = useState(false);
 
@@ -332,7 +330,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
     fetchGitHubStats();
 
     return () => observer.disconnect();
-  }, [ghStats]);
+  }, []);
 
   const addToRefs = (el: HTMLElement | null) => {
     if (el && !revealRefs.current.includes(el)) {
