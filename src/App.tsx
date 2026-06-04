@@ -600,7 +600,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         <div className="github-contrib reveal" ref={addToRefs}>
           <p className="contrib-label">{t('Contribution Activity')}</p>
           <img
-            src={`https://ghchart.rshah.org/3d8a3d/Bhushan-git20`}
+            src={`https://ghchart.rshah.org/3c8b3d/Bhushan-git20`}
             alt="GitHub contribution graph"
             className="contrib-graph"
           />
