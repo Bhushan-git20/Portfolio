@@ -136,7 +136,7 @@ export default function Portfolio() {
           ))}
         </h1>
         <p className="hero-tagline">
-          AI Engineer · Full Stack Developer · <em>MCA Graduate 2026</em>
+          AI Automation Engineer | <em>MCA Graduate 2026</em> | Building AI-powered products
         </p>
         <div className="scroll-hint">
           <span>Scroll</span>
@@ -403,7 +403,7 @@ export default function Portfolio() {
 
       <footer>
         <p>© 2026 Damisetti Bhushanam</p>
-        <p>MCA Graduate · Visakhapatnam, AP</p>
+        <p>MCA Graduate · Vizianagaram, India</p>
       </footer>
     </>
   );
