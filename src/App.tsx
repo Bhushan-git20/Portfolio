@@ -12,7 +12,7 @@ import {
   SiPython, SiJavascript, SiTypescript, SiReact, SiTailwindcss, SiHtml5, SiCss, 
   SiFastapi, SiNodedotjs, SiExpress, SiPostgresql, SiDocker, SiVercel, SiSupabase, SiGoogle, SiGmail
 } from "react-icons/si";
-import { FaJava, FaGitAlt, FaAws } from "react-icons/fa";
+import { FaJava, FaGitAlt, FaAws, FaRobot } from "react-icons/fa";
 import "./App.css";
 
 const t = (s: string) => s;
@@ -677,7 +677,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         {chatOpen && (
           <div className="chatbot-window">
             <div className="chatbot-header">
-              <span><FiCpu size={16} /> Ask AI Assistant</span>
+              <span><FaRobot size={16} /> Ask AI Assistant</span>
               <button onClick={() => setChatOpen(false)} className="chatbot-close">&times;</button>
             </div>
             <div className="chatbot-messages">
@@ -694,7 +694,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           </div>
         )}
         <button className="chatbot-fab" onClick={() => setChatOpen(!chatOpen)} aria-label="Open AI Chat">
-          <FiCpu size={24} />
+          <FaRobot size={24} />
         </button>
       </div>
     </>
