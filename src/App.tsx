@@ -47,6 +47,17 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
+    id: 4,
+    name: "HireReady",
+    badge: "Open Source",
+    problem: "Students lack actionable insights into their career readiness and market demands, making interview preparation inefficient.",
+    solution: "Developed an AI-powered open-source job application intelligence platform featuring predictive job fit scoring, real-time market insights, and STAR framework interview preparation.",
+    result: "Real-time market intelligence and a personalized AI career coach for students.",
+    tech: ["React", "TypeScript", "Supabase", "Gemini 2.5 Flash", "Tailwind CSS"],
+    link: "https://github.com/Bhushan-git20/hireready",
+    image: "/placement_prospect.png"
+  },
+  {
     id: 0,
     featured: true,
     name: "MindCare",
@@ -58,7 +69,6 @@ const PROJECTS: Project[] = [
     link: "https://github.com/Bhushan-git20/mindful-pathways",
     image: "/mindcare.png"
   },
-
   {
     id: 2,
     name: "PDF RAG Chatbot",
@@ -80,16 +90,6 @@ const PROJECTS: Project[] = [
     link: "https://github.com/Bhushan-git20/ollive-ai-assistant",
     demoLink: "https://huggingface.co/spaces/Bhushan-git20/ollive-ai-assistant",
     image: "/ollive.png"
-  },
-  {
-    id: 4,
-    name: "HireReady",
-    problem: "Students lack actionable insights into their career readiness and market demands, making interview preparation inefficient.",
-    solution: "Developed an AI-powered open-source job application intelligence platform featuring predictive job fit scoring, real-time market insights, and STAR framework interview preparation.",
-    result: "Real-time market intelligence and a personalized AI career coach for students.",
-    tech: ["React", "TypeScript", "Supabase", "Gemini 2.5 Flash", "Tailwind CSS"],
-    link: "https://github.com/Bhushan-git20/hireready",
-    image: "/placement_prospect.png"
   }
 ];
 
@@ -165,43 +165,6 @@ export const Portfolio = () => {
   const [chatMessages, setChatMessages] = useState<{sender: string, text: string}[]>([
     { sender: 'ai', text: 'Hi! I am Bhushan\'s AI assistant. How can I help you today?' }
   ]);
-
-  // Book Layout State
-  const [isBookOpen, setIsBookOpen] = useState(false);
-  const [isBookReady, setIsBookReady] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [isPageFlipping, setIsPageFlipping] = useState(false);
-
-  useEffect(() => {
-    if (isBookOpen) {
-      const timer = setTimeout(() => setIsBookReady(true), 1200);
-      return () => clearTimeout(timer);
-    } else {
-      setIsBookReady(false);
-    }
-  }, [isBookOpen]);
-
-  const handleNextPage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (currentPage < PROJECTS.length - 1) {
-      setIsPageFlipping(true);
-      setTimeout(() => {
-        setCurrentPage(p => p + 1);
-        setTimeout(() => setIsPageFlipping(false), 50);
-      }, 300);
-    }
-  };
-
-  const handlePrevPage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (currentPage > 0) {
-      setIsPageFlipping(true);
-      setTimeout(() => {
-        setCurrentPage(p => p - 1);
-        setTimeout(() => setIsPageFlipping(false), 50);
-      }, 300);
-    }
-  };
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -299,6 +262,23 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
     }
   };
 
+
+  // ── SPOTLIGHT EFFECT ──
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const cards = document.querySelectorAll('.expertise-card, .project-sbs');
+      cards.forEach(card => {
+        const rect = (card as HTMLElement).getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
+        (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -342,11 +322,12 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
     <>
       <div className="cursor-glow"></div>
       {/* ── NAV ── */}
-      <nav>
+      {/* ── NAV ── */}
+      <nav className="nav-wrapper">
         <span className="nav-logo">{t('Bhushan')}</span>
         <div className="nav-links">
           {[["#home","Home"],["#work","Work"],["#about","About"],["#contact","Contact"]].map(([href, label]) => (
-            <a key={href} href={href}>{label}</a>
+            <a key={href} href={href} className="nav-link">{label}</a>
           ))}
           <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
             {theme === "dark" ? <FiSun size={16} /> : <FiMoon size={16} />}
@@ -368,116 +349,215 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         </h1>
       
         <p className="hero-headline">
-          AI Automation Engineer building agentic workflows and scalable AI systems.
+          AI Automation Engineer
         </p>
 
         <p className="hero-subtext">
-          Specialised in AI automation · FastAPI backends · n8n workflows · LLM integrations · production-ready AI applications
+          Building AI agents, workflow automations, and intelligent systems that create measurable business outcomes.
         </p>
 
         <div className="hero-ctas">
           <a href="#work" className="cta-primary">{t('View Projects')}</a>
-          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="cta-secondary">{t('GitHub')}</a>
           <a href="#about" className="cta-secondary">{t('Resume')}</a>
-        </div>
-      
-
-        <div className="scroll-hint">
-          <span>{t('Scroll')}</span>
-          <div className="scroll-bar" />
         </div>
       </section>
 
-      {/* ── PROJECTS (3D BOOK LAYOUT) ── */}
+      {/* ── PROJECTS (SIDE-BY-SIDE LAYOUT) ── */}
+      
+      {/* ── AUTOMATION EXPERTISE ── */}
+      <section className="section" style={{ background: "var(--bg-alt)", position: "relative" }}>
+        <p className="section-label reveal" ref={addToRefs}>{t('Core Competencies')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('Automation Systems I Build')}</h2>
+        
+        <div className="expertise-grid reveal" ref={addToRefs}>
+          <div className="expertise-card">
+            <h3 className="expertise-title">Workflow Automation</h3>
+            <p className="expertise-desc">Connecting APIs and automating complex business processes to eliminate manual data entry.</p>
+            <div className="expertise-tech">
+              <span>n8n</span>
+              <span>Make</span>
+              <span>Webhooks</span>
+            </div>
+          </div>
+          
+          <div className="expertise-card">
+            <h3 className="expertise-title">Agentic AI</h3>
+            <p className="expertise-desc">Building autonomous LLM agents capable of reasoning, tool use, and multi-step execution.</p>
+            <div className="expertise-tech">
+              <span>LangGraph</span>
+              <span>CrewAI</span>
+              <span>Gemini</span>
+            </div>
+          </div>
+          
+          <div className="expertise-card">
+            <h3 className="expertise-title">Custom Web Apps</h3>
+            <p className="expertise-desc">Developing premium, scalable full-stack applications with modern frameworks.</p>
+            <div className="expertise-tech">
+              <span>React</span>
+              <span>FastAPI</span>
+              <span>Supabase</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="work" className="section" style={{ background: "var(--bg-alt)" }}>
         <p className="section-label reveal" ref={addToRefs}>{t('Selected Work')}</p>
         <h2 className="section-title reveal" ref={addToRefs}>{t('Projects')}</h2>
         
-        <div className={`book-container ${isBookOpen ? "book-open" : ""} ${isBookReady ? "book-ready" : ""}`} ref={addToRefs}>
-          {/* Cover */}
-          <div 
-            className="book-cover" 
-            onClick={() => setIsBookOpen(true)}
-          >
-            <div className="book-cover-content">
-              <h3>{t('My Projects Portfolio')}</h3>
-              <p>{t('Click to Open')}</p>
-              <div className="book-spine-detail"></div>
-            </div>
-          </div>
-          
-          {/* Inside Left Page (Image) */}
-          <div className="book-page book-page-left">
-             <div className={`page-content ${isPageFlipping ? 'page-transitioning' : ''}`}>
-                {(PROJECTS.at(currentPage) || PROJECTS[0]).image ? (
-                  <img src={(PROJECTS.at(currentPage) || PROJECTS[0]).image} alt={(PROJECTS.at(currentPage) || PROJECTS[0]).name} className="book-project-image" />
+        <div className="projects-sbs-list reveal" ref={addToRefs}>
+          {PROJECTS.map((proj, idx) => (
+            <div key={proj.id} className={`project-sbs ${idx % 2 !== 0 ? "sbs-reverse" : ""}`}>
+              <div className="project-sbs-visual">
+                {proj.image ? (
+                  <img src={proj.image} alt={proj.name} className="project-sbs-img" />
                 ) : (
                   <div className="book-no-image">{t("No Image")}</div>
                 )}
-             </div>
-          </div>
-
-          {/* Inside Right Page (Details) */}
-          <div className="book-page book-page-right">
-             <div className={`page-content ${isPageFlipping ? 'page-transitioning' : ''}`}>
-                <button 
-                  className="book-close-btn" 
-                  onClick={() => setIsBookOpen(false)}
-                  aria-label="Close Book"
-                >
-                  &times;
-                </button>
+              </div>
+              <div className="project-sbs-content">
+                {proj.badge && <span className="project-badge">{proj.badge}</span>}
+                <h3 className="project-sbs-title">{proj.name}</h3>
                 
-                {(PROJECTS.at(currentPage) || PROJECTS[0]).badge && <span className="project-badge">{(PROJECTS.at(currentPage) || PROJECTS[0]).badge}</span>}
-                <h3 className="project-name">{(PROJECTS.at(currentPage) || PROJECTS[0]).name}</h3>
-      
-                <div className="project-story">
-                  <div className="story-block">
-                    <span className="story-label">{t('Problem')}</span>
-                    <p className="story-text">{(PROJECTS.at(currentPage) || PROJECTS[0]).problem}</p>
-                  </div>
-                  <div className="story-block">
-                    <span className="story-label">{t('Solution')}</span>
-                    <p className="story-text">{(PROJECTS.at(currentPage) || PROJECTS[0]).solution}</p>
-                  </div>
-                  <div className="story-block story-result">
-                    <span className="story-label">{t('Result')}</span>
-                    <p className="story-text result-text">{(PROJECTS.at(currentPage) || PROJECTS[0]).result}</p>
-                  </div>
+                <div className="project-sbs-desc">
+                  <p><strong>{t('Problem')}:</strong> {proj.problem}</p>
+                  <p><strong>{t('Solution')}:</strong> {proj.solution}</p>
+                  <p className="result-text"><strong>{t('Result')}:</strong> {proj.result}</p>
                 </div>
-      
-                <div className="project-tech">
-                  {(PROJECTS.at(currentPage) || PROJECTS[0]).tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
+                
+                <div className="project-sbs-tech">
+                  {proj.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
                 </div>
                 
                 <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                  <a href={(PROJECTS.at(currentPage) || PROJECTS[0]).link} target="_blank" rel="noopener noreferrer" className="ext-link">
+                  <a href={proj.link} target="_blank" rel="noopener noreferrer" className="project-link-btn ext-link">
                     GitHub <FiExternalLink size={14} />
                   </a>
-                  {(PROJECTS.at(currentPage) || PROJECTS[0]).demoLink && (
-                    <a href={(PROJECTS.at(currentPage) || PROJECTS[0]).demoLink} target="_blank" rel="noopener noreferrer" className="ext-link" style={{ color: "var(--accent)" }}>
+                  {proj.demoLink && (
+                    <a href={proj.demoLink} target="_blank" rel="noopener noreferrer" className="project-link-btn ext-link" style={{ color: "var(--accent)" }}>
                       Live Demo <FiExternalLink size={14} />
                     </a>
                   )}
                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-                {/* Pagination Controls */}
-                <div className="book-pagination">
-                   <button 
-                     disabled={currentPage === 0 || isPageFlipping} 
-                     onClick={handlePrevPage}
-                   >
-                     &larr; Prev
-                   </button>
-                   <span>{currentPage + 1} / {PROJECTS.length}</span>
-                   <button 
-                     disabled={currentPage === PROJECTS.length - 1 || isPageFlipping} 
-                     onClick={handleNextPage}
-                   >
-                     Next &rarr;
-                   </button>
-                </div>
-             </div>
+      
+      {/* ── ARCHITECTURE DIAGRAMS ── */}
+      <section className="section" style={{ background: "var(--bg-alt)", position: "relative", overflow: "hidden" }}>
+        <p className="section-label reveal" ref={addToRefs}>{t('Systems Design')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('Architecture Flow')}</h2>
+        
+        <div className="arch-container reveal" ref={addToRefs}>
+          {/* MindCare Architecture */}
+          <div className="arch-card">
+            <h3 className="arch-card-title">MindCare: AI Mental Wellness</h3>
+            <div className="arch-flow">
+              <div className="node">React UI</div>
+              <div className="flow-arrow">→</div>
+              <div className="node">FastAPI</div>
+              <div className="flow-arrow">→</div>
+              <div className="node highlight">Gemini Pro</div>
+              <div className="flow-arrow">→</div>
+              <div className="node">Supabase</div>
+            </div>
+          </div>
+
+          {/* Job Automation Pipeline */}
+          <div className="arch-card">
+            <h3 className="arch-card-title">Job Automation Pipeline</h3>
+            <div className="arch-flow">
+              <div className="node">Data Sources</div>
+              <div className="flow-arrow">→</div>
+              <div className="node highlight">n8n Workflow</div>
+              <div className="flow-arrow">→</div>
+              <div className="node">AI Scoring</div>
+              <div className="flow-arrow">→</div>
+              <div className="node">Telegram / Notion</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ── AI AUTOMATION LIFECYCLE ── */}
+      <section className="section" style={{ background: "var(--bg-main)", position: "relative" }}>
+        <p className="section-label reveal" ref={addToRefs}>{t('Process')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('How I Build Systems')}</h2>
+        
+        <div className="lifecycle-container reveal" ref={addToRefs}>
+          {[
+            { step: '01', title: 'Discover', desc: 'Map existing workflows and identify high-ROI automation opportunities.' },
+            { step: '02', title: 'Architect', desc: 'Design the AI pipeline and select the right LLMs and integration tools.' },
+            { step: '03', title: 'Automate', desc: 'Build the orchestration layer, connecting APIs, databases, and agents.' },
+            { step: '04', title: 'Refine', desc: 'Monitor system performance, optimize prompts, and ensure reliability.' }
+          ].map((item, idx) => (
+            <div key={item.step} className="lifecycle-step">
+              <div className="lifecycle-number">{item.step}</div>
+              <div className="lifecycle-content">
+                <h3 className="lifecycle-title">{item.title}</h3>
+                <p className="lifecycle-desc">{item.desc}</p>
+              </div>
+              {idx < 3 && <div className="lifecycle-connector" />}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── EDUCATION & EXPERIENCE ── */}
+      <section id="experience" className="section" style={{ background: "var(--bg-main)" }}>
+        <p className="section-label reveal" ref={addToRefs}>{t('My Journey')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('Background')}</h2>
+
+        <div className="timeline-two-col reveal" ref={addToRefs}>
+          {/* Education Column */}
+          <div className="timeline-col">
+            <h3 className="timeline-col-title">Education</h3>
+            <div className="timeline-item">
+              <div className="timeline-dot" />
+              <div className="timeline-content">
+                <div className="timeline-date">Nov 2024 - Jul 2026</div>
+                <h4 className="timeline-role">Master of Computer Applications (MCA)</h4>
+                <p className="timeline-org">Adikavi Nannaya University (MSN Campus)</p>
+                <p className="timeline-desc">Published research paper at GCCMIEA International Conference.</p>
+              </div>
+            </div>
+            <div className="timeline-item">
+              <div className="timeline-dot" />
+              <div className="timeline-content">
+                <div className="timeline-date">Nov 2021 - May 2024</div>
+                <h4 className="timeline-role">B.Sc Computer Science</h4>
+                <p className="timeline-org">Aditya Degree College</p>
+                <p className="timeline-desc">CGPA: 7.86. Developed strong foundation in software engineering and web technologies.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Experience Column */}
+          <div className="timeline-col">
+            <h3 className="timeline-col-title">Experience</h3>
+            <div className="timeline-item">
+              <div className="timeline-dot" />
+              <div className="timeline-content">
+                <div className="timeline-date">Sep 2024 - Dec 2024</div>
+                <h4 className="timeline-role">Full Stack Developer Intern</h4>
+                <p className="timeline-org">AICTE EduSkills (AICTE-Eduskills)</p>
+                <p className="timeline-desc">Developed and deployed end-to-end full stack web applications, optimizing backend APIs.</p>
+              </div>
+            </div>
+            <div className="timeline-item">
+              <div className="timeline-dot" />
+              <div className="timeline-content">
+                <div className="timeline-date">Nov 2023 - Mar 2024</div>
+                <h4 className="timeline-role">Frontend Web Developer Intern</h4>
+                <p className="timeline-org">Internshala</p>
+                <p className="timeline-desc">Built interactive web applications using React.js. Collaborated on UI/UX improvements.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -521,7 +601,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             </div>
           </div>
           <dl className="about-stats">
-            {[["3+","Projects"],["2","Internships"],["7.86","CGPA"],["3","Certs"]].map(([num, label]) => (
+            {[["3+","Projects"],["2","Internships"],["7","Repos"],["3","Certs"]].map(([num, label]) => (
               <div key={label} className="stat-block">
                 <dt className="stat-label">{label}</dt>
                 <dd className="stat-number">{num}</dd>
@@ -530,12 +610,14 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           </dl>
         </div>
         <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s" }}>
-          <div className="photo-wrapper">
-            <img
-              src="/bhushan.png"
-              alt="Damisetti Bhushanam"
-              className="about-photo-img"
-            />
+          <div className="id-card id-card-drop">
+            <div className="photo-wrapper">
+              <img
+                src="/bhushan.png"
+                alt="Damisetti Bhushanam"
+                className="about-photo-img"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -566,7 +648,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       </section>
 
       {/* ── SYSTEMS BUILT ── */}
-      <section className="section" style={{ background: "#000" }}>
+      <section className="section" style={{ background: "var(--bg-main)" }}>
         <p className="section-label reveal" ref={addToRefs}>{t('Engineering Footprint')}</p>
         <h2 className="section-title reveal" ref={addToRefs}>{t('Systems Built')}</h2>
         <div className="systems-list reveal" ref={addToRefs}>
@@ -584,7 +666,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       </section>
 
       {/* ── GITHUB ── */}
-      <section className="section" style={{ background: "#080808" }}>
+      <section className="section" style={{ background: "var(--bg-alt)" }}>
         <p className="section-label reveal" ref={addToRefs}>{t('Open Source')}</p>
         <h2 className="section-title reveal" ref={addToRefs}>{t('GitHub')}</h2>
       
@@ -633,36 +715,21 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         </div>
       </section>
 
-      {/* ── CONTACT ── */}
-      <section id="contact" className="contact-section">
-        <p className="section-label reveal" ref={addToRefs}>{t('Get In Touch')}</p>
-        <h2 className="contact-title reveal" ref={addToRefs}>{t("Let's Work")}<br />{t("Together")}</h2>
-        <div className="contact-divider reveal" ref={addToRefs} />
-        
+            {/* ── CONTACT ── */}
+      <section id="contact" className="section" style={{ background: "var(--bg-alt)" }}>
+        <p className="section-label reveal" ref={addToRefs}>{t('Connect')}</p>
+        <h2 className="section-title reveal" ref={addToRefs} style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
+          {t("Let's Build Something Useful.")}
+        </h2>
         <div className="contact-links reveal" ref={addToRefs}>
-          <a href="mailto:bhushanam2004@gmail.com" className="contact-link">
-            <SiGmail size={14} color="#EA4335" /> Gmail
-          </a>
-          <a href="https://linkedin.com/in/bhushanam-damisetti" target="_blank" rel="noopener noreferrer" className="contact-link">
-            <FiLinkedin size={14} color="#0A66C2" /> LinkedIn
-          </a>
-          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="contact-link">
-            <FiGithub size={14} color="var(--logo-black)" /> GitHub
-          </a>
-          <a href="tel:+919390782043" className="contact-link">
-            <FiPhone size={14} /> Phone
-          </a>
+          <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>
+            {t('Currently open to roles as: AI Automation Engineer, Full Stack Developer, or Backend Developer.')}
+          </p>
+          <a href="mailto:bhushanamdamisetti@gmail.com" className="social-link">Email ↗</a>
+          <a href="https://www.linkedin.com/in/bhushan-damisetti-597551276/" target="_blank" rel="noopener noreferrer" className="social-link">LinkedIn ↗</a>
+          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="social-link">GitHub ↗</a>
+          <a href="https://x.com/Bhushan679" target="_blank" rel="noopener noreferrer" className="social-link">X (Twitter) ↗</a>
         </div>
-
-        <form action="https://api.web3forms.com/submit" method="POST" className="contact-form reveal" ref={addToRefs}>
-          <input type="hidden" name="access_key" value="0cf726bd-0957-4f18-92bd-805dc9596b43" />
-          <div className="form-group">
-            <input type="text" name="name" placeholder="Your Name" required className="form-input" />
-            <input type="email" name="email" placeholder="Your Email" required className="form-input" />
-          </div>
-          <textarea name="message" placeholder="Your Message" required className="form-input form-textarea"></textarea>
-          <button type="submit" className="form-submit">{t('Send Message')}</button>
-        </form>
       </section>
 
       <footer>
