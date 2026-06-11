@@ -1,11 +1,12 @@
 /* eslint-disable */
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
 import { 
   FiGithub, FiLinkedin, FiMail, FiExternalLink, FiCode, FiPhone, FiAward, 
-  FiSun, FiMoon, FiCpu, FiDatabase, FiSettings, FiTerminal, FiGitMerge
+  FiSun, FiMoon, FiCpu, FiDatabase, FiSettings, FiTerminal, FiGitMerge, FiTwitter
 } from "react-icons/fi";
 import { 
   SiPython, SiJavascript, SiTypescript, SiReact, SiTailwindcss, SiHtml5, SiCss, 
@@ -154,9 +155,71 @@ const RESUMES = [
   { label: "Associate SE", file: "/resume-associate-se.pdf" },
 ];
 
+const TiltCard = ({ children }: { children: React.ReactNode }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+      }}
+      className="id-card id-card-drop"
+    >
+      <div style={{ transform: "translateZ(50px)", width: "100%", height: "100%" }}>
+        {children}
+      </div>
+    </motion.div>
+  );
+};
+
 export const Portfolio = () => {
   const [ghStats, setGhStats] = useState<GitHubStats | null>(null);
   const [theme, setTheme] = useState("dark");
+  const [activeSection, setActiveSection] = useState("home");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.target.id) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, { threshold: 0.3 });
+    
+    document.querySelectorAll("section[id]").forEach((section) => {
+      observer.observe(section);
+    });
+    
+    return () => observer.disconnect();
+  }, []);
   const revealRefs = useRef<(HTMLElement | null)[]>([]);
 
   // Premium feature states
@@ -285,7 +348,8 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         entries.forEach(e => {
           if (e.isIntersecting) {
             e.target.classList.add("visible");
-            observer.unobserve(e.target);
+          } else {
+            e.target.classList.remove("visible");
           }
         });
       },
@@ -312,11 +376,11 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
     return () => observer.disconnect();
   }, []);
 
-  const addToRefs = (el: HTMLElement | null) => {
+  const addToRefs = useCallback((el: HTMLElement | null) => {
     if (el && !revealRefs.current.includes(el)) {
       revealRefs.current.push(el);
     }
-  };
+  }, []);
 
   return (
     <>
@@ -326,11 +390,24 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       <nav className="nav-wrapper">
         <span className="nav-logo">{t('Bhushan')}</span>
         <div className="nav-links">
-          {[["#home","Home"],["#work","Work"],["#about","About"],["#contact","Contact"]].map(([href, label]) => (
-            <a key={href} href={href} className="nav-link">{label}</a>
-          ))}
+          {[["#home","Home"], ["#about","About"], ["#experience","Experience"], ["#process","Workflow"], ["#work","Projects"], ["#skills","Skills"], ["#contact","Contact"]].map(([href, label]) => {
+            const isActive = activeSection === href.replace('#', '');
+            return (
+              <a key={href} href={href} className={`nav-link ${isActive ? 'active' : ''}`} style={{ position: 'relative' }}>
+                {label}
+                {isActive && (
+                  <motion.div 
+                    layoutId="nav-indicator"
+                    className="nav-active-indicator"
+                    initial={false}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </a>
+            );
+          })}
           <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-            {theme === "dark" ? <FiSun size={16} /> : <FiMoon size={16} />}
+            {theme === "dark" ? <FiSun size={16} color="#FFD700" /> : <FiMoon size={16} />}
           </button>
         </div>
       </nav>
@@ -363,42 +440,146 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       </section>
 
       {/* ── PROJECTS (SIDE-BY-SIDE LAYOUT) ── */}
-      
-      {/* ── AUTOMATION EXPERTISE ── */}
-      <section className="section" style={{ background: "var(--bg-alt)", position: "relative" }}>
-        <p className="section-label reveal" ref={addToRefs}>{t('Core Competencies')}</p>
-        <h2 className="section-title reveal" ref={addToRefs}>{t('Automation Systems I Build')}</h2>
+      {/* ── ABOUT ── */}
+      <section id="about" className="about-section">
+        <div className="about-text reveal" ref={addToRefs}>
+          <p className="section-label">{t('Background')}</p>
+          <h2 className="about-title">{t('About')}</h2>
+          <p className="about-bio">
+            I build <strong>{t('AI automation systems')}</strong> — from LLM-powered pipelines and RAG chatbots
+            to full-stack applications that ship to production.
+          </p>
+          <p className="about-bio">
+            MCA graduate (July 2026) · Published at <strong>{t('GCCMIEA International Conference')}</strong> · Open to relocation across India.
+          </p>
+          <p className="about-bio" style={{ color: "var(--text-muted)", fontSize: ".85rem", letterSpacing: ".06em" }}>
+            Current focus: agentic AI systems · LangGraph · multi-agent orchestration
+          </p>
+          <div className="certs-list">
+            {CERTS.map(c => (
+              <div key={c} className="cert-row">
+                <FiAward size={14} /> {c}
+              </div>
+            ))}
+          </div>
+          <div className="resume-selector">
+            <p className="resume-label" style={{ color: '#FFD700' }}>{t('View Resume')}</p>
+            <div className="resume-btns">
+              {RESUMES.map(r => (
+                <a
+                  key={r.label}
+                  href={r.file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="resume-btn"
+                >
+                  {r.label} ↗
+                </a>
+              ))}
+            </div>
+          </div>
+          <dl className="about-stats">
+            {[["3+","Projects"],["2","Internships"],["7","Repos"],["3","Certs"]].map(([num, label]) => (
+              <div key={label} className="stat-block">
+                <dt className="stat-label">{label}</dt>
+                <dd className="stat-number">{num}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s", perspective: "1000px" }}>
+          <TiltCard>
+            <div className="photo-wrapper" style={{ width: "100%", height: "100%" }}>
+              <img
+                src="/bhushan.png"
+                alt="Damisetti Bhushanam"
+                className="about-photo-img"
+              />
+            </div>
+          </TiltCard>
+        </div>
+      </section>
+
+      {/* ── EDUCATION & EXPERIENCE ── */}
+      <section id="experience" className="section" style={{ background: "var(--bg-main)" }}>
+        <p className="section-label reveal" ref={addToRefs}>{t('My Journey')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('Background')}</h2>
+
+        <div className="timeline-two-col reveal" ref={addToRefs}>
+          {/* Education Column */}
+          <div className="timeline-col">
+            <h3 className="timeline-col-title">Education</h3>
+            <div className="timeline-item">
+              <div className="timeline-dot" />
+              <div className="timeline-content">
+                <div className="timeline-date">Nov 2024 - Jul 2026</div>
+                <h4 className="timeline-role">Master of Computer Applications (MCA)</h4>
+                <p className="timeline-org">Adikavi Nannaya University (MSN Campus)</p>
+                <p className="timeline-desc">Published research paper at GCCMIEA International Conference.</p>
+              </div>
+            </div>
+            <div className="timeline-item">
+              <div className="timeline-dot" />
+              <div className="timeline-content">
+                <div className="timeline-date">Nov 2021 - May 2024</div>
+                <h4 className="timeline-role">B.Sc Computer Science</h4>
+                <p className="timeline-org">Aditya Degree College</p>
+                <p className="timeline-desc">CGPA: 7.86. Developed strong foundation in software engineering and web technologies.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Experience Column */}
+          <div className="timeline-col">
+            <h3 className="timeline-col-title">Experience</h3>
+            <div className="timeline-item">
+              <div className="timeline-dot" />
+              <div className="timeline-content">
+                <div className="timeline-date">Sep 2024 - Dec 2024</div>
+                <h4 className="timeline-role">Full Stack Developer Intern</h4>
+                <p className="timeline-org">AICTE EduSkills (AICTE-Eduskills)</p>
+                <p className="timeline-desc">Developed and deployed end-to-end full stack web applications, optimizing backend APIs.</p>
+              </div>
+            </div>
+            <div className="timeline-item">
+              <div className="timeline-dot" />
+              <div className="timeline-content">
+                <div className="timeline-date">Nov 2023 - Mar 2024</div>
+                <h4 className="timeline-role">Frontend Web Developer Intern</h4>
+                <p className="timeline-org">Internshala</p>
+                <p className="timeline-desc">Built interactive web applications using React.js. Collaborated on UI/UX improvements.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PROCESS ── */}
+      <section id="process" className="section" style={{ background: "var(--bg-main)" }}>
+        <p className="section-label reveal" ref={addToRefs}>{t('Workflow')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('AI Engineering Process')}</h2>
         
-        <div className="expertise-grid reveal" ref={addToRefs}>
-          <div className="expertise-card">
-            <h3 className="expertise-title">Workflow Automation</h3>
-            <p className="expertise-desc">Connecting APIs and automating complex business processes to eliminate manual data entry.</p>
-            <div className="expertise-tech">
-              <span>n8n</span>
-              <span>Make</span>
-              <span>Webhooks</span>
-            </div>
-          </div>
-          
-          <div className="expertise-card">
-            <h3 className="expertise-title">Agentic AI</h3>
-            <p className="expertise-desc">Building autonomous LLM agents capable of reasoning, tool use, and multi-step execution.</p>
-            <div className="expertise-tech">
-              <span>LangGraph</span>
-              <span>CrewAI</span>
-              <span>Gemini</span>
-            </div>
-          </div>
-          
-          <div className="expertise-card">
-            <h3 className="expertise-title">Custom Web Apps</h3>
-            <p className="expertise-desc">Developing premium, scalable full-stack applications with modern frameworks.</p>
-            <div className="expertise-tech">
-              <span>React</span>
-              <span>FastAPI</span>
-              <span>Supabase</span>
-            </div>
-          </div>
+        <div className="process-grid">
+          {[
+            { num: "01", title: "Discovery & Architecture", desc: "Analyze business bottlenecks, select optimal LLMs (Gemini, Groq) and design the agentic workflow structure (n8n, LangChain)." },
+            { num: "02", title: "Data Integration", desc: "Connect diverse data sources, setup vector databases (ChromaDB, FAISS), and ingest unstructured data for RAG pipelines." },
+            { num: "03", title: "Agent & Prompt Engineering", desc: "Craft robust system prompts, configure tool-calling capabilities, and build autonomous agents that can reason and execute." },
+            { num: "04", title: "Testing & Evaluation", desc: "Rigorously evaluate retrieval accuracy, test edge cases, and ensure the system behaves predictably." },
+            { num: "05", title: "Deployment & Automation", desc: "Dockerize applications, deploy to cloud infrastructure (AWS, Vercel), and establish monitoring." }
+          ].map((step, i) => (
+            <motion.div 
+              key={step.num}
+              className="process-card"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: i * 0.15 }}
+            >
+              <div className="process-num">{step.num}</div>
+              <h3 className="process-step-title">{step.title}</h3>
+              <p className="process-step-desc">{step.desc}</p>
+            </motion.div>
+          ))}
         </div>
       </section>
 
@@ -406,9 +587,9 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         <p className="section-label reveal" ref={addToRefs}>{t('Selected Work')}</p>
         <h2 className="section-title reveal" ref={addToRefs}>{t('Projects')}</h2>
         
-        <div className="projects-sbs-list reveal" ref={addToRefs}>
+        <div className="projects-sbs-list">
           {PROJECTS.map((proj, idx) => (
-            <div key={proj.id} className={`project-sbs ${idx % 2 !== 0 ? "sbs-reverse" : ""}`}>
+            <div key={proj.id} className={`project-sbs reveal ${idx % 2 !== 0 ? "sbs-reverse" : ""}`} ref={addToRefs}>
               <div className="project-sbs-visual">
                 {proj.image ? (
                   <img src={proj.image} alt={proj.name} className="project-sbs-img" />
@@ -484,139 +665,42 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       </section>
 
 
-      {/* ── AI AUTOMATION LIFECYCLE ── */}
-      <section className="section" style={{ background: "var(--bg-main)", position: "relative" }}>
-        <p className="section-label reveal" ref={addToRefs}>{t('Process')}</p>
-        <h2 className="section-title reveal" ref={addToRefs}>{t('How I Build Systems')}</h2>
+
+
+      
+      {/* ── AUTOMATION EXPERTISE ── */}
+      <section className="section" style={{ background: "var(--bg-alt)", position: "relative" }}>
+        <p className="section-label reveal" ref={addToRefs}>{t('Core Competencies')}</p>
+        <h2 className="section-title reveal" ref={addToRefs}>{t('Automation Systems I Build')}</h2>
         
-        <div className="lifecycle-container reveal" ref={addToRefs}>
-          {[
-            { step: '01', title: 'Discover', desc: 'Map existing workflows and identify high-ROI automation opportunities.' },
-            { step: '02', title: 'Architect', desc: 'Design the AI pipeline and select the right LLMs and integration tools.' },
-            { step: '03', title: 'Automate', desc: 'Build the orchestration layer, connecting APIs, databases, and agents.' },
-            { step: '04', title: 'Refine', desc: 'Monitor system performance, optimize prompts, and ensure reliability.' }
-          ].map((item, idx) => (
-            <div key={item.step} className="lifecycle-step">
-              <div className="lifecycle-number">{item.step}</div>
-              <div className="lifecycle-content">
-                <h3 className="lifecycle-title">{item.title}</h3>
-                <p className="lifecycle-desc">{item.desc}</p>
-              </div>
-              {idx < 3 && <div className="lifecycle-connector" />}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── EDUCATION & EXPERIENCE ── */}
-      <section id="experience" className="section" style={{ background: "var(--bg-main)" }}>
-        <p className="section-label reveal" ref={addToRefs}>{t('My Journey')}</p>
-        <h2 className="section-title reveal" ref={addToRefs}>{t('Background')}</h2>
-
-        <div className="timeline-two-col reveal" ref={addToRefs}>
-          {/* Education Column */}
-          <div className="timeline-col">
-            <h3 className="timeline-col-title">Education</h3>
-            <div className="timeline-item">
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-date">Nov 2024 - Jul 2026</div>
-                <h4 className="timeline-role">Master of Computer Applications (MCA)</h4>
-                <p className="timeline-org">Adikavi Nannaya University (MSN Campus)</p>
-                <p className="timeline-desc">Published research paper at GCCMIEA International Conference.</p>
-              </div>
-            </div>
-            <div className="timeline-item">
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-date">Nov 2021 - May 2024</div>
-                <h4 className="timeline-role">B.Sc Computer Science</h4>
-                <p className="timeline-org">Aditya Degree College</p>
-                <p className="timeline-desc">CGPA: 7.86. Developed strong foundation in software engineering and web technologies.</p>
-              </div>
+        <div className="expertise-grid reveal" ref={addToRefs}>
+          <div className="expertise-card">
+            <h3 className="expertise-title">Workflow Automation</h3>
+            <p className="expertise-desc">Connecting APIs and automating complex business processes to eliminate manual data entry.</p>
+            <div className="expertise-tech">
+              <span>n8n</span>
+              <span>Make</span>
+              <span>Webhooks</span>
             </div>
           </div>
-
-          {/* Experience Column */}
-          <div className="timeline-col">
-            <h3 className="timeline-col-title">Experience</h3>
-            <div className="timeline-item">
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-date">Sep 2024 - Dec 2024</div>
-                <h4 className="timeline-role">Full Stack Developer Intern</h4>
-                <p className="timeline-org">AICTE EduSkills (AICTE-Eduskills)</p>
-                <p className="timeline-desc">Developed and deployed end-to-end full stack web applications, optimizing backend APIs.</p>
-              </div>
-            </div>
-            <div className="timeline-item">
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-date">Nov 2023 - Mar 2024</div>
-                <h4 className="timeline-role">Frontend Web Developer Intern</h4>
-                <p className="timeline-org">Internshala</p>
-                <p className="timeline-desc">Built interactive web applications using React.js. Collaborated on UI/UX improvements.</p>
-              </div>
+          
+          <div className="expertise-card">
+            <h3 className="expertise-title">Agentic AI</h3>
+            <p className="expertise-desc">Building autonomous LLM agents capable of reasoning, tool use, and multi-step execution.</p>
+            <div className="expertise-tech">
+              <span>LangGraph</span>
+              <span>CrewAI</span>
+              <span>Gemini</span>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ── ABOUT ── */}
-      <section id="about" className="about-section">
-        <div className="about-text reveal" ref={addToRefs}>
-          <p className="section-label">{t('Background')}</p>
-          <h2 className="about-title">{t('More About')}<br />Bhushan</h2>
-          <p className="about-bio">
-            I build <strong>{t('AI automation systems')}</strong> — from LLM-powered pipelines and RAG chatbots
-            to full-stack applications that ship to production.
-          </p>
-          <p className="about-bio">
-            MCA graduate (July 2026) · Published at <strong>{t('GCCMIEA International Conference')}</strong> · Open to relocation across India.
-          </p>
-          <p className="about-bio" style={{ color: "#222", fontSize: ".78rem", letterSpacing: ".06em" }}>
-            Current focus: agentic AI systems · LangGraph · multi-agent orchestration
-          </p>
-          <div className="certs-list">
-            {CERTS.map(c => (
-              <div key={c} className="cert-row">
-                <FiAward size={14} /> {c}
-              </div>
-            ))}
-          </div>
-          <div className="resume-selector">
-            <p className="resume-label">{t('View Resume')}</p>
-            <div className="resume-btns">
-              {RESUMES.map(r => (
-                <a
-                  key={r.label}
-                  href={r.file}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="resume-btn"
-                >
-                  {r.label} ↗
-                </a>
-              ))}
-            </div>
-          </div>
-          <dl className="about-stats">
-            {[["3+","Projects"],["2","Internships"],["7","Repos"],["3","Certs"]].map(([num, label]) => (
-              <div key={label} className="stat-block">
-                <dt className="stat-label">{label}</dt>
-                <dd className="stat-number">{num}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-        <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s" }}>
-          <div className="id-card id-card-drop">
-            <div className="photo-wrapper">
-              <img
-                src="/bhushan.png"
-                alt="Damisetti Bhushanam"
-                className="about-photo-img"
-              />
+          
+          <div className="expertise-card">
+            <h3 className="expertise-title">Custom Web Apps</h3>
+            <p className="expertise-desc">Developing premium, scalable full-stack applications with modern frameworks.</p>
+            <div className="expertise-tech">
+              <span>React</span>
+              <span>FastAPI</span>
+              <span>Supabase</span>
             </div>
           </div>
         </div>
@@ -709,26 +793,38 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         </div>
       
         <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
-          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="ext-link">
+          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="ext-link" style={{ color: '#FFD700' }}>
             github.com/Bhushan-git20 →
           </a>
         </div>
       </section>
 
-            {/* ── CONTACT ── */}
+      {/* ── CONTACT ── */}
       <section id="contact" className="section" style={{ background: "var(--bg-alt)" }}>
         <p className="section-label reveal" ref={addToRefs}>{t('Connect')}</p>
         <h2 className="section-title reveal" ref={addToRefs} style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
           {t("Let's Build Something Useful.")}
         </h2>
-        <div className="contact-links reveal" ref={addToRefs}>
-          <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>
-            {t('Currently open to roles as: AI Automation Engineer, Full Stack Developer, or Backend Developer.')}
-          </p>
-          <a href="mailto:bhushanamdamisetti@gmail.com" className="social-link">Email ↗</a>
-          <a href="https://www.linkedin.com/in/bhushan-damisetti-597551276/" target="_blank" rel="noopener noreferrer" className="social-link">LinkedIn ↗</a>
-          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="social-link">GitHub ↗</a>
-          <a href="https://x.com/Bhushan679" target="_blank" rel="noopener noreferrer" className="social-link">X (Twitter) ↗</a>
+        <div className="contact-wrapper reveal" ref={addToRefs}>
+          <div className="contact-links-sidebar">
+            <p style={{ marginBottom: '2.5rem', color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '1.05rem' }}>
+              {t('Currently open to roles as: AI Automation Engineer, Full Stack Developer, or Backend Developer.')}
+            </p>
+            <div className="social-icons">
+              <a href="mailto:bhushanam2004@gmail.com" className="social-icon" aria-label="Email"><FiMail size={22} color="#EA4335" /> <span>Email</span></a>
+              <a href="https://www.linkedin.com/in/bhushanam-damisetti/" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="LinkedIn"><FiLinkedin size={22} color="#0A66C2" /> <span>LinkedIn</span></a>
+              <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="GitHub"><FiGithub size={22} color="#333333" /> <span>GitHub</span></a>
+            </div>
+          </div>
+          <div className="contact-form-container">
+            <form action="https://api.web3forms.com/submit" method="POST" className="contact-form">
+              <input type="hidden" name="access_key" value="09d66144-8d9e-4c74-a6c8-58edbb813426" />
+              <input type="text" name="name" placeholder="Name" required className="form-input" />
+              <input type="email" name="email" placeholder="Email" required className="form-input" />
+              <textarea name="message" placeholder="Your Message" required className="form-input form-textarea"></textarea>
+              <button type="submit" className="cta-primary" style={{ width: '100%', marginTop: '1rem', border: 'none', cursor: 'pointer', padding: '1.2rem', fontSize: '1rem' }}>Send Message</button>
+            </form>
+          </div>
         </div>
       </section>
 
