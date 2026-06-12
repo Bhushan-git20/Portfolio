@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
@@ -155,7 +155,7 @@ const RESUMES = [
   { label: "Associate SE", file: "/resume-associate-se.pdf" },
 ];
 
-const TiltCard = ({ children }: { children: React.ReactNode }) => {
+const TiltCard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -191,7 +191,7 @@ const TiltCard = ({ children }: { children: React.ReactNode }) => {
         rotateY,
         transformStyle: "preserve-3d",
       }}
-      className="id-card id-card-drop"
+      className={className || "id-card id-card-drop"}
     >
       <div style={{ transform: "translateZ(50px)", width: "100%", height: "100%" }}>
         {children}
@@ -222,6 +222,13 @@ export const Portfolio = () => {
   }, []);
   const revealRefs = useRef<(HTMLElement | null)[]>([]);
 
+  // Scroll tracking for Timeline animations
+  const processRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: processScroll } = useScroll({
+    target: processRef,
+    offset: ["start center", "end center"]
+  });
+  const processLineHeight = useTransform(processScroll, [0, 1], ["0%", "100%"]);
   // Premium feature states
   const [chatOpen, setChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
@@ -511,21 +518,21 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             <h3 className="timeline-col-title">Education</h3>
             <div className="timeline-item">
               <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-date">Nov 2024 - Jul 2026</div>
+              <TiltCard className="timeline-content">
+                <div className="timeline-date">Jul 2024 - Jul 2026</div>
                 <h4 className="timeline-role">Master of Computer Applications (MCA)</h4>
-                <p className="timeline-org">Adikavi Nannaya University (MSN Campus)</p>
-                <p className="timeline-desc">Published research paper at GCCMIEA International Conference.</p>
-              </div>
+                <p className="timeline-org">Vignan's Institute of Information Technology</p>
+                <p className="timeline-desc">CGPA: 7.86</p>
+              </TiltCard>
             </div>
             <div className="timeline-item">
               <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-date">Nov 2021 - May 2024</div>
+              <TiltCard className="timeline-content">
+                <div className="timeline-date">Jun 2021 - Apr 2024</div>
                 <h4 className="timeline-role">B.Sc Computer Science</h4>
                 <p className="timeline-org">Aditya Degree College</p>
-                <p className="timeline-desc">CGPA: 7.86. Developed strong foundation in software engineering and web technologies.</p>
-              </div>
+                <p className="timeline-desc">CGPA: 7.27</p>
+              </TiltCard>
             </div>
           </div>
 
@@ -534,52 +541,58 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             <h3 className="timeline-col-title">Experience</h3>
             <div className="timeline-item">
               <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-date">Sep 2024 - Dec 2024</div>
+              <TiltCard className="timeline-content">
+                <div className="timeline-date">Mar 2026 - Apr 2026</div>
                 <h4 className="timeline-role">Full Stack Developer Intern</h4>
-                <p className="timeline-org">AICTE EduSkills (AICTE-Eduskills)</p>
-                <p className="timeline-desc">Developed and deployed end-to-end full stack web applications, optimizing backend APIs.</p>
-              </div>
+                <p className="timeline-org">Codec Technologies</p>
+                <p className="timeline-desc">Built async FastAPI endpoints and React dashboards. Deployed to AWS EC2 with Docker.</p>
+              </TiltCard>
             </div>
             <div className="timeline-item">
               <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-date">Nov 2023 - Mar 2024</div>
-                <h4 className="timeline-role">Frontend Web Developer Intern</h4>
-                <p className="timeline-org">Internshala</p>
-                <p className="timeline-desc">Built interactive web applications using React.js. Collaborated on UI/UX improvements.</p>
-              </div>
+              <TiltCard className="timeline-content">
+                <div className="timeline-date">Feb 2024 - Apr 2024</div>
+                <h4 className="timeline-role">AWS Cloud Intern</h4>
+                <p className="timeline-org">Adhoc Network Company</p>
+                <p className="timeline-desc">Monitored EC2 & S3 via CloudWatch, documented IAM roles, and authored operational runbooks.</p>
+              </TiltCard>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── PROCESS ── */}
-      <section id="process" className="section" style={{ background: "var(--bg-main)" }}>
+      <section id="process" className="section" ref={processRef} style={{ background: "var(--bg-main)", position: "relative" }}>
         <p className="section-label reveal" ref={addToRefs}>{t('Workflow')}</p>
         <h2 className="section-title reveal" ref={addToRefs}>{t('AI Engineering Process')}</h2>
         
-        <div className="process-grid">
-          {[
-            { num: "01", title: "Discovery & Architecture", desc: "Analyze business bottlenecks, select optimal LLMs (Gemini, Groq) and design the agentic workflow structure (n8n, LangChain)." },
-            { num: "02", title: "Data Integration", desc: "Connect diverse data sources, setup vector databases (ChromaDB, FAISS), and ingest unstructured data for RAG pipelines." },
-            { num: "03", title: "Agent & Prompt Engineering", desc: "Craft robust system prompts, configure tool-calling capabilities, and build autonomous agents that can reason and execute." },
-            { num: "04", title: "Testing & Evaluation", desc: "Rigorously evaluate retrieval accuracy, test edge cases, and ensure the system behaves predictably." },
-            { num: "05", title: "Deployment & Automation", desc: "Dockerize applications, deploy to cloud infrastructure (AWS, Vercel), and establish monitoring." }
-          ].map((step, i) => (
-            <motion.div 
-              key={step.num}
-              className="process-card"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-            >
-              <div className="process-num">{step.num}</div>
+        <div className="process-timeline-container">
+          <div className="timeline-track-bg"></div>
+          <motion.div className="timeline-track-fill" style={{ height: processLineHeight }}></motion.div>
+          <div className="process-timeline-items">
+            {[
+              { num: "01", title: "Discovery & Architecture", desc: "Analyze business bottlenecks, select optimal LLMs (Gemini, Groq) and design the agentic workflow structure (n8n, LangChain)." },
+              { num: "02", title: "Data Integration", desc: "Connect diverse data sources, setup vector databases (ChromaDB, FAISS), and ingest unstructured data for RAG pipelines." },
+              { num: "03", title: "Agent & Prompt Engineering", desc: "Craft robust system prompts, configure tool-calling capabilities, and build autonomous agents that can reason and execute." },
+              { num: "04", title: "Testing & Evaluation", desc: "Rigorously evaluate retrieval accuracy, test edge cases, and ensure the system behaves predictably." },
+              { num: "05", title: "Deployment & Automation", desc: "Dockerize applications, deploy to cloud infrastructure (AWS, Vercel), and establish monitoring." }
+            ].map((step, i) => (
+              <div key={step.num} className={`process-timeline-item ${i % 2 === 0 ? "left" : "right"}`}>
+                <div className="process-timeline-dot"></div>
+                <motion.div 
+                  className="process-card"
+                  initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: false, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                  <div className="process-num">{step.num}</div>
               <h3 className="process-step-title">{step.title}</h3>
               <p className="process-step-desc">{step.desc}</p>
-            </motion.div>
-          ))}
+                </motion.div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -813,7 +826,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             <div className="social-icons">
               <a href="mailto:bhushanam2004@gmail.com" className="social-icon" aria-label="Email"><FiMail size={22} color="#EA4335" /> <span>Email</span></a>
               <a href="https://www.linkedin.com/in/bhushanam-damisetti/" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="LinkedIn"><FiLinkedin size={22} color="#0A66C2" /> <span>LinkedIn</span></a>
-              <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="GitHub"><FiGithub size={22} color="#333333" /> <span>GitHub</span></a>
+              <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="GitHub"><FiGithub size={22} color="currentColor" /> <span>GitHub</span></a>
             </div>
           </div>
           <div className="contact-form-container">
