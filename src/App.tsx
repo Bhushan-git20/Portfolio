@@ -287,7 +287,7 @@ export const Portfolio = () => {
 
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash-latest",
+        model: "gemini-2.0-flash",
         systemInstruction: `You are Bhushan's AI assistant for his portfolio website. 
 You act like a RAG (Retrieval-Augmented Generation) chatbot. 
 You MUST ONLY answer using the exact data provided below. Do NOT hallucinate, guess, or make up ANY information that is not explicitly written in this prompt. 
@@ -299,9 +299,9 @@ Bio: Builds AI automation systems — from LLM-powered pipelines and RAG chatbot
 Stats: 3+ Projects, 2 Internships, 7.86 CGPA, 3 Certifications.
 Projects:
 1. MindCare: Full-stack wellness platform with Gemini API driving personalised recommendations, Supabase real-time sync. (Published internationally). Tech: React, TS, FastAPI, PostgreSQL, Supabase, Gemini, Docker, AWS.
-2. PDF RAG Chatbot: Multi-PDF AI using LangChain, ChromaDB, FAISS, HF MiniLM. 91% retrieval accuracy. Tech: Python, LangChain, ChromaDB, FAISS, Gemini 1.5 Flash, Streamlit.
+2. PDF RAG Chatbot: Multi-PDF AI using LangChain, ChromaDB, FAISS, HF MiniLM. 91% retrieval accuracy. Tech: Python, LangChain, ChromaDB, FAISS, Gemini 2.0 Flash, Streamlit.
 3. Olive AI Assistant: Custom AI agent deployed to Hugging Face Spaces for free, scalable access. Tech: Python, HF Spaces, Gradio, LLM APIs.
-4. HireReady: AI-powered open-source job application intelligence platform featuring predictive job fit scoring, real-time market insights, and STAR framework interview preparation. Tech: React, TS, Supabase, Gemini 1.5 Flash, Tailwind CSS.
+4. HireReady: AI-powered open-source job application intelligence platform featuring predictive job fit scoring, real-time market insights, and STAR framework interview preparation. Tech: React, TS, Supabase, Gemini 2.0 Flash, Tailwind CSS.
 Skills:
 - AI/Automation: LangChain, n8n, Gemini API, Groq, ChromaDB, FAISS, RAG, Prompt Engineering
 - Backend: FastAPI, Node.js, Express.js, PostgreSQL, MySQL, REST APIs
