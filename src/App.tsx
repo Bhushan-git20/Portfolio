@@ -74,11 +74,11 @@ const PROJECTS: Project[] = [
     id: 2,
     name: "PDF RAG Chatbot",
     problem: "Reading through long PDFs to find specific answers is slow and loses context across documents.",
-    solution: "Built a multi-PDF conversational AI using LangChain ConversationalRetrievalChain, ChromaDB vector store, and HuggingFace MiniLM embeddings — with persistent chat history and source attribution.",
+    solution: "Built a robust multi-PDF conversational AI using LangChain (LCEL), ChromaDB hybrid search (dense + BM25 sparse), and Google text-embedding-004 — refined by a CrossEncoder reranker to eliminate hallucinations.",
     result: "91% retrieval accuracy · 60% fewer repeated queries · Multi-PDF in one session",
-    tech: ["Python", "LangChain", "ChromaDB", "FAISS", "HuggingFace MiniLM", "Gemini 2.5 Flash", "Streamlit"],
+    tech: ["Python", "LangChain LCEL", "ChromaDB", "CrossEncoder", "Gemini 2.5 Flash", "Streamlit"],
     link: "https://github.com/Bhushan-git20/pdf-rag-chatbot",
-    demoLink: "https://huggingface.co/spaces/Bhushan-git20/pdf-rag-chatbot",
+    demoLink: "https://huggingface.co/spaces/Bhushanam/pdf-rag-chatbot",
     image: "/rag_chatbot.png"
   },
   {
@@ -299,7 +299,7 @@ Bio: Builds AI automation systems — from LLM-powered pipelines and RAG chatbot
 Stats: 3+ Projects, 2 Internships, 7.86 CGPA, 3 Certifications.
 Projects:
 1. MindCare: Full-stack wellness platform with Gemini API driving personalised recommendations, Supabase real-time sync. (Published internationally). Tech: React, TS, FastAPI, PostgreSQL, Supabase, Gemini, Docker, AWS.
-2. PDF RAG Chatbot: Multi-PDF AI using LangChain, ChromaDB, FAISS, HF MiniLM. 91% retrieval accuracy. Tech: Python, LangChain, ChromaDB, FAISS, Gemini 2.0 Flash, Streamlit.
+2. PDF RAG Chatbot: Multi-PDF AI using LangChain LCEL, ChromaDB Hybrid Search, Google Embeddings, and CrossEncoder reranking. 91% retrieval accuracy. Tech: Python, LangChain, ChromaDB, Gemini 2.5 Flash, Streamlit.
 3. Olive AI Assistant: Custom AI agent deployed to Hugging Face Spaces for free, scalable access. Tech: Python, HF Spaces, Gradio, LLM APIs.
 4. HireReady: AI-powered open-source job application intelligence platform featuring predictive job fit scoring, real-time market insights, and STAR framework interview preparation. Tech: React, TS, Supabase, Gemini 2.0 Flash, Tailwind CSS.
 Skills:
