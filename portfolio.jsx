@@ -32,6 +32,7 @@ const PROJECTS = [
     desc: "Multi-PDF conversational AI with semantic search, source attribution, and persistent chat history — built with LangChain and ChromaDB.",
     tech: ["Python", "LangChain", "ChromaDB", "Gemini 2.5 Flash", "Streamlit", "HuggingFace"],
     link: "https://github.com/Bhushan-git20/pdf-rag-chatbot",
+    demo: "https://huggingface.co/spaces/Bhushanam/pdf-rag-chatbot"
   },
   {
     id: 3,
@@ -224,9 +225,14 @@ export default function Portfolio() {
                   </svg>
                 )}
 
-                <a href={p.link} target="_blank" rel="noopener noreferrer" className="ext-link">
+                <a href={p.link} target="_blank" rel="noopener noreferrer" className="ext-link" style={{ marginRight: "1rem" }}>
                   View on GitHub →
                 </a>
+                {p.demo && (
+                  <a href={p.demo} target="_blank" rel="noopener noreferrer" className="ext-link" style={{ color: "#4f8bff" }}>
+                    Live Demo →
+                  </a>
+                )}
               </div>
               {p.featured && (
                 <div className="card-visual">
