@@ -13,7 +13,7 @@ A high-end, interactive developer portfolio built with React, TypeScript, and Vi
 - **Infinite Marquee**: The skills section continuously scrolls through the tech stack using custom CSS keyframes.
 - **Project Storytelling**: Project cards are structured with Problem/Solution/Result blocks for maximum recruiter impact.
 - **Click-to-Copy Email**: Custom tooltip implementation for quick clipboard copying.
-- **Mini AI Chatbot**: A floating frontend UI widget for an AI assistant (ready to be hooked up to a Gemini backend).
+- **Mini AI Chatbot**: A floating frontend UI widget for an AI assistant (live and hooked up via a Vercel proxy backend).
 - **Web3Forms Integration**: Fully functional, serverless contact form.
 
 ## 🛠️ Tech Stack
@@ -43,21 +43,21 @@ A high-end, interactive developer portfolio built with React, TypeScript, and Vi
    ```bash
    npm run dev
    ```
-   The application will be available at `http://localhost:8501` (or whatever port Vite assigns).
+   The application will be available at `http://localhost:5173` (or whatever port Vite assigns).
 
 ## ⚙️ Configuration
 
 ### Contact Form (Web3Forms)
 To receive emails from the contact form:
 1. Get a free API key from [Web3Forms](https://web3forms.com/).
-2. Open `src/App.tsx`.
+2. Open `src/portfolio.jsx`.
 3. Locate the form section and replace `"YOUR_ACCESS_KEY_HERE"` with your actual API key:
    ```html
    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
    ```
 
 ### Customizing Data
-All user data is centralised at the top of `src/App.tsx`. You can easily modify:
+All user data is centralised at the top of `src/portfolio.jsx`. You can easily modify:
 - `NAME_DATA` (Hero title)
 - `PROJECTS` (Project cards and details)
 - `SKILLS` (Marquee categories and icons)
