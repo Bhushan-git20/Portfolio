@@ -304,7 +304,7 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   .system-index { font-family: 'Bebas Neue', 'Impact', sans-serif; font-size: 1.1rem; color: var(--tag-text); background-color: var(--tag-bg); }
   .system-name { font-size: .95rem; color: var(--text-main); margin-bottom: .3rem; transition: color .2s; }
   .system-row:hover .system-name { color: var(--text-main); }
-  .system-desc { font-size: .68rem; letter-spacing: .06em; color: var(--tag-text); background-color: var(--tag-bg); }
+  .system-desc { font-size: .68rem; letter-spacing: .06em; color: var(--tag-text); background-color: var(--tag-bg); display: inline-block; padding: 0.2rem 0.4rem; border-radius: 4px; }
   .system-line { width: 30px; height: 1px; background: var(--border-color); transition: width .3s, background .3s; }
   .system-row:hover .system-line { width: 50px; background: var(--text-muted); }
 
@@ -1281,7 +1281,7 @@ html {
   font-family: var(--font-mono);
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: var(--text-main);
+  color: var(--accent);
 }
 .expertise-desc {
   color: var(--text-muted);
@@ -1297,10 +1297,10 @@ html {
 .expertise-tech span {
   font-size: 0.8rem;
   padding: 0.3rem 0.8rem;
-  background: var(--bg-alt);
-  border: 1px solid var(--border-color);
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
   border-radius: 20px;
-  color: var(--text-muted);
+  color: var(--tag-text);
 }
 
 /* ── LIFECYCLE SECTION ── */

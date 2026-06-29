@@ -136,11 +136,26 @@ const getSkillIcon = (skill: string) => {
 };
 
 const SYSTEMS = [
-  { name: "AI Job Automation Pipeline",       desc: "n8n + Gemini + Groq · processes 200+ listings/day · zero manual input" },
-  { name: "LLM Document Processing System",   desc: "LangChain + ChromaDB + FAISS · 91% retrieval accuracy · multi-PDF" },
-  { name: "Dockerised Workflow Infrastructure", desc: "Full stack containerisation · AWS EC2 deploy · 3 zero-downtime releases" },
-  { name: "Event-Driven Notification System", desc: "Telegram bot integration · score-filtered delivery · real-time alerts" },
-  { name: "AI-Powered Wellness Platform",     desc: "Gemini API + Supabase real-time · 150+ users · published research" },
+  {
+    name: "AI Job Automation Pipeline",
+    desc: "n8n + Gemini + Groq · processes 200+ listings/day · zero manual input"
+  },
+  {
+    name: "LLM Document Processing System",
+    desc: "LangChain + ChromaDB + FAISS · 91% retrieval accuracy · multi-PDF"
+  },
+  {
+    name: "Dockerised Workflow Infrastructure",
+    desc: "Full stack containerisation · AWS EC2 deploy · 3 zero-downtime releases"
+  },
+  {
+    name: "Event-Driven Notification System",
+    desc: "Telegram bot integration · score-filtered delivery · real-time alerts"
+  },
+  {
+    name: "AI-Powered Wellness Platform",
+    desc: "Gemini API + Supabase real-time · 150+ users · published research"
+  }
 ];
 
 const CERTS = [
