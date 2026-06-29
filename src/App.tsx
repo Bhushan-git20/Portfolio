@@ -800,11 +800,11 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       
         <div className="github-repos reveal" ref={addToRefs}>
           {[
-            { name: "mindful-pathways", desc: "AI mental wellness platform · React · FastAPI · Gemini" },
-            { name: "pdf-rag-chatbot", desc: "Multi-PDF RAG chatbot · LangChain · ChromaDB · Streamlit" },
-            { name: "job-automation-pipeline", desc: "n8n job scraper · Gemini scoring · Telegram delivery" },
-            { name: "ollive-ai-assistant", desc: "AI Assistant deployed on Hugging Face Spaces · Python · Gradio" },
-            { name: "hireready", desc: "AI career coach & resume parsing · React · Supabase · Gemini" },
+            { name: "mindful-pathways", desc: "AI mental wellness platform · React · Supabase · Gemini" },
+              { name: "pdf-rag-chatbot", desc: "Multi-PDF RAG chatbot · LangChain · ChromaDB · Streamlit" },
+              { name: "job-automation-pipeline", desc: "n8n job scraper · Gemini scoring · Telegram delivery" },
+              { name: "ollive-ai-assistant", desc: "Dual-model AI Assistant eval suite · Next.js · FastAPI" },
+              { name: "hireready", desc: "AI career intelligence tool · React · Supabase · Gemini" },
           ].map(r => (
             <a
               key={r.name}
