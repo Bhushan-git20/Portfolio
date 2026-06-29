@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
+import { motion, useTransform, useScroll } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Lanyard from "./Lanyard";
 import "@fontsource/bebas-neue";
