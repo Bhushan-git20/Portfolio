@@ -95,9 +95,9 @@ const PROJECTS: Project[] = [
 ];
 
 const SKILLS = [
-  { cat: "AI / Automation",  items: ["LangChain", "n8n", "Gemini API", "Groq", "ChromaDB", "FAISS", "RAG", "Prompt Engineering"] },
+  { cat: "AI-Automations",  items: ["LangChain", "n8n", "Gemini API", "Groq", "ChromaDB", "FAISS", "RAG", "Prompt Engineering"] },
   { cat: "Backend",          items: ["FastAPI", "Node.js", "Express.js", "PostgreSQL", "MySQL", "REST APIs"] },
-  { cat: "Cloud / DevOps",   items: ["Docker", "AWS EC2", "AWS S3", "IAM", "CloudWatch", "Vercel", "Git"] },
+  { cat: "Cloud-DevOps",   items: ["Docker", "AWS EC2", "AWS S3", "IAM", "CloudWatch", "Vercel", "Git"] },
   { cat: "Frontend",         items: ["React", "TypeScript", "Tailwind CSS", "JavaScript"] },
   { cat: "Languages",        items: ["Python", "Java SE 11", "TypeScript", "JavaScript"] },
 ];
@@ -509,17 +509,25 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             ))}
           </dl>
         </div>
-        <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s", perspective: "1000px" }}>
-          <TiltCard>
-            <div className="photo-wrapper" style={{ width: "100%", height: "100%" }}>
-              <img
-                src="/bhushan.png"
-                alt="Damisetti Bhushanam"
-                className="about-photo-img"
-              />
-            </div>
-          </TiltCard>
-        </div>
+          <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s", perspective: "1000px" }}>
+            <TiltCard>
+              <div className="id-card-inner">
+                <div className="id-card-hole"></div>
+                <div className="photo-wrapper">
+                  <img
+                    src="/bhushan.png"
+                    alt="Damisetti Bhushanam"
+                    className="about-photo-img"
+                  />
+                </div>
+                <div className="id-card-details">
+                  <h3 className="id-card-name">BHUSHAN</h3>
+                  <p className="id-card-role">AI-Automations Engineer</p>
+                  <div className="id-card-barcode">|| | || | || | ||| ||</div>
+                </div>
+              </div>
+            </TiltCard>
+          </div>
       </section>
 
       {/* ── EDUCATION & EXPERIENCE ── */}
@@ -630,9 +638,9 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
                 <h3 className="project-sbs-title">{proj.name}</h3>
                 
                 <div className="project-sbs-desc">
-                  <p><strong>{t('Problem')}:</strong> {proj.problem}</p>
-                  <p><strong>{t('Solution')}:</strong> {proj.solution}</p>
-                  <p className="result-text"><strong>{t('Result')}:</strong> {proj.result}</p>
+                  <p><strong style={{ color: '#EF4444', fontSize: '1.2em' }}>{t('Problem')}:</strong> {proj.problem}</p>
+                  <p><strong style={{ color: '#EF4444', fontSize: '1.2em' }}>{t('Solution')}:</strong> {proj.solution}</p>
+                  <p className="result-text"><strong style={{ color: '#EF4444', fontSize: '1.2em' }}>{t('Result')}:</strong> {proj.result}</p>
                 </div>
                 
                 <div className="project-sbs-tech">

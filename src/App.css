@@ -414,7 +414,7 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   gap: 1.5rem;
   padding: 0 1.5rem;
 }
-.skill-cat-pill {
+.skill-cat-pill { white-space: nowrap;
   font-family: 'Bebas Neue', 'Impact', sans-serif;
   font-size: 1.2rem;
   letter-spacing: 0.1em;
@@ -927,7 +927,7 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   color: var(--accent) !important;
 }
 
-.skill-cat-pill {
+.skill-cat-pill { white-space: nowrap;
   background: var(--accent) !important;
   color: #fff !important;
 }
@@ -1638,5 +1638,52 @@ html {
 }
 .ext-link.github-link:hover {
   color: var(--accent-purple-hover) !important;
+}
+
+
+/* --- ID CARD SPECIFIC UI --- */
+
+.id-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+}
+.id-card-hole {
+  width: 50px;
+  height: 6px;
+  background: var(--bg-main);
+  border-radius: 6px;
+  margin-bottom: 15px;
+  margin-top: 5px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+}
+.id-card-details {
+  margin-top: 15px;
+  text-align: center;
+  width: 100%;
+}
+.id-card-name {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.8rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.1rem;
+}
+.id-card-role {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.id-card-barcode {
+  font-family: monospace;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  color: var(--text-main);
+  opacity: 0.6;
 }
 
