@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useTransform, useScroll } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { PillNav } from "./PillNav";
 import Lanyard from "./Lanyard";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
@@ -358,28 +359,23 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
   return (
     <>
       {/* ── NAV ── */}
-      {/* ── NAV ── */}
-      <nav className="nav-wrapper">
-        <span className="nav-logo">{t('Bhushan')}</span>
-        <div className="nav-links">
-          {[["#home","Home"], ["#about","About"], ["#experience","Experience"], ["#process","Workflow"], ["#work","Projects"], ["#skills","Skills"], ["#contact","Contact"]].map(([href, label]) => {
-            const isActive = activeSection === href.replace('#', '');
-            return (
-              <a key={href} href={href} className={`nav-link ${isActive ? 'active' : ''}`} style={{ position: 'relative' }}>
-                {label}
-                {isActive && (
-                  <motion.div 
-                    layoutId="nav-indicator"
-                    className="nav-active-indicator"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </a>
-            );
-          })}
-          </div>
-      </nav>
+      <PillNav
+        items={[
+          { label: 'Home', href: '#home' },
+          { label: 'About', href: '#about' },
+          { label: 'Experience', href: '#experience' },
+          { label: 'Workflow', href: '#process' },
+          { label: 'Projects', href: '#work' },
+          { label: 'Skills', href: '#skills' },
+          { label: 'Contact', href: '#contact' }
+        ]}
+        activeHref={`#${activeSection}`}
+        baseColor="#161617"
+        pillColor="#000000"
+        hoveredPillTextColor="#ffffff"
+        pillTextColor="#888888"
+        initialLoadAnimation={true}
+      />
 
       {/* ── HERO ── */}
       <section id="home" className="hero-section">

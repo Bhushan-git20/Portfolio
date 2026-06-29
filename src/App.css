@@ -58,27 +58,7 @@ body {
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ── NAV ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 1.5rem 4rem;
-  background: linear-gradient(to bottom, var(--nav-bg) 0%, transparent 100%);
-}
-.nav-logo {
-  font-family: 'Bebas Neue', 'Impact', sans-serif;
-  font-size: 1.3rem; letter-spacing: .12em; color: var(--text-main);
-}
-.nav-links { display: flex; gap: 2.5rem; align-items: center; }
-.nav-links a {
-  font-size: 1rem; letter-spacing: .15em; text-transform: uppercase;
-  color: var(--text-main); text-decoration: none; opacity: 1; transition: opacity .25s, color .25s;
-}
-.nav-links a:hover { color: var(--accent); }
-.theme-toggle {
-  background: none; border: none; cursor: pointer; color: var(--text-main);
-  opacity: 0.6; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center;
-}
+
 
 
 /* ── HERO ── */
@@ -869,21 +849,6 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   border-color: var(--accent) !important;
 }
 
-.nav-link.active {
-  color: var(--accent) !important;
-}
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: var(--accent);
-}
-
 .stat-number {
   color: var(--accent) !important;
 }
@@ -1099,18 +1064,6 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
   display: block;
 }
 
-/* ── NAV UPDATES ── */
-.nav-wrapper {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background-color: var(--bg-main);
-  background: color-mix(in srgb, var(--bg-main) 80%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-color);
-  padding: 1.5rem 5%;
-}
 
 html {
   scroll-behavior: smooth;
@@ -1372,19 +1325,6 @@ html {
 /* ── TILT CARD ── */
 
 
-/* ── NAV ACTIVE INDICATOR ── */
-.nav-item {
-  position: relative;
-}
-.nav-active-indicator {
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--accent, #F97316);
-  border-radius: 2px;
-}
 
 /* ── CONTACT SECTION ── */
 .contact-wrapper {
