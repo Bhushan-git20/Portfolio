@@ -52,17 +52,9 @@ export default function FluidGlass({
 
   return (
     <Canvas camera={{ position: [0, 0, 20], fov: 15 }} gl={{ alpha: true }}>
-      <ScrollControls damping={0.2} pages={3} distance={0.4}>
-        {mode === 'bar' && <NavItems items={navItems} />}
-        <Wrapper modeProps={modeProps}>
-          <Scroll>
-            <Typography />
-            <Images />
-          </Scroll>
-          <Scroll html />
-          <Preload />
-        </Wrapper>
-      </ScrollControls>
+      <Wrapper modeProps={modeProps}>
+        <Images />
+      </Wrapper>
     </Canvas>
   );
 }
@@ -121,11 +113,12 @@ const ModeWrapper = memo(function ModeWrapper({
     }
 
     gl.setRenderTarget(buffer);
+    gl.setClearColor(0x0a0a0f, 1);
     gl.render(scene, camera);
     gl.setRenderTarget(null);
 
     // Background Color
-    gl.setClearColor(0x5227ff, 1);
+    gl.setClearColor(0x000000, 0);
   });
 
   const { scale, ior, thickness, anisotropy, chromaticAberration, ...extraMat } = modeProps;
@@ -256,31 +249,30 @@ function NavItems({ items }: { items: NavItem[] }) {
 
 function Images() {
   const group = useRef<THREE.Group>(null);
-  const data = useScroll();
-  const { height } = useThree(s => s.viewport);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!group.current) return;
-    const child0 = group.current.children[0] as any;
-    const child1 = group.current.children[1] as any;
-    const child2 = group.current.children[2] as any;
-    const child3 = group.current.children[3] as any;
-    const child4 = group.current.children[4] as any;
-
-    if (child0) child0.material.zoom = 1 + data.range(0, 1 / 3) / 3;
-    if (child1) child1.material.zoom = 1 + data.range(0, 1 / 3) / 3;
-    if (child2) child2.material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
-    if (child3) child3.material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
-    if (child4) child4.material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
+    const time = state.clock.getElapsedTime();
+    group.current.children.forEach((child, i) => {
+      child.position.y = Math.sin(time + i * 1.5) * 0.8;
+      child.position.x = Math.cos(time + i * 1.5) * 0.8;
+    });
   });
 
   return (
     <group ref={group}>
-      <Image position={[-2, 0, 0]} scale={[3, height / 1.1, 1]} url="/bhushan.png" />
-      <Image position={[2, 0, 3]} scale={3} url="/bhushan.png" />
-      <Image position={[-2.05, -height, 6]} scale={[1, 3, 1]} url="/bhushan.png" />
-      <Image position={[-0.6, -height, 9]} scale={[1, 2, 1]} url="/bhushan.png" />
-      <Image position={[0.75, -height, 10.5]} scale={1.5} url="/bhushan.png" />
+      <mesh position={[-2, 0, 0]} scale={3}>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshBasicMaterial color="#FF5E00" />
+      </mesh>
+      <mesh position={[2, 1, 1]} scale={2.5}>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshBasicMaterial color="#7C3AED" />
+      </mesh>
+      <mesh position={[0, -2, -1]} scale={3.5}>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshBasicMaterial color="#0A5CFF" />
+      </mesh>
     </group>
   );
 }

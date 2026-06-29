@@ -119,6 +119,18 @@ export const PillNav = ({
     return () => window.removeEventListener('resize', onResize);
   }, [items, ease, initialLoadAnimation]);
 
+  useEffect(() => {
+    items.forEach((item, i) => {
+      if (activeHref === item.href) {
+        const tl = tlRefs.current[i];
+        if (tl) {
+          activeTweenRefs.current[i]?.kill();
+          tl.progress(0);
+        }
+      }
+    });
+  }, [activeHref, items]);
+
   const handleEnter = (i: number) => {
     const tl = tlRefs.current[i];
     if (!tl) return;
@@ -211,8 +223,12 @@ export const PillNav = ({
                   href={item.href}
                   className={`pill${activeHref === item.href ? ' is-active' : ''}`}
                   aria-label={item.ariaLabel || item.label}
-                  onMouseEnter={() => handleEnter(i)}
-                  onMouseLeave={() => handleLeave(i)}
+                  onMouseEnter={() => {
+                    if (activeHref !== item.href) handleEnter(i);
+                  }}
+                  onMouseLeave={() => {
+                    if (activeHref !== item.href) handleLeave(i);
+                  }}
                 >
                   <span
                     className="hover-circle"

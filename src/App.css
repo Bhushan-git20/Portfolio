@@ -62,6 +62,15 @@ body {
 
 
 /* ── HERO ── */
+.hero-bg-fluid-glass {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: auto;
+}
 .hero-section {
   min-height: 100vh;
   display: flex; flex-direction: column;
@@ -69,11 +78,17 @@ body {
   background: var(--bg-main); position: relative; overflow: hidden;
 }
 .hero-intro {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
   font-size: .7rem; letter-spacing: .35em; text-transform: uppercase;
   color: var(--text-muted); margin-bottom: 1.5rem;
   opacity: 0; animation: fadeUp .8s .3s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 .hero-name {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
   font-family: 'Bebas Neue', 'Impact', sans-serif;
   font-size: clamp(5.5rem, 14vw, 12rem);
   line-height: .88; text-align: center;
@@ -160,7 +175,7 @@ body {
 
 /* ── FOOTER ── */
 footer { padding: 1.5rem 4rem; display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); background: var(--bg-main); }
-footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--tag-text); background-color: var(--tag-bg); }
+footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
 
 /* ── NEW ELEMENTS ── */
 .resume-btn {
@@ -193,20 +208,27 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
 .form-submit:hover { background: transparent; color: var(--text-main); }
 @media (max-width: 600px) { .form-group { flex-direction: column; } }
 
-  /* ── HERO ── */
   .hero-headline {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
     font-size: clamp(1rem, 2.2vw, 1.35rem);
     color: #fff; max-width: 600px; text-align: center;
     line-height: 1.5; margin-top: 2rem; letter-spacing: .01em;
     opacity: 0; animation: fadeUp .8s 2.4s cubic-bezier(0.16,1,0.3,1) forwards;
   }
   .hero-subtext {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
     font-size: .72rem; letter-spacing: .08em; color: var(--text-main);
     max-width: 560px; text-align: center; line-height: 1.8;
     margin-top: .75rem;
     opacity: 0; animation: fadeUp .8s 2.7s cubic-bezier(0.16,1,0.3,1) forwards;
   }
   .hero-ctas {
+    position: relative;
+    z-index: 3;
     display: flex; gap: 1rem; margin-top: 2.25rem; flex-wrap: wrap; justify-content: center;
     opacity: 0; animation: fadeUp .8s 3s cubic-bezier(0.16,1,0.3,1) forwards;
   }
@@ -1327,7 +1349,24 @@ html {
 
 
 /* ── CONTACT SECTION ── */
+.contact-bg-fluid-glass {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: auto;
+}
+#contact .section-label {
+  position: relative;
+  z-index: 2;
+  color: var(--accent-purple) !important;
+  font-weight: 600;
+}
 .contact-wrapper {
+  position: relative;
+  z-index: 2;
   display: flex;
   gap: 4rem;
   justify-content: space-between;
@@ -1336,6 +1375,8 @@ html {
   align-items: flex-start;
 }
 .contact-form-container {
+  position: relative;
+  z-index: 3;
   flex: 1.2;
   min-width: 300px;
   transform: translateY(-2rem);

@@ -120,17 +120,21 @@
   will-change: transform, opacity;
 }
 
+.pill.is-active {
+  background: #FF5E00 !important;
+  color: #ffffff !important;
+}
+
+.pill.is-active .pill-label {
+  color: #ffffff !important;
+}
+
+.pill.is-active .hover-circle {
+  display: none !important;
+}
+
 .pill.is-active::after {
-  content: '';
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  background: var(--base, #000);
-  border-radius: 50px;
-  z-index: 4;
+  display: none !important;
 }
 
 .desktop-only {
@@ -223,4 +227,9 @@
   cursor: pointer;
   background-color: var(--base);
   color: var(--hover-text, #fff);
+}
+
+.mobile-menu-popover .mobile-menu-link.is-active {
+  background-color: #FF5E00 !important;
+  color: #ffffff !important;
 }

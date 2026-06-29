@@ -4,6 +4,9 @@ import { motion, useTransform, useScroll } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PillNav } from "./PillNav";
 import Lanyard from "./Lanyard";
+import FluidGlass from "./FluidGlass";
+import Ferrofluid from "./Ferrofluid";
+import RotatingText from "./RotatingText";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
 import { 
@@ -177,6 +180,8 @@ const RESUMES = [
 export const Portfolio = () => {
   const [ghStats, setGhStats] = useState<GitHubStats | null>(null);
   const [activeSection, setActiveSection] = useState("home");
+  const [roleIndex, setRoleIndex] = useState(0);
+  const roleColors = ["#EF4444", "#7C3AED", "#FF5E00"];
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -379,6 +384,25 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
       {/* ── HERO ── */}
       <section id="home" className="hero-section">
+        <div className="hero-bg-fluid-glass">
+          <Ferrofluid
+            paused={activeSection !== "home"}
+            colors={["#ffffff", "#ffffff", "#ffffff"]}
+            speed={0.5}
+            scale={1}
+            turbulence={1}
+            fluidity={0.1}
+            rimWidth={0.2}
+            sharpness={3}
+            shimmer={1}
+            glow={2}
+            flowDirection="down"
+            opacity={1}
+            mouseInteraction={true}
+            mouseStrength={1}
+            mouseRadius={0.3}
+          />
+        </div>
         <p className="hero-intro">{t('Introducing')}</p>
         <h1 className="hero-name" aria-label="DAMISETTI BHUSHANAM">
           {NAME_DATA.map((line, li) => (
@@ -390,8 +414,21 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           ))}
         </h1>
       
-        <p className="hero-headline">
-          AI Automation Engineer
+        <p className="hero-headline" style={{ display: 'inline-flex', justifyContent: 'center', position: 'relative', zIndex: 2, pointerEvents: 'none' }}>
+          <RotatingText
+            texts={['AI Automation Engineer', 'Full Stack Developer', 'Backend Developer']}
+            mainClassName="overflow-hidden"
+            style={{ color: roleColors[roleIndex] }}
+            onNext={setRoleIndex}
+            staggerFrom={"last"}
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "-120%", opacity: 0 }}
+            staggerDuration={0.025}
+            splitLevelClassName="overflow-hidden pb-1"
+            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+            rotationInterval={2000}
+          />
         </p>
 
         <p className="hero-subtext">
@@ -446,7 +483,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           </dl>
         </div>
           <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s", perspective: "1000px" }}>
-            <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} frontImage="/bhushan.png" />
+            <Lanyard paused={activeSection !== "about"} position={[0, 0, 20]} gravity={[0, -40, 0]} frontImage="/bhushan.png" />
           </div>
       </section>
 
@@ -756,10 +793,10 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       </section>
 
       {/* ── CONTACT ── */}
-      <section id="contact" className="section" style={{ background: "var(--bg-alt)" }}>
+      <section id="contact" className="section" style={{ background: "var(--bg-alt)", position: "relative", overflow: "hidden" }}>
         <p className="section-label reveal" ref={addToRefs}>{t('Connect')}</p>
-        <h2 className="section-title reveal" ref={addToRefs} style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
-          {t("Let's Build Something Useful.")}
+        <h2 className="section-title reveal" ref={addToRefs} style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', position: 'relative', zIndex: 2 }}>
+          {t("Lets connect & build something useful together")}
         </h2>
         <div className="contact-wrapper reveal" ref={addToRefs}>
           <div className="contact-links-sidebar">
