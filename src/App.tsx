@@ -2,11 +2,12 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import Lanyard from "./Lanyard";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
 import { 
   FiGithub, FiLinkedin, FiMail, FiExternalLink, FiCode, FiPhone, FiAward, 
-  FiSun, FiMoon, FiCpu, FiDatabase, FiSettings, FiTerminal, FiGitMerge, FiTwitter
+  FiCpu, FiDatabase, FiSettings, FiTerminal, FiGitMerge, FiTwitter
 } from "react-icons/fi";
 import { 
   SiPython, SiJavascript, SiTypescript, SiReact, SiTailwindcss, SiHtml5, SiCss, 
@@ -170,54 +171,10 @@ const RESUMES = [
   { label: "Associate SE", file: "/resume-associate-se.pdf" },
 ];
 
-const TiltCard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
 
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.div
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
-      className={className || "id-card id-card-drop"}
-    >
-      <div style={{ transform: "translateZ(50px)", width: "100%", height: "100%" }}>
-        {children}
-      </div>
-    </motion.div>
-  );
-};
 
 export const Portfolio = () => {
   const [ghStats, setGhStats] = useState<GitHubStats | null>(null);
-  const [theme, setTheme] = useState("dark");
   const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
@@ -251,10 +208,6 @@ export const Portfolio = () => {
     { sender: 'ai', text: 'Hi! I am Bhushan\'s AI assistant. How can I help you today?' }
   ]);
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
   // Prevent scroll restoration on refresh
   useEffect(() => {
     if ('scrollRestoration' in history) {
@@ -278,8 +231,6 @@ export const Portfolio = () => {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
-
-  const toggleTheme = () => setTheme(prev => prev === "dark" ? "light" : "dark");
 
   const [isChatTyping, setIsChatTyping] = useState(false);
 
@@ -406,7 +357,6 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
   return (
     <>
-      <div className="cursor-glow"></div>
       {/* ── NAV ── */}
       {/* ── NAV ── */}
       <nav className="nav-wrapper">
@@ -428,10 +378,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
               </a>
             );
           })}
-          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-            {theme === "dark" ? <FiSun size={16} color="#FFD700" /> : <FiMoon size={16} />}
-          </button>
-        </div>
+          </div>
       </nav>
 
       {/* ── HERO ── */}
@@ -477,13 +424,6 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           <p className="about-bio" style={{ color: "var(--text-muted)", fontSize: ".85rem", letterSpacing: ".06em" }}>
             Current focus: agentic AI systems · LangGraph · multi-agent orchestration
           </p>
-          <div className="certs-list">
-            {CERTS.map(c => (
-              <div key={c} className="cert-row">
-                <FiAward size={14} /> {c}
-              </div>
-            ))}
-          </div>
           <div className="resume-selector">
             <p className="resume-label" style={{ color: '#FFD700' }}>{t('View Resume')}</p>
             <div className="resume-btns">
@@ -501,7 +441,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             </div>
           </div>
           <dl className="about-stats">
-            {[["3+","Projects"],["2","Internships"],["7","Repos"],["3","Certs"]].map(([num, label]) => (
+            {[["3+","Projects"],["2","Internships"],["7","Repos"],["3+","Certs"]].map(([num, label]) => (
               <div key={label} className="stat-block">
                 <dt className="stat-label">{label}</dt>
                 <dd className="stat-number">{num}</dd>
@@ -510,23 +450,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           </dl>
         </div>
           <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s", perspective: "1000px" }}>
-            <TiltCard>
-              <div className="id-card-inner">
-                <div className="id-card-hole"></div>
-                <div className="photo-wrapper">
-                  <img
-                    src="/bhushan.png"
-                    alt="Damisetti Bhushanam"
-                    className="about-photo-img"
-                  />
-                </div>
-                <div className="id-card-details">
-                  <h3 className="id-card-name">BHUSHAN</h3>
-                  <p className="id-card-role">AI-Automations Engineer</p>
-                  <div className="id-card-barcode">|| | || | || | ||| ||</div>
-                </div>
-              </div>
-            </TiltCard>
+            <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} frontImage="/bhushan.png" />
           </div>
       </section>
 
@@ -541,21 +465,21 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             <h3 className="timeline-col-title">Education</h3>
             <div className="timeline-item">
               <div className="timeline-dot" />
-              <TiltCard className="timeline-content">
+              <div className="timeline-content">
                 <div className="timeline-date">Jul 2024 - Jul 2026</div>
                 <h4 className="timeline-role">Master of Computer Applications (MCA)</h4>
                 <p className="timeline-org">Vignan's Institute of Information Technology</p>
                 <p className="timeline-desc">CGPA: 7.86</p>
-              </TiltCard>
+              </div>
             </div>
             <div className="timeline-item">
               <div className="timeline-dot" />
-              <TiltCard className="timeline-content">
+              <div className="timeline-content">
                 <div className="timeline-date">Jun 2021 - Apr 2024</div>
                 <h4 className="timeline-role">B.Sc Computer Science</h4>
                 <p className="timeline-org">Aditya Degree College</p>
                 <p className="timeline-desc">CGPA: 7.27</p>
-              </TiltCard>
+              </div>
             </div>
           </div>
 
@@ -564,21 +488,21 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             <h3 className="timeline-col-title">Experience</h3>
             <div className="timeline-item">
               <div className="timeline-dot" />
-              <TiltCard className="timeline-content">
+              <div className="timeline-content">
                 <div className="timeline-date">Mar 2026 - Apr 2026</div>
                 <h4 className="timeline-role">Full Stack Developer Intern</h4>
                 <p className="timeline-org">Codec Technologies</p>
                 <p className="timeline-desc">Built async FastAPI endpoints and React dashboards. Deployed to AWS EC2 with Docker.</p>
-              </TiltCard>
+              </div>
             </div>
             <div className="timeline-item">
               <div className="timeline-dot" />
-              <TiltCard className="timeline-content">
+              <div className="timeline-content">
                 <div className="timeline-date">Feb 2024 - Apr 2024</div>
                 <h4 className="timeline-role">AWS Cloud Intern</h4>
                 <p className="timeline-org">Adhoc Network Company</p>
                 <p className="timeline-desc">Monitored EC2 & S3 via CloudWatch, documented IAM roles, and authored operational runbooks.</p>
-              </TiltCard>
+              </div>
             </div>
           </div>
         </div>
