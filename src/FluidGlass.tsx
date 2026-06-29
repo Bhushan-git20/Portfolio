@@ -32,10 +32,14 @@ export default function FluidGlass({
   mode = 'lens', 
   lensProps = {}, 
   barProps = {}, 
-  cubeProps = {} 
-}: FluidGlassProps) {
+  cubeProps = {},
+  ...flatProps
+}: any) {
   const Wrapper = mode === 'bar' ? Bar : mode === 'cube' ? Cube : Lens;
-  const rawOverrides = mode === 'bar' ? barProps : mode === 'cube' ? cubeProps : lensProps;
+  const rawOverrides = {
+    ...(mode === 'bar' ? barProps : mode === 'cube' ? cubeProps : lensProps),
+    ...flatProps
+  };
 
   const {
     navItems = [
@@ -322,5 +326,3 @@ function Typography() {
 
 // Preload GLTF models
 useGLTF.preload('/assets/3d/lens.glb');
-useGLTF.preload('/assets/3d/cube.glb');
-useGLTF.preload('/assets/3d/bar.glb');
