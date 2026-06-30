@@ -4,7 +4,6 @@ import { motion, useTransform, useScroll } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PillNav } from "./PillNav";
 import Lanyard from "./Lanyard";
-import FluidGlass from "./FluidGlass";
 import Ferrofluid from "./Ferrofluid";
 import RotatingText from "./RotatingText";
 import "@fontsource/bebas-neue";
