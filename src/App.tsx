@@ -4,13 +4,14 @@ import { motion, useTransform, useScroll } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PillNav } from "./PillNav";
 import Lanyard from "./Lanyard";
-import Ferrofluid from "./Ferrofluid";
-import RotatingText from "./RotatingText";
+import { ShapeGrid } from "./ShapeGrid";
+import ScrollStack, { ScrollStackItem } from "./ScrollStack";
+import Lenis from "lenis";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
 import { 
   FiGithub, FiLinkedin, FiMail, FiExternalLink, FiCode, FiPhone, FiAward, 
-  FiCpu, FiDatabase, FiSettings, FiTerminal, FiGitMerge, FiTwitter
+  FiCpu, FiDatabase, FiSettings, FiTerminal, FiGitMerge, FiTwitter, FiArrowUpRight
 } from "react-icons/fi";
 import { 
   SiPython, SiJavascript, SiTypescript, SiReact, SiTailwindcss, SiHtml5, SiCss, 
@@ -52,6 +53,28 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
+    id: 3,
+    name: "Ollive AI Assistant",
+    problem: "Comparing OSS and frontier AI models in a production-like setting requires building real infrastructure — not just calling APIs. Most demos are superficial and don't test models under guardrails, memory, or tool constraints.",
+    solution: "Built a dual-model AI assistant pitting Qwen2.5-0.5B (open source, runs on CPU) against Gemini 2.5 Flash (frontier), with a FastAPI backend, Next.js frontend, per-session SQLite memory, tool routing (calculator, datetime, DuckDuckGo search), input/output safety guardrails, and a Recharts observability dashboard tracking latency, tokens, and guardrail hits per session. Includes a 30-question eval suite across hallucination, bias, and safety categories with auto-generated PDF reports.",
+    result: "Gemini 2.5 Flash: 30/30 (100%) · Qwen2.5-0.5B: 26/30 (86.7%) · Side-by-side compare tab with cost and latency breakdown · Deployed on Hugging Face Spaces.",
+    tech: ["Python", "FastAPI", "Next.js", "HuggingFace Spaces", "SQLite"],
+    link: "https://github.com/Bhushan-git20/ollive-ai-assistant",
+    demoLink: "https://huggingface.co/spaces/Bhushanam/ollive-ai-assistant",
+    image: "/ollive.png"
+  },
+  {
+    id: 2,
+    name: "PDF RAG Chatbot",
+    problem: "Reading through long PDFs to find specific answers is slow, loses context across documents, and standard keyword search misses semantically related content entirely.",
+    solution: "Built a multi-PDF conversational AI using a hybrid retrieval pipeline — ChromaDB for dense semantic search combined with BM25 for sparse keyword matching, reranked by a CrossEncoder (ms-marco-MiniLM-L-6-v2) to surface only the top 3 most relevant chunks. Gemini 2.5 Flash synthesizes the answer with automatic fallback to Groq Llama-3.3-70b for high availability. Every response includes source attribution showing exactly which paragraph it came from.",
+    result: "Handles multiple PDFs in a single session · Source-attributed responses with CrossEncoder confidence scoring · Thread-safe embeddings for concurrent access · Exponential backoff for API rate limits.",
+    tech: ["Python", "LangChain LCEL", "ChromaDB", "CrossEncoder", "Gemini 2.5 Flash", "Streamlit"],
+    link: "https://github.com/Bhushan-git20/pdf-rag-chatbot",
+    demoLink: "https://huggingface.co/spaces/Bhushanam/pdf-rag-chatbot",
+    image: "/rag_chatbot.png"
+  },
+  {
     id: 4,
     name: "HireReady",
     badge: "Open Source",
@@ -73,28 +96,6 @@ const PROJECTS: Project[] = [
     tech: ["React", "TypeScript", "Supabase", "Gemini 2.5 Flash", "Vite"],
     link: "https://github.com/Bhushan-git20/mindful-pathways",
     image: "/mindcare.png"
-  },
-  {
-    id: 2,
-    name: "PDF RAG Chatbot",
-    problem: "Reading through long PDFs to find specific answers is slow, loses context across documents, and standard keyword search misses semantically related content entirely.",
-    solution: "Built a multi-PDF conversational AI using a hybrid retrieval pipeline — ChromaDB for dense semantic search combined with BM25 for sparse keyword matching, reranked by a CrossEncoder (ms-marco-MiniLM-L-6-v2) to surface only the top 3 most relevant chunks. Gemini 2.5 Flash synthesizes the answer with automatic fallback to Groq Llama-3.3-70b for high availability. Every response includes source attribution showing exactly which paragraph it came from.",
-    result: "Handles multiple PDFs in a single session · Source-attributed responses with CrossEncoder confidence scoring · Thread-safe embeddings for concurrent access · Exponential backoff for API rate limits.",
-    tech: ["Python", "LangChain LCEL", "ChromaDB", "CrossEncoder", "Gemini 2.5 Flash", "Streamlit"],
-    link: "https://github.com/Bhushan-git20/pdf-rag-chatbot",
-    demoLink: "https://huggingface.co/spaces/Bhushanam/pdf-rag-chatbot",
-    image: "/rag_chatbot.png"
-  },
-  {
-    id: 3,
-    name: "Ollive AI Assistant",
-    problem: "Comparing OSS and frontier AI models in a production-like setting requires building real infrastructure — not just calling APIs. Most demos are superficial and don't test models under guardrails, memory, or tool constraints.",
-    solution: "Built a dual-model AI assistant pitting Qwen2.5-0.5B (open source, runs on CPU) against Gemini 2.5 Flash (frontier), with a FastAPI backend, Next.js frontend, per-session SQLite memory, tool routing (calculator, datetime, DuckDuckGo search), input/output safety guardrails, and a Recharts observability dashboard tracking latency, tokens, and guardrail hits per session. Includes a 30-question eval suite across hallucination, bias, and safety categories with auto-generated PDF reports.",
-    result: "Gemini 2.5 Flash: 30/30 (100%) · Qwen2.5-0.5B: 26/30 (86.7%) · Side-by-side compare tab with cost and latency breakdown · Deployed on Hugging Face Spaces.",
-    tech: ["Python", "FastAPI", "Next.js", "HuggingFace Spaces", "SQLite"],
-    link: "https://github.com/Bhushan-git20/ollive-ai-assistant",
-    demoLink: "https://huggingface.co/spaces/Bhushanam/ollive-ai-assistant",
-    image: "/ollive.png"
   }
 ];
 
@@ -179,23 +180,38 @@ const RESUMES = [
 export const Portfolio = () => {
   const [ghStats, setGhStats] = useState<GitHubStats | null>(null);
   const [activeSection, setActiveSection] = useState("home");
-  const [roleIndex, setRoleIndex] = useState(0);
-  const roleColors = ["#EF4444", "#7C3AED", "#FF5E00"];
 
   useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    let rafId: number;
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && entry.target.id) {
           setActiveSection(entry.target.id);
         }
       });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.1 });
     
     document.querySelectorAll("section[id]").forEach((section) => {
       observer.observe(section);
     });
     
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
   }, []);
   const revealRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -239,6 +255,26 @@ export const Portfolio = () => {
 
   const [isChatTyping, setIsChatTyping] = useState(false);
 
+  const getLocalFallbackResponse = (query: string): string => {
+    const q = query.toLowerCase();
+    if (q.includes('who is bhushan') || q.includes('who are you') || q.includes('about') || q.includes('bhushan')) {
+      return "Damisetti Bhushanam is an AI Automation Engineer and Full Stack Developer. He recently graduated with his MCA in July 2026 and builds advanced AI automation systems, RAG pipelines (like PDF RAG Chatbot), and full-stack web applications.";
+    }
+    if (q.includes('project') || q.includes('work') || q.includes('portfolio') || q.includes('build')) {
+      return "Bhushan has built several high-impact projects:\n\n1. **Ollive AI Assistant**: A dual-model assistant comparing Qwen2.5 & Gemini with a FastAPI backend.\n2. **PDF RAG Chatbot**: Multi-PDF AI using ChromaDB and CrossEncoder reranking.\n3. **HireReady**: AI career intelligence tool for JD analysis & STAR prep.\n4. **MindCare**: Full-stack wellness platform (GCCMIEA published).";
+    }
+    if (q.includes('skill') || q.includes('tech') || q.includes('python') || q.includes('react') || q.includes('stack')) {
+      return "Bhushan's core technical stack includes:\n\n• **AI/Automation**: LangChain, n8n, Gemini API, ChromaDB, RAG, Prompt Engineering\n• **Languages & Backend**: Python, FastAPI, Node.js, TypeScript, PostgreSQL, Docker\n• **Frontend**: React, TypeScript, Tailwind CSS, JavaScript";
+    }
+    if (q.includes('education') || q.includes('mca') || q.includes('college') || q.includes('study')) {
+      return "Bhushan completed his Master of Computer Applications (MCA) at Vignan's Institute of Information Technology (2024 - 2026) with a CGPA of 7.86. Prior to that, he earned his B.Sc in Computer Science at Aditya Degree College.";
+    }
+    if (q.includes('contact') || q.includes('email') || q.includes('hire') || q.includes('github') || q.includes('linkedin')) {
+      return "You can connect with Bhushan via:\n\n• **Email**: damisettibhushanam@gmail.com\n• **GitHub**: [github.com/Bhushan-git20](https://github.com/Bhushan-git20)\n• **LinkedIn**: [linkedin.com/in/damisetti-bhushanam](https://linkedin.com/in/damisetti-bhushanam)";
+    }
+    return "I'm sorry, but I can only provide information that is explicitly stated in Bhushan's portfolio and resume. Feel free to ask about his projects, skills, education, experience, or contact details!";
+  };
+
   const handleChatSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim() || isChatTyping) return;
@@ -258,7 +294,7 @@ export const Portfolio = () => {
 
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-2.0-flash",
+        model: "gemini-2.0-flash-lite",
         systemInstruction: `You are Bhushan's AI assistant for his portfolio website. 
 You act like a RAG (Retrieval-Augmented Generation) chatbot. 
 You MUST ONLY answer using the exact data provided below. Do NOT hallucinate, guess, or make up ANY information that is not explicitly written in this prompt. 
@@ -296,8 +332,9 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       
       setChatMessages(prev => [...prev, { sender: 'ai', text: response.text() }]);
     } catch (error: any) {
-      console.error("Chat API Error:", error);
-      setChatMessages(prev => [...prev, { sender: 'ai', text: `Sorry, I'm having trouble: ${error.message || 'Unknown error'}` }]);
+      console.warn("Gemini API Quota/Error, falling back to local dataset:", error);
+      const fallbackText = getLocalFallbackResponse(userMessage);
+      setChatMessages(prev => [...prev, { sender: 'ai', text: fallbackText }]);
     } finally {
       setIsChatTyping(false);
     }
@@ -362,6 +399,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
   return (
     <>
+
       {/* ── NAV ── */}
       <PillNav
         items={[
@@ -384,22 +422,14 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       {/* ── HERO ── */}
       <section id="home" className="hero-section">
         <div className="hero-bg-fluid-glass">
-          <Ferrofluid
-            paused={activeSection !== "home"}
-            colors={["#ffffff", "#ffffff", "#ffffff"]}
-            speed={0.5}
-            scale={1}
-            turbulence={1}
-            fluidity={0.1}
-            rimWidth={0.2}
-            sharpness={3}
-            shimmer={1}
-            glow={2}
-            flowDirection="down"
-            opacity={1}
-            mouseInteraction={true}
-            mouseStrength={1}
-            mouseRadius={0.3}
+          <ShapeGrid 
+            speed={0.5} 
+            squareSize={40}
+            direction='diagonal'
+            borderColor='rgba(255, 255, 255, 0.08)'
+            hoverFillColor='rgba(255, 94, 0, 0.2)'
+            shape='square'
+            hoverTrailAmount={5}
           />
         </div>
         <p className="hero-intro">{t('Introducing')}</p>
@@ -413,21 +443,8 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           ))}
         </h1>
       
-        <p className="hero-headline" style={{ display: 'inline-flex', justifyContent: 'center', position: 'relative', zIndex: 2, pointerEvents: 'none' }}>
-          <RotatingText
-            texts={['AI Automation Engineer', 'Full Stack Developer', 'Backend Developer']}
-            mainClassName="overflow-hidden"
-            style={{ color: roleColors[roleIndex] }}
-            onNext={setRoleIndex}
-            staggerFrom={"last"}
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "-120%", opacity: 0 }}
-            staggerDuration={0.025}
-            splitLevelClassName="overflow-hidden pb-1"
-            transition={{ type: "spring", damping: 30, stiffness: 400 }}
-            rotationInterval={2000}
-          />
+        <p className="hero-headline">
+          AI Automation Engineer
         </p>
 
         <p className="hero-subtext">
@@ -579,44 +596,54 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         <p className="section-label reveal" ref={addToRefs}>{t('Selected Work')}</p>
         <h2 className="section-title reveal" ref={addToRefs}>{t('Projects')}</h2>
         
-        <div className="projects-sbs-list">
+        <ScrollStack 
+          useWindowScroll={true} 
+          itemDistance={100} 
+          baseScale={0.82} 
+          itemScale={0.045} 
+          blurAmount={1.5}
+          stackPosition="25%"
+          scaleEndPosition="10%"
+        >
           {PROJECTS.map((proj, idx) => (
-            <div key={proj.id} className={`project-sbs reveal ${idx % 2 !== 0 ? "sbs-reverse" : ""}`} ref={addToRefs}>
-              <div className="project-sbs-visual">
-                {proj.image ? (
-                  <img src={proj.image} alt={proj.name} className="project-sbs-img" />
-                ) : (
-                  <div className="book-no-image">{t("No Image")}</div>
-                )}
-              </div>
-              <div className="project-sbs-content">
-                {proj.badge && <span className="project-badge">{proj.badge}</span>}
-                <h3 className="project-sbs-title">{proj.name}</h3>
-                
-                <div className="project-sbs-desc">
-                  <p><strong style={{ color: '#EF4444', fontSize: '1.2em' }}>{t('Problem')}:</strong> {proj.problem}</p>
-                  <p><strong style={{ color: '#EF4444', fontSize: '1.2em' }}>{t('Solution')}:</strong> {proj.solution}</p>
-                  <p className="result-text"><strong style={{ color: '#EF4444', fontSize: '1.2em' }}>{t('Result')}:</strong> {proj.result}</p>
-                </div>
-                
-                <div className="project-sbs-tech">
-                  {proj.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
-                </div>
-                
-                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                  <a href={proj.link} target="_blank" rel="noopener noreferrer" className="project-link-btn ext-link">
-                    GitHub <FiExternalLink size={14} />
-                  </a>
-                  {proj.demoLink && (
-                    <a href={proj.demoLink} target="_blank" rel="noopener noreferrer" className="project-link-btn ext-link" style={{ color: "var(--accent)" }}>
-                      Live Demo <FiExternalLink size={14} />
-                    </a>
+            <ScrollStackItem key={proj.id}>
+              <div className={`project-sbs ${idx % 2 !== 0 ? "sbs-reverse" : ""}`} style={{ margin: 0, height: '100%' }}>
+                <div className="project-sbs-visual">
+                  {proj.image ? (
+                    <img src={proj.image} alt={proj.name} className="project-sbs-img" />
+                  ) : (
+                    <div className="book-no-image">{t("No Image")}</div>
                   )}
                 </div>
+                <div className="project-sbs-content">
+                  {proj.badge && <span className="project-badge">{proj.badge}</span>}
+                  <h3 className="project-sbs-title">{proj.name}</h3>
+                  
+                  <div className="project-sbs-desc">
+                    <p><strong style={{ color: '#EF4444', fontSize: '1.2em' }}>{t('Problem')}:</strong> {proj.problem}</p>
+                    <p><strong style={{ color: '#EF4444', fontSize: '1.2em' }}>{t('Solution')}:</strong> {proj.solution}</p>
+                    <p className="result-text"><strong style={{ color: '#EF4444', fontSize: '1.2em' }}>{t('Result')}:</strong> {proj.result}</p>
+                  </div>
+                  
+                  <div className="project-sbs-tech">
+                    {proj.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
+                  </div>
+                  
+                  <div style={{ display: 'flex', gap: '1rem', marginTop: '1.25rem' }}>
+                    <a href={proj.link} target="_blank" rel="noopener noreferrer" className="project-link-btn ext-link">
+                      <FiGithub size={16} /> View on GitHub <FiArrowUpRight size={14} />
+                    </a>
+                    {proj.demoLink && (
+                      <a href={proj.demoLink} target="_blank" rel="noopener noreferrer" className="project-link-btn demo-btn ext-link">
+                        <FiExternalLink size={16} /> Live Demo <FiArrowUpRight size={14} />
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
+            </ScrollStackItem>
           ))}
-        </div>
+        </ScrollStack>
       </section>
 
       
@@ -802,10 +829,19 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             <p style={{ marginBottom: '2.5rem', color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '1.05rem' }}>
               {t('Currently open to roles as: AI Automation Engineer, Full Stack Developer, or Backend Developer.')}
             </p>
-            <div className="social-icons">
-              <a href="mailto:bhushanam2004@gmail.com" className="social-icon" aria-label="Email"><FiMail size={22} color="#EA4335" /> <span>Email</span></a>
-              <a href="https://www.linkedin.com/in/bhushanam-damisetti/" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="LinkedIn"><FiLinkedin size={22} color="#0A66C2" /> <span>LinkedIn</span></a>
-              <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="GitHub"><FiGithub size={22} color="currentColor" /> <span>GitHub</span></a>
+            <div className="social-cards-row">
+              <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="social-card card-github" aria-label="GitHub">
+                <span className="social-card-icon"><FiGithub size={24} color="#ffffff" /></span>
+                <span className="social-card-label">GitHub</span>
+              </a>
+              <a href="https://www.linkedin.com/in/bhushanam-damisetti/" target="_blank" rel="noopener noreferrer" className="social-card card-linkedin" aria-label="LinkedIn">
+                <span className="social-card-icon"><FiLinkedin size={24} color="#00A0DC" /></span>
+                <span className="social-card-label">LinkedIn</span>
+              </a>
+              <a href="mailto:bhushanam2004@gmail.com" className="social-card card-email" aria-label="Email">
+                <span className="social-card-icon"><FiMail size={24} color="#EA4335" /></span>
+                <span className="social-card-label">Email</span>
+              </a>
             </div>
           </div>
           <div className="contact-form-container">
