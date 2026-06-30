@@ -473,7 +473,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             </div>
           </div>
           <dl className="about-stats">
-            {[["3+","Projects"],["2","Internships"],["7","Repos"],["3+","Certs"]].map(([num, label]) => (
+            {[["3+","Projects"],["2","Internships"],["7","Repos"],["3+","Certs"],["1","Papers"]].map(([num, label]) => (
               <div key={label} className="stat-block">
                 <dt className="stat-label">{label}</dt>
                 <dd className="stat-number">{num}</dd>
