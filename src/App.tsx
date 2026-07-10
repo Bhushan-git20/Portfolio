@@ -170,9 +170,7 @@ const CERTS = [
 ];
 
 const RESUMES = [
-  { label: "AI Engineer", file: "/resume-ai-engineer.pdf" },
-  { label: "Full Stack Dev", file: "/resume-fullstack.pdf" },
-  { label: "Associate SE", file: "/resume-associate-se.pdf" },
+  { label: "AI Engineer", file: "/Bhushan-AI-Engineer.pdf" }
 ];
 
 
@@ -499,7 +497,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           </dl>
         </div>
           <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s", perspective: "1000px" }}>
-            <Lanyard paused={activeSection !== "about"} position={[0, 0, 20]} gravity={[0, -40, 0]} frontImage="/bhushan.png" />
+            <Lanyard paused={activeSection !== "about"} position={[0, 0, 20]} gravity={[0, -40, 0]} frontImage={"/bhushan.png" as any} />
           </div>
       </section>
 

@@ -547,10 +547,10 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
 .resume-btns { display: flex; gap: .6rem; flex-wrap: wrap; }
 .resume-btn {
   font-size: .62rem; letter-spacing: .15em; text-transform: uppercase;
-  padding: .6rem 1.2rem; border: 1px solid #1c1c1c;
-  color: #fff; text-decoration: none; opacity: .5; transition: opacity .25s, border-color .25s;
+  padding: .6rem 1.2rem; border: 1px solid var(--text-main);
+  color: #fff; text-decoration: none; opacity: 1; transition: border-color .25s;
 }
-.resume-btn:hover { opacity: 1; border-color: var(--text-main); }
+.resume-btn:hover { border-color: var(--text-main); }
 
 /* ── PIPELINE VISUALISER ── */
 .pipeline-track { display: flex; align-items: stretch; justify-content: space-between; position: relative; width: 100%; min-height: 120px; padding: 2rem 0; margin-bottom: 4rem; overflow-x: auto; }
