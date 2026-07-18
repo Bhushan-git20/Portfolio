@@ -1,0 +1,34 @@
+/* Animated Button Styles */
+.animated-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  background-color: #000000;
+  border: 1px solid #333;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+.animated-btn .z-10 {
+  z-index: 10;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.05em;
+}
+.animated-btn .inset-0 {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  border-radius: 0.5rem;
+  padding: 1px;
+  display: block;
+}

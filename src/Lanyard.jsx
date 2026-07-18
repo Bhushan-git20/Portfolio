@@ -1,6 +1,6 @@
 /* eslint-disable */
 'use client';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, memo } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier';
@@ -18,7 +18,7 @@ const BLANK_PIXEL =
 const FRONT_UV_RECT = { x: 0, y: 0, w: 0.5, h: 0.755 };
 const BACK_UV_RECT = { x: 0.5, y: 0, w: 0.5, h: 0.757 };
 
-export default function Lanyard({
+const Lanyard = ({
   position = [0, 0, 30],
   gravity = [0, -40, 0],
   fov = 20,
@@ -29,7 +29,7 @@ export default function Lanyard({
   lanyardImage = null,
   lanyardWidth = 1,
   paused = false
-}) {
+}) => {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
   useEffect(() => {
@@ -273,4 +273,6 @@ function Band({
       </mesh>
     </>
   );
-}
+};
+
+export default memo(Lanyard);
