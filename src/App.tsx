@@ -7,8 +7,11 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 gsap.registerPlugin(ScrollTrigger);
 import { PillNav } from "./PillNav";
 import Lanyard from "./Lanyard";
-import Lightning from "./Lightning";
+import Starfield from "./Starfield";
+import AnimatedButton from "./AnimatedButton";
+import CustomCursor from "./CustomCursor";
 import ScrollStack, { ScrollStackItem } from "./ScrollStack";
+import { PortfolioChatbot } from "./components/PortfolioChatbot";
 import Lenis from "lenis";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
@@ -24,152 +27,16 @@ import { FaJava, FaGitAlt, FaAws, FaRobot } from "react-icons/fa";
 import { GitHubCalendar } from 'react-github-calendar';
 import "./App.css";
 
-const t = (s: string) => s;
-const GH_USER = "Bhushan-git20";
+import { 
+  t, GH_USER, NAME_DATA, Project, PROJECTS, 
+  SKILLS, getSkillIcon, SYSTEMS, RESUMES 
+} from "./data/portfolioData";
 
 interface GitHubStats {
   public_repos: number;
   followers: number;
   following: number;
 }
-
-const NAME_DATA = (() => {
-  const lines = ["DAMISETTI BHUSHANAM"];
-  let i = 0;
-  return lines.map(line =>
-    line.split("").map(ch => ({ ch, delay: `${(0.65 + i++ * 0.05).toFixed(2)}s` }))
-  );
-})();
-
-interface Project {
-  id: number;
-  featured?: boolean;
-  name: string;
-  badge?: string;
-  problem: string;
-  solution: string;
-  result: string;
-  tech: string[];
-  link: string;
-  demoLink?: string;
-  image?: string;
-}
-
-const PROJECTS: Project[] = [
-  {
-    id: 3,
-    name: "Ollive AI Assistant",
-    problem: "Comparing OSS and frontier AI models in a production-like setting requires building real infrastructure — not just calling APIs. Most demos are superficial and don't test models under guardrails, memory, or tool constraints.",
-    solution: "Built a dual-model AI assistant pitting Qwen2.5-0.5B (open source, runs on CPU) against Gemini 2.5 Flash (frontier), with a FastAPI backend, Next.js frontend, per-session SQLite memory, tool routing (calculator, datetime, DuckDuckGo search), input/output safety guardrails, and a Recharts observability dashboard tracking latency, tokens, and guardrail hits per session. Includes a 30-question eval suite across hallucination, bias, and safety categories with auto-generated PDF reports.",
-    result: "Gemini 2.5 Flash: 30/30 (100%) · Qwen2.5-0.5B: 26/30 (86.7%) · Side-by-side compare tab with cost and latency breakdown · Deployed on Hugging Face Spaces.",
-    tech: ["Python", "FastAPI", "Next.js", "HuggingFace Spaces", "SQLite"],
-    link: "https://github.com/Bhushan-git20/ollive-ai-assistant",
-    demoLink: "https://huggingface.co/spaces/Bhushanam/ollive-ai-assistant",
-    image: "/ollive.png"
-  },
-  {
-    id: 2,
-    name: "PDF RAG Chatbot",
-    problem: "Reading through long PDFs to find specific answers is slow, loses context across documents, and standard keyword search misses semantically related content entirely.",
-    solution: "Built a multi-PDF conversational AI using a hybrid retrieval pipeline — ChromaDB for dense semantic search combined with BM25 for sparse keyword matching, reranked by a CrossEncoder (ms-marco-MiniLM-L-6-v2) to surface only the top 3 most relevant chunks. Gemini 2.5 Flash synthesizes the answer with automatic fallback to Groq Llama-3.3-70b for high availability. Every response includes source attribution showing exactly which paragraph it came from.",
-    result: "Handles multiple PDFs in a single session · Source-attributed responses with CrossEncoder confidence scoring · Thread-safe embeddings for concurrent access · Exponential backoff for API rate limits.",
-    tech: ["Python", "LangChain LCEL", "ChromaDB", "CrossEncoder", "Gemini 2.5 Flash", "Streamlit"],
-    link: "https://github.com/Bhushan-git20/pdf-rag-chatbot",
-    demoLink: "https://huggingface.co/spaces/Bhushanam/pdf-rag-chatbot",
-    image: "/rag_chatbot.png"
-  },
-  {
-    id: 4,
-    name: "HireReady",
-    badge: "Open Source",
-    problem: "Most students apply to jobs blindly — no idea if their skills match the role, what gaps exist, or why they keep getting ghosted. Generic interview prep doesn't account for your actual projects or background.",
-    solution: "Built a full-stack AI career intelligence tool where you set up your profile once (skills, projects, CGPA, resume text) and then paste any job description to get an honest A–F fit grade, a weighted match score, specific missing skills, and how many weeks it would take to close the gap. The interview module generates STAR-format behavioral questions and answers written around your actual projects — not generic examples.",
-    result: "End-to-end from JD paste to interview-ready in under 2 minutes. Tracks every application with stage updates, and surfaces rejection patterns after 5+ applications.",
-    tech: ["React", "TypeScript", "Supabase", "Gemini 2.5 Flash", "Tailwind CSS"],
-    link: "https://github.com/Bhushan-git20/hireready",
-    image: "/placement_prospect.png"
-  },
-  {
-    id: 0,
-    featured: true,
-    name: "MindCare",
-    badge: "Published · GCCMIEA Dec 2025",
-    problem: "Student mental health support is fragmented — clinical tools feel cold, general apps lack depth, and nothing combines mood tracking, AI-guided support, and real assessments in one place built specifically for students.",
-    solution: "Built a full-stack wellness platform with PHQ-9 and GAD-7 clinical assessments, an AI chatbot (Gemini 2.5 Flash via Supabase Edge Functions) that suggests evidence-based coping strategies, mood-coded journaling with sentiment analysis, habit tracking, an anonymous peer community with content moderation, and an admin panel for counsellors. Research published at GCCMIEA International Conference, December 2025.",
-    result: "150+ test users during MCA capstone evaluation · 4.2/5 satisfaction score · Sub-2s load time · Full-stack system with 6 Supabase Edge Functions handling AI, moderation, and assessment scoring.",
-    tech: ["React", "TypeScript", "Supabase", "Gemini 2.5 Flash", "Vite"],
-    link: "https://github.com/Bhushan-git20/mindful-pathways",
-    image: "/mindcare.png"
-  }
-];
-
-const SKILLS = [
-  { cat: "AI-Automations",  items: ["LangChain", "n8n", "Gemini API", "Groq", "ChromaDB", "FAISS", "RAG", "Prompt Engineering"] },
-  { cat: "Backend",          items: ["FastAPI", "Node.js", "Express.js", "PostgreSQL", "MySQL", "REST APIs"] },
-  { cat: "Cloud-DevOps",   items: ["Docker", "AWS EC2", "AWS S3", "IAM", "CloudWatch", "Vercel", "Git"] },
-  { cat: "Frontend",         items: ["React", "TypeScript", "Tailwind CSS", "JavaScript"] },
-  { cat: "Languages",        items: ["Python", "Java SE 11", "TypeScript", "JavaScript"] },
-];
-
-const getSkillIcon = (skill: string) => {
-  switch(skill.toLowerCase()) {
-    case 'python': return <SiPython color="#5A9FD4" />;
-    case 'javascript': return <SiJavascript color="#F7DF1E" />;
-    case 'typescript': return <SiTypescript color="#5FA4F9" />;
-    case 'react': return <SiReact color="#61DAFB" />;
-    case 'tailwindcss': case 'tailwind css': return <SiTailwindcss color="#38BDF8" />;
-    case 'html5': return <SiHtml5 color="#F06529" />;
-    case 'css': return <SiCss color="#4BA4E6" />;
-    case 'fastapi': return <SiFastapi color="#2DD4BF" />;
-    case 'node.js': return <SiNodedotjs color="#4ade80" />;
-    case 'express.js': return <SiExpress color="#4ade80" />;
-    case 'postgresql': return <SiPostgresql color="#6B8CF4" />;
-    case 'mysql': return <FiDatabase color="#63A0CF" />;
-    case 'docker': return <SiDocker color="#53B1FF" />;
-    case 'vercel': return <SiVercel color="#ffffff" />;
-    case 'supabase': return <SiSupabase color="#3ECF8E" />;
-    case 'gemini api': return <SiGoogle color="#6EA3FF" />;
-    case 'java se 11': return <FaJava color="#00A2D3" />;
-    case 'git': return <FaGitAlt color="#F47255" />;
-    case 'aws ec2': case 'aws s3': case 'iam': case 'cloudwatch': return <FaAws color="#FF9900" />;
-    case 'langchain': return <FiCpu color="#34D399" />;
-    case 'n8n': return <FiGitMerge color="#FF6B6B" />;
-    case 'groq': return <FiCpu color="#FF7A66" />;
-    case 'chromadb': return <FiDatabase color="#F472B6" />;
-    case 'faiss': return <FiDatabase color="#60A5FA" />;
-    case 'rag': return <FiCode color="#C084FC" />;
-    case 'prompt engineering': return <FiTerminal color="#FCD34D" />;
-    case 'rest apis': return <FiCode color="#7DD3FC" />;
-    default: return <FiCode color="#a3a3a3" />;
-  }
-};
-
-const SYSTEMS = [
-  {
-    name: "AI Job Automation Pipeline",
-    desc: "n8n + Gemini + Groq · processes 200+ listings/day · zero manual input"
-  },
-  {
-    name: "LLM Document Processing System",
-    desc: "LangChain + ChromaDB + FAISS · 91% retrieval accuracy · multi-PDF"
-  },
-  {
-    name: "Dockerised Workflow Infrastructure",
-    desc: "Full stack containerisation · AWS EC2 deploy · 3 zero-downtime releases"
-  },
-  {
-    name: "Event-Driven Notification System",
-    desc: "Telegram bot integration · score-filtered delivery · real-time alerts"
-  },
-  {
-    name: "AI-Powered Wellness Platform",
-    desc: "Gemini API + Supabase real-time · 150+ users · published research"
-  }
-];
-
-const RESUMES = [
-  { label: "AI Engineer", file: "/Bhushan-AI-Engineer.pdf" }
-];
 
 
 
@@ -185,22 +52,26 @@ export const Portfolio = () => {
   const heroNameRef = useRef<HTMLHeadingElement>(null);
   const heroRoleRef = useRef<HTMLParagraphElement>(null);
   
-  useEffect(() => {
-    // Preloader counting sequence (sped up)
-    const steps = [0, 54, 100];
-    let stepIndex = 0;
-    
-    const interval = setInterval(() => {
-      stepIndex++;
-      if (stepIndex < steps.length) {
-        setLoadingProgress(steps[stepIndex]);
-      } else {
-        clearInterval(interval);
-        setTimeout(() => setIsLoading(false), 0); 
-      }
-    }, 60); 
+  const counterRef = useRef<HTMLDivElement>(null);
 
-    return () => clearInterval(interval);
+  useEffect(() => {
+    // Preloader counting sequence (smooth from 0 to 100 bypassing React state for performance)
+    let progress = { value: 0 };
+    const tween = gsap.to(progress, {
+      value: 100,
+      duration: 1.5,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        if (counterRef.current) {
+          counterRef.current.innerText = String(Math.round(progress.value)).padStart(3, '0');
+        }
+      },
+      onComplete: () => {
+        setTimeout(() => setIsLoading(false), 200); 
+      }
+    });
+
+    return () => { tween.kill(); };
   }, []);
 
   useEffect(() => {
@@ -315,12 +186,7 @@ export const Portfolio = () => {
     offset: ["start center", "end center"]
   });
   const processLineHeight = useTransform(processScroll, [0, 1], ["0%", "100%"]);
-  // Premium feature states
-  const [chatOpen, setChatOpen] = useState(false);
-  const [chatInput, setChatInput] = useState("");
-  const [chatMessages, setChatMessages] = useState<{sender: string, text: string}[]>([
-    { sender: 'ai', text: 'Hi! I am Bhushan\'s AI assistant. How can I help you today?' }
-  ]);
+
 
   // Prevent scroll restoration on refresh
   useEffect(() => {
@@ -346,92 +212,7 @@ export const Portfolio = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const [isChatTyping, setIsChatTyping] = useState(false);
 
-  const getLocalFallbackResponse = (query: string): string => {
-    const q = query.toLowerCase();
-    if (q.includes('who is bhushan') || q.includes('who are you') || q.includes('about') || q.includes('bhushan')) {
-      return "Damisetti Bhushanam is an AI Automation Engineer and Full Stack Developer. He recently graduated with his MCA in July 2026 and builds advanced AI automation systems, RAG pipelines (like PDF RAG Chatbot), and full-stack web applications.";
-    }
-    if (q.includes('project') || q.includes('work') || q.includes('portfolio') || q.includes('build')) {
-      return "Bhushan has built several high-impact projects:\n\n1. **Ollive AI Assistant**: A dual-model assistant comparing Qwen2.5 & Gemini with a FastAPI backend.\n2. **PDF RAG Chatbot**: Multi-PDF AI using ChromaDB and CrossEncoder reranking.\n3. **HireReady**: AI career intelligence tool for JD analysis & STAR prep.\n4. **MindCare**: Full-stack wellness platform (GCCMIEA published).";
-    }
-    if (q.includes('skill') || q.includes('tech') || q.includes('python') || q.includes('react') || q.includes('stack')) {
-      return "Bhushan's core technical stack includes:\n\n• **AI/Automation**: LangChain, n8n, Gemini API, ChromaDB, RAG, Prompt Engineering\n• **Languages & Backend**: Python, FastAPI, Node.js, TypeScript, PostgreSQL, Docker\n• **Frontend**: React, TypeScript, Tailwind CSS, JavaScript";
-    }
-    if (q.includes('education') || q.includes('mca') || q.includes('college') || q.includes('study')) {
-      return "Bhushan completed his Master of Computer Applications (MCA) at Vignan's Institute of Information Technology (2024 - 2026) with a CGPA of 7.86. Prior to that, he earned his B.Sc in Computer Science at Aditya Degree College.";
-    }
-    if (q.includes('contact') || q.includes('email') || q.includes('hire') || q.includes('github') || q.includes('linkedin')) {
-      return "You can connect with Bhushan via:\n\n• **Email**: damisettibhushanam@gmail.com\n• **GitHub**: [github.com/Bhushan-git20](https://github.com/Bhushan-git20)\n• **LinkedIn**: [linkedin.com/in/damisetti-bhushanam](https://linkedin.com/in/damisetti-bhushanam)";
-    }
-    return "I'm sorry, but I can only provide information that is explicitly stated in Bhushan's portfolio and resume. Feel free to ask about his projects, skills, education, experience, or contact details!";
-  };
-
-  const handleChatSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!chatInput.trim() || isChatTyping) return;
-    
-    const userMessage = chatInput;
-    setChatMessages(prev => [...prev, { sender: 'user', text: userMessage }]);
-    setChatInput("");
-    setIsChatTyping(true);
-
-    try {
-      const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
-      if (!apiKey) {
-        setChatMessages(prev => [...prev, { sender: 'ai', text: "Error: VITE_GEMINI_API_KEY is not set in the environment variables." }]);
-        setIsChatTyping(false);
-        return;
-      }
-
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ 
-        model: "gemini-2.0-flash-lite",
-        systemInstruction: `You are Bhushan's AI assistant for his portfolio website. 
-You act like a RAG (Retrieval-Augmented Generation) chatbot. 
-You MUST ONLY answer using the exact data provided below. Do NOT hallucinate, guess, or make up ANY information that is not explicitly written in this prompt. 
-If the user asks about anything not found in the data below (even general knowledge, coding help, or unrelated topics), you must reply with: "I'm sorry, but I can only provide information that is explicitly stated in Bhushan's portfolio and resume."
-Here is the strict context data:
-Name: Damisetti Bhushanam
-Education: MCA graduate (July 2026). Published at GCCMIEA International Conference. Open to relocation across India.
-Bio: Builds AI automation systems — from LLM-powered pipelines and RAG chatbots to full-stack applications. Current focus: agentic AI systems, LangGraph, multi-agent orchestration.
-Stats: 3+ Projects, 2 Internships, 7.86 CGPA, 3 Certifications.
-Projects:
-1. MindCare: Full-stack wellness platform with Gemini API driving personalised recommendations, Supabase real-time sync. (Published internationally). Tech: React, TS, FastAPI, PostgreSQL, Supabase, Gemini, Docker, AWS.
-2. PDF RAG Chatbot: Multi-PDF AI using LangChain LCEL, ChromaDB Hybrid Search, Google Embeddings, and CrossEncoder reranking. 91% retrieval accuracy. Tech: Python, LangChain, ChromaDB, Gemini 2.5 Flash, Streamlit.
-3. Olive AI Assistant: Custom AI agent deployed to Hugging Face Spaces for free, scalable access. Tech: Python, HF Spaces, Gradio, LLM APIs.
-4. HireReady: AI-powered open-source job application intelligence platform featuring predictive job fit scoring, real-time market insights, and STAR framework interview preparation. Tech: React, TS, Supabase, Gemini 2.0 Flash, Tailwind CSS.
-Skills:
-- AI/Automation: LangChain, n8n, Gemini API, Groq, ChromaDB, FAISS, RAG, Prompt Engineering
-- Backend: FastAPI, Node.js, Express.js, PostgreSQL, MySQL, REST APIs
-- Cloud/DevOps: Docker, AWS EC2/S3, IAM, CloudWatch, Vercel, Git
-- Frontend: React, TypeScript, Tailwind CSS, JavaScript
-- Languages: Python, Java SE 11, TypeScript, JavaScript
-Keep your answers concise, professional, and directly related to Bhushan's skills and projects.`
-      });
-
-      // Construct history for Gemini
-      const history = chatMessages
-        .filter(msg => msg.text !== "Hi! I am Bhushan's AI assistant. How can I help you today?")
-        .map(msg => ({
-          role: msg.sender === 'user' ? 'user' : 'model',
-          parts: [{ text: msg.text }]
-        }));
-
-      const chat = model.startChat({ history });
-      const result = await chat.sendMessage(userMessage);
-      const response = await result.response;
-      
-      setChatMessages(prev => [...prev, { sender: 'ai', text: response.text() }]);
-    } catch (error: any) {
-      console.warn("Gemini API Quota/Error, falling back to local dataset:", error);
-      const fallbackText = getLocalFallbackResponse(userMessage);
-      setChatMessages(prev => [...prev, { sender: 'ai', text: fallbackText }]);
-    } finally {
-      setIsChatTyping(false);
-    }
-  };
 
 
   // ── SPOTLIGHT EFFECT ──
@@ -502,6 +283,8 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
   return (
     <>
+      <CustomCursor />
+      <Starfield />
 
       {/* ── NAV ── */}
       <PillNav
@@ -524,13 +307,11 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
       {/* ── PRELOADER ── */}
       <div className={`preloader ${!isLoading ? 'preloader-hidden' : ''}`}>
-        <div className="preloader-counter">{loadingProgress}</div>
+        <div className="preloader-counter" ref={counterRef}>000</div>
       </div>
 
       {/* ── HERO ── */}
       <section id="home" className="hero-section">
-        
-        <Lightning hue={220} xOffset={0} speed={1} intensity={1.5} size={1} />
         
         <div className="hero-text-content" ref={heroTextContainerRef}>
           <h1 className="hero-name" aria-label="DAMISETTI BHUSHANAM" ref={heroNameRef}>
@@ -552,9 +333,14 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         
           <div className="hero-meta" ref={heroRoleRef}>
             <p className="hero-headline">AI Automation Engineer</p>
-            <a href={RESUMES[0].file} target="_blank" rel="noopener noreferrer" className="resume-btn">
-              View Resume ↗
-            </a>
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', justifyContent: 'center' }}>
+              <AnimatedButton as="a" href={RESUMES[0].file} target="_blank" rel="noopener noreferrer">
+                View Resume ↗
+              </AnimatedButton>
+              <AnimatedButton as="a" href="#contact">
+                Hire Me
+              </AnimatedButton>
+            </div>
           </div>
         </div>
       </section>
@@ -592,7 +378,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             </div>
           </div>
           <dl className="about-stats">
-            {[["3+","Projects"],["2","Internships"],["7","Repos"],["3+","Certs"],["1","Papers"]].map(([num, label]) => (
+            {[["5+","Projects"],["1","Internships"],["7","Repos"],["5+","Certs"],["1","Papers"]].map(([num, label]) => (
               <div key={label} className="stat-block">
                 <dt className="stat-label">{label}</dt>
                 <dd className="stat-number">{num}</dd>
@@ -620,7 +406,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
                 <div className="timeline-date">Jul 2024 - Jul 2026</div>
                 <h4 className="timeline-role">Master of Computer Applications (MCA)</h4>
                 <p className="timeline-org">Vignan's Institute of Information Technology</p>
-                <p className="timeline-desc">CGPA: 7.86</p>
+                <p className="timeline-desc">CGPA: 7.71</p>
               </div>
             </div>
             <div className="timeline-item">
@@ -637,15 +423,6 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
           {/* Experience Column */}
           <div className="timeline-col">
             <h3 className="timeline-col-title">Experience</h3>
-            <div className="timeline-item">
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-date">Mar 2026 - Apr 2026</div>
-                <h4 className="timeline-role">Full Stack Developer Intern</h4>
-                <p className="timeline-org">Codec Technologies</p>
-                <p className="timeline-desc">Built async FastAPI endpoints and React dashboards. Deployed to AWS EC2 with Docker.</p>
-              </div>
-            </div>
             <div className="timeline-item">
               <div className="timeline-dot" />
               <div className="timeline-content">
@@ -761,11 +538,11 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             <div className="arch-flow">
               <div className="node">React UI</div>
               <div className="flow-arrow">→</div>
-              <div className="node">FastAPI</div>
+              <div className="node">Supabase Edge Functions</div>
               <div className="flow-arrow">→</div>
-              <div className="node highlight">Gemini Pro</div>
+              <div className="node highlight">Gemini 2.5 Flash</div>
               <div className="flow-arrow">→</div>
-              <div className="node">Supabase</div>
+              <div className="node">Supabase DB</div>
             </div>
           </div>
 
@@ -779,7 +556,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
               <div className="flow-arrow">→</div>
               <div className="node">AI Scoring</div>
               <div className="flow-arrow">→</div>
-              <div className="node">Telegram / Notion</div>
+              <div className="node">Google Sheets / Telegram</div>
             </div>
           </div>
         </div>
@@ -894,46 +671,18 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             />
           </div>
         </div>
-      
-        <div className="github-repos reveal" ref={addToRefs}>
-          {[
-            { name: "mindful-pathways", desc: "AI mental wellness platform · React · Supabase · Gemini" },
-              { name: "pdf-rag-chatbot", desc: "Multi-PDF RAG chatbot · LangChain · ChromaDB · Streamlit" },
-              { name: "job-automation-pipeline", desc: "n8n job scraper · Gemini scoring · Telegram delivery" },
-              { name: "ollive-ai-assistant", desc: "Dual-model AI Assistant eval suite · Next.js · FastAPI" },
-              { name: "hireready", desc: "AI career intelligence tool · React · Supabase · Gemini" },
-          ].map(r => (
-            <a
-              key={r.name}
-              href={`https://github.com/Bhushan-git20/${r.name}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="repo-card"
-            >
-              <div className="repo-name">{t('Bhushan-git20 / ')}{r.name}</div>
-              <div className="repo-desc">{r.desc}</div>
-              <div className="repo-arrow">→</div>
-            </a>
-          ))}
-        </div>
-      
-        <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
-          <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="ext-link" style={{ color: '#FFD700' }}>
-            github.com/Bhushan-git20 →
-          </a>
-        </div>
       </section>
 
       {/* ── CONTACT ── */}
       <section id="contact" className="section" style={{ background: "var(--bg-alt)", position: "relative", overflow: "hidden" }}>
         <p className="section-label reveal" ref={addToRefs}>{t('Connect')}</p>
         <h2 className="section-title reveal" ref={addToRefs} style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', position: 'relative', zIndex: 2 }}>
-          {t("Lets connect & build something useful together")}
+          {t("lets build together")}
         </h2>
         <div className="contact-wrapper reveal" ref={addToRefs}>
           <div className="contact-links-sidebar">
             <p style={{ marginBottom: '2.5rem', color: 'var(--text-muted)', lineHeight: '1.6', fontSize: '1.05rem' }}>
-              {t('Currently open to roles as: AI Automation Engineer, Full Stack Developer, or Backend Developer.')}
+              {t('Currently open to roles as: AI Engineer / GenAI, AI Automation Engineer, or Full Stack Developer.')}
             </p>
             <div className="social-cards-row">
               <a href="https://github.com/Bhushan-git20" target="_blank" rel="noopener noreferrer" className="social-card card-github" aria-label="GitHub">
@@ -944,9 +693,13 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
                 <span className="social-card-icon"><FiLinkedin size={24} color="#00A0DC" /></span>
                 <span className="social-card-label">LinkedIn</span>
               </a>
-              <a href="mailto:bhushanam2004@gmail.com" className="social-card card-email" aria-label="Email">
+              <a href="mailto:bhushanamd20@gmail.com" className="social-card card-email" aria-label="Email">
                 <span className="social-card-icon"><FiMail size={24} color="#EA4335" /></span>
                 <span className="social-card-label">Email</span>
+              </a>
+              <a href="tel:+919390782043" className="social-card card-phone" aria-label="Phone">
+                <span className="social-card-icon"><FiPhone size={24} color="#25D366" /></span>
+                <span className="social-card-label">Call</span>
               </a>
             </div>
           </div>
@@ -968,30 +721,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
       </footer>
 
       {/* ── AI CHATBOT ── */}
-      <div className={`chatbot-widget ${chatOpen ? 'open' : ''}`}>
-        {chatOpen && (
-          <div className="chatbot-window">
-            <div className="chatbot-header">
-              <span><FaRobot size={16} /> Ask AI Assistant</span>
-              <button onClick={() => setChatOpen(false)} className="chatbot-close">&times;</button>
-            </div>
-            <div className="chatbot-messages">
-              {chatMessages.map((msg, idx) => (
-                <div key={idx} className={`chat-bubble ${msg.sender}`}>
-                  {msg.text}
-                </div>
-              ))}
-            </div>
-            <form className="chatbot-input" onSubmit={handleChatSubmit}>
-              <input type="text" placeholder="Ask about Bhushan..." value={chatInput} onChange={e => setChatInput(e.target.value)} disabled={isChatTyping} />
-              <button type="submit" disabled={isChatTyping}>{isChatTyping ? "..." : "Send"}</button>
-            </form>
-          </div>
-        )}
-        <button className="chatbot-fab" onClick={() => setChatOpen(!chatOpen)} aria-label="Open AI Chat">
-          <FaRobot size={24} />
-        </button>
-      </div>
+      <PortfolioChatbot />
     </>
   );
 };

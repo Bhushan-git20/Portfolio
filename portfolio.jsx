@@ -391,8 +391,8 @@ export default function Portfolio() {
         <p className="section-label reveal">Get In Touch</p>
         <h2 className="contact-title reveal">Let's Work<br />Together</h2>
         <div className="contact-divider reveal" />
-        <a href="mailto:bhushanam2004@gmail.com" className="contact-email reveal">
-          bhushanam2004@gmail.com
+        <a href="mailto:bhushanamd20@gmail.com" className="contact-email reveal">
+          bhushanamd20@gmail.com
         </a>
         <div className="contact-links reveal">
           {[

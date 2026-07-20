@@ -29,6 +29,7 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: auto; }
 body {
+  cursor: none;
   background: var(--bg-main);
   color: var(--text-main);
   font-family: 'DM Sans', system-ui, sans-serif;
@@ -96,7 +97,7 @@ body {
   min-height: 100vh;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  background: var(--bg-main); position: relative; overflow: hidden;
+  background: transparent; position: relative; overflow: hidden;
 }
 .hero-section::after {
   content: '';
@@ -200,7 +201,7 @@ body {
 .card-visual span { font-family: 'Bebas Neue', 'Impact', sans-serif; font-size: 6rem; color: var(--visual-text); }
 
 /* ── ABOUT ── */
-.about-section { display: grid; overflow: hidden; grid-template-columns: 1fr 1fr; gap: 6rem; padding: 8rem 4rem; background: var(--bg-main); align-items: center; }
+.about-section { display: grid; overflow: hidden; grid-template-columns: 1fr 1fr; gap: 6rem; padding: 8rem 4rem; background: transparent; align-items: center; }
 .about-title { font-family: 'Bebas Neue', 'Impact', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1; margin-bottom: 2rem; }
 .about-bio { font-size: .9rem; line-height: 1.85; color: var(--text-muted); margin-bottom: 1.25rem; }
 .about-bio strong { color: var(--text-main); font-weight: 600; }
@@ -224,7 +225,7 @@ body {
 
 /* ── CONTACT ── */
 .contact-section {
-  background: var(--bg-main); padding: 8rem 4rem;
+  background: transparent; padding: 8rem 4rem;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   min-height: 80vh; text-align: center;
@@ -1880,4 +1881,42 @@ html {
   font-size: 1.5rem;
   letter-spacing: 2px;
   opacity: 0.8;
+}
+
+/* Custom Cursor */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  background-color: #FFD700;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999999;
+  box-shadow: 0 0 15px #FFD700;
+  transform-origin: center;
+}
+
+/* GSAP Hero Text Animation & Hover Effect */
+.gsap-char {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.gsap-char-inner {
+  display: inline-block;
+  position: relative;
+}
+.char-u {
+  display: inline-block;
+  color: var(--text-main);
+}
+.char-c {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #FFD700;
+  pointer-events: none;
 }
