@@ -1,6 +1,6 @@
 # 🚀 Premium Developer Portfolio
 
-A high-end, interactive developer portfolio built with React, TypeScript, and Vite. This portfolio is designed to immediately grab attention with a stunning Dark Mode UI, dynamic terminal animations, an interactive 3D physical ID card lanyard, smooth inertial scrolling, and a responsive custom canvas background.
+A high-end, interactive developer portfolio built with React, TypeScript, and Vite. This portfolio is designed to immediately grab attention with a stunning Dark Mode UI, an interactive 3D physical ID card lanyard, smooth inertial scrolling, and a procedural WebGL lightning background.
 
 ![Portfolio Preview](./public/favicon.svg) <!-- Feel free to replace with a real screenshot! -->
 
@@ -12,7 +12,7 @@ A high-end, interactive developer portfolio built with React, TypeScript, and Vi
 - **GSAP Per-Letter Text Animations**: Custom, highly responsive hover effects that trigger individual letter animations synchronously with mouse movement, powered by GSAP.
 - **Single-Instance Global Smooth Scrolling**: Driven by `lenis` on the document level, providing a liquid scrolling experience across all sections while preserving native scroll hooks.
 - **Live GitHub Calendar**: Real-time integration with `react-github-calendar` to showcase live open-source contributions directly on the landing page.
-- **Resilient RAG Chatbot**: Features a floating portfolio chat assistant utilizing the Gemini API (`gemini-2.0-flash-lite`), backed by a client-side rule-matching engine fallback to ensure 100% availability even when API quotas are exceeded.
+- **Resilient RAG Chatbot**: Features a floating portfolio chat assistant utilizing the Gemini API (`gemini-2.0-flash-lite`), backed by a client-side rule-matching engine fallback to ensure basic responses remain available even when API quotas are exceeded.
 - **Infinite Marquee**: The skills section continuously scrolls through the tech stack using custom CSS keyframes.
 - **Project Storytelling**: Project cards are structured with Problem/Solution/Result blocks for maximum impact.
 - **Web3Forms Integration**: Fully functional, serverless contact form.
