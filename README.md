@@ -7,11 +7,12 @@ A high-end, interactive developer portfolio built with React, TypeScript, and Vi
 ## ✨ Features
 
 - **Interactive 3D Lanyard**: A custom WebGL implementation using `@react-three/fiber` and `@react-three/rapier` to simulate a physics-based, swinging lanyard holding a 3D ID card. You can drag and throw it!
-- **Interactive ShapeGrid Background**: A custom HTML5 Canvas-based animation grid (`<ShapeGrid />`) running in the Hero section, reacting dynamically with cursor hover trails, fading paths, and diagonal movement.
+- **Interactive Lightning Background**: A custom WebGL-based procedural lightning animation (`<Lightning />`) running in the Hero section. It is heavily optimized with an Intersection Observer to completely pause GPU rendering when scrolled out of view.
 - **ScrollStack Projects Section**: A GPU-optimized stacked cards layout (`<ScrollStack />`) bound to the window scroll. Includes custom scale, rotation, and blur-out animations that stack project cards smoothly as you scroll down, optimized with coordinate caching to avoid layout thrashing.
+- **GSAP Per-Letter Text Animations**: Custom, highly responsive hover effects that trigger individual letter animations synchronously with mouse movement, powered by GSAP.
 - **Single-Instance Global Smooth Scrolling**: Driven by `lenis` on the document level, providing a liquid scrolling experience across all sections while preserving native scroll hooks.
-- **Resilient RAG Chatbot**: Features a floating portfolio chat assistant utilizing the Gemini API (`gemini-2.0-flash`, `gemini-2.0-flash-lite`, and `gemini-1.5-flash-latest`), backed by a client-side rule-matching engine fallback to ensure 100% availability even when API quotas are exceeded.
-- **Simulated Terminal**: A real-time visual demonstration of an automation script (`pipeline.py`) running in a mock terminal window.
+- **Live GitHub Calendar**: Real-time integration with `react-github-calendar` to showcase live open-source contributions directly on the landing page.
+- **Resilient RAG Chatbot**: Features a floating portfolio chat assistant utilizing the Gemini API (`gemini-2.0-flash-lite`), backed by a client-side rule-matching engine fallback to ensure 100% availability even when API quotas are exceeded.
 - **Infinite Marquee**: The skills section continuously scrolls through the tech stack using custom CSS keyframes.
 - **Project Storytelling**: Project cards are structured with Problem/Solution/Result blocks for maximum impact.
 - **Web3Forms Integration**: Fully functional, serverless contact form.
@@ -26,7 +27,8 @@ A high-end, interactive developer portfolio built with React, TypeScript, and Vi
 - **Smooth Scroll**: Lenis v1
 - **Styling**: Vanilla CSS (CSS Variables, Flexbox, CSS Grid, custom `@keyframes`)
 - **Icons**: `react-icons` (Feather, Simple Icons, FontAwesome)
-- **Animations**: `framer-motion`
+- **Animations**: `framer-motion`, `gsap`
+- **Integrations**: `react-github-calendar`
 
 ## 🚀 Quick Start
 
