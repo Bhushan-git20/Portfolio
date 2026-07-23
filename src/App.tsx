@@ -1,10 +1,13 @@
-/* eslint-disable */
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useTransform, useScroll } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
+gsap.registerPlugin(ScrollTrigger);
 import { PillNav } from "./PillNav";
 import Lanyard from "./Lanyard";
-import { ShapeGrid } from "./ShapeGrid";
+import Lightning from "./Lightning";
 import ScrollStack, { ScrollStackItem } from "./ScrollStack";
 import Lenis from "lenis";
 import "@fontsource/bebas-neue";
@@ -18,6 +21,7 @@ import {
   SiFastapi, SiNodedotjs, SiExpress, SiPostgresql, SiDocker, SiVercel, SiSupabase, SiGoogle, SiGmail
 } from "react-icons/si";
 import { FaJava, FaGitAlt, FaAws, FaRobot } from "react-icons/fa";
+import { GitHubCalendar } from 'react-github-calendar';
 import "./App.css";
 
 const t = (s: string) => s;
@@ -30,7 +34,7 @@ interface GitHubStats {
 }
 
 const NAME_DATA = (() => {
-  const lines = ["DAMISETTI", "BHUSHANAM"];
+  const lines = ["DAMISETTI BHUSHANAM"];
   let i = 0;
   return lines.map(line =>
     line.split("").map(ch => ({ ch, delay: `${(0.65 + i++ * 0.05).toFixed(2)}s` }))
@@ -163,21 +167,112 @@ const SYSTEMS = [
   }
 ];
 
-const CERTS = [
-  "Java SE 11 Developer · Infosys Springboard",
-  "Generative AI Studio · IBM SkillsBuild",
-  "Web Design Fundamentals · IBM SkillsBuild",
-];
-
 const RESUMES = [
   { label: "AI Engineer", file: "/Bhushan-AI-Engineer.pdf" }
 ];
 
 
 
+
+
 export const Portfolio = () => {
-  const [ghStats, setGhStats] = useState<GitHubStats | null>(null);
   const [activeSection, setActiveSection] = useState("home");
+  const [ghStats, setGhStats] = useState<GitHubStats | null>(null);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const heroTextContainerRef = useRef<HTMLDivElement>(null);
+  const heroNameRef = useRef<HTMLHeadingElement>(null);
+  const heroRoleRef = useRef<HTMLParagraphElement>(null);
+  
+  useEffect(() => {
+    // Preloader counting sequence (sped up)
+    const steps = [0, 54, 100];
+    let stepIndex = 0;
+    
+    const interval = setInterval(() => {
+      stepIndex++;
+      if (stepIndex < steps.length) {
+        setLoadingProgress(steps[stepIndex]);
+      } else {
+        clearInterval(interval);
+        setTimeout(() => setIsLoading(false), 0); 
+      }
+    }, 60); 
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (isLoading || !heroNameRef.current || !heroTextContainerRef.current) return;
+    const charInners = heroNameRef.current.querySelectorAll('.gsap-char-inner');
+    const uChars = heroNameRef.current.querySelectorAll('.char-u');
+    const cChars = heroNameRef.current.querySelectorAll('.char-c');
+
+    const tl = gsap.timeline({ 
+      delay: 0.1,
+      onComplete: () => {
+        charInners.forEach((node) => {
+          const uChar = node.querySelector('.char-u');
+          const cChar = node.querySelector('.char-c');
+          
+          if (!uChar || !cChar) return;
+
+          const onEnter = () => {
+            gsap.to(uChar, { clipPath: "inset(0 0 0 100%)", duration: 0.4, ease: "power3.out", overwrite: true });
+            gsap.to(cChar, { clipPath: "inset(0 0 0 0)", duration: 0.4, ease: "power3.out", overwrite: true });
+          };
+          
+          const onLeave = () => {
+            gsap.to(cChar, { clipPath: "inset(0 100% 0 0)", duration: 0.5, ease: "power3.out", overwrite: true });
+            gsap.to(uChar, { clipPath: "inset(0 0 0 0)", duration: 0.5, ease: "power3.out", overwrite: true });
+          };
+
+          node.addEventListener('mouseenter', onEnter);
+          node.addEventListener('mouseleave', onLeave);
+          
+          (node as any)._cleanupHover = () => {
+            node.removeEventListener('mouseenter', onEnter);
+            node.removeEventListener('mouseleave', onLeave);
+          };
+        });
+      }
+    }); 
+    
+    // Set initial clip-path for hover clones
+    gsap.set(cChars, { clipPath: "inset(0 100% 0 0)" });
+
+    // 1. Center Text Reveal (Slide up)
+    tl.fromTo(charInners, 
+      { yPercent: 110 }, 
+      { yPercent: 0, duration: 0.6, ease: "power4.out", stagger: 0.015 }
+    );
+
+    // 2. Move to top (but not too far, leave room for nav bar)
+    tl.to(heroTextContainerRef.current, {
+      y: "-20vh",
+      duration: 0.8,
+      ease: "power3.inOut"
+    }, "+=0.1");
+
+    // 3. Role and button pop up
+    if (heroRoleRef.current) {
+      tl.to([".hero-intro", heroRoleRef.current], { 
+        autoAlpha: 1, 
+        y: 0, 
+        duration: 0.6, 
+        ease: "power3.out", 
+        stagger: 0.1 
+      }, "-=0.3");
+    }
+
+    return () => {
+      charInners.forEach(node => {
+        if ((node as any)._cleanupHover) (node as any)._cleanupHover();
+      });
+      tl.kill();
+    };
+  }, [isLoading]);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -340,23 +435,16 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
 
   // ── SPOTLIGHT EFFECT ──
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const cards = document.querySelectorAll('.expertise-card, .project-sbs');
-      cards.forEach(card => {
-        const rect = (card as HTMLElement).getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
-        (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
-      });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const revealObserver = new IntersectionObserver(
       entries => {
         entries.forEach(e => {
           if (e.isIntersecting) {
@@ -370,8 +458,22 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
     );
 
     revealRefs.current.forEach(el => {
-      if (el) observer.observe(el);
+      if (el) revealObserver.observe(el);
     });
+
+    const navObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            setActiveSection(e.target.id);
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: "-10% 0px -40% 0px" }
+    );
+    
+    const sections = document.querySelectorAll('section[id]');
+    sections.forEach(s => navObserver.observe(s));
 
     const fetchGitHubStats = async () => {
       try {
@@ -386,7 +488,10 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
 
     fetchGitHubStats();
 
-    return () => observer.disconnect();
+    return () => {
+      revealObserver.disconnect();
+      navObserver.disconnect();
+    };
   }, []);
 
   const addToRefs = useCallback((el: HTMLElement | null) => {
@@ -417,41 +522,40 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         initialLoadAnimation={true}
       />
 
+      {/* ── PRELOADER ── */}
+      <div className={`preloader ${!isLoading ? 'preloader-hidden' : ''}`}>
+        <div className="preloader-counter">{loadingProgress}</div>
+      </div>
+
       {/* ── HERO ── */}
       <section id="home" className="hero-section">
-        <div className="hero-bg-fluid-glass">
-          <ShapeGrid 
-            speed={0.5} 
-            squareSize={40}
-            direction='diagonal'
-            borderColor='rgba(255, 255, 255, 0.08)'
-            hoverFillColor='rgba(255, 94, 0, 0.2)'
-            shape='square'
-            hoverTrailAmount={5}
-          />
-        </div>
-        <p className="hero-intro">{t('Introducing')}</p>
-        <h1 className="hero-name" aria-label="DAMISETTI BHUSHANAM">
-          {NAME_DATA.map((line, li) => (
-            <div key={li} className="hero-line" aria-hidden="true">
-              {line.map(({ ch, delay }) => (
-                <span key={delay} className="hero-letter" style={{ animationDelay: delay }}>{ch}</span>
-              ))}
-            </div>
-          ))}
-        </h1>
-      
-        <p className="hero-headline">
-          AI Automation Engineer
-        </p>
-
-        <p className="hero-subtext">
-          Building AI agents, workflow automations, and intelligent systems that create measurable business outcomes.
-        </p>
-
-        <div className="hero-ctas">
-          <a href="#work" className="cta-primary">{t('View Projects')}</a>
-          <a href="#about" className="cta-secondary">{t('Resume')}</a>
+        
+        <Lightning hue={220} xOffset={0} speed={1} intensity={1.5} size={1} />
+        
+        <div className="hero-text-content" ref={heroTextContainerRef}>
+          <h1 className="hero-name" aria-label="DAMISETTI BHUSHANAM" ref={heroNameRef}>
+            {NAME_DATA.map((line, li) => (
+              <div key={li} className="hero-line" aria-hidden="true" style={{ overflow: 'hidden' }}>
+                {line.map((item, idx) => (
+                  <span key={idx} className="gsap-char" style={{ animationDelay: item.delay }}>
+                    <span className="gsap-char-inner">
+                      <span className="char-u">{item.ch === ' ' ? '\u00A0' : item.ch}</span>
+                      <span className="char-c">{item.ch === ' ' ? '\u00A0' : item.ch}</span>
+                    </span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </h1>
+          
+          <p className="hero-intro">{t('Introducing')}</p>
+        
+          <div className="hero-meta" ref={heroRoleRef}>
+            <p className="hero-headline">AI Automation Engineer</p>
+            <a href={RESUMES[0].file} target="_blank" rel="noopener noreferrer" className="resume-btn">
+              View Resume ↗
+            </a>
+          </div>
         </div>
       </section>
 
@@ -605,7 +709,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         >
           {PROJECTS.map((proj, idx) => (
             <ScrollStackItem key={proj.id}>
-              <div className={`project-sbs ${idx % 2 !== 0 ? "sbs-reverse" : ""}`} style={{ margin: 0, height: '100%' }}>
+              <div className={`project-sbs ${idx % 2 !== 0 ? "sbs-reverse" : ""}`} style={{ margin: 0, height: '100%' }} onMouseMove={handleCardMouseMove}>
                 <div className="project-sbs-visual">
                   {proj.image ? (
                     <img src={proj.image} alt={proj.name} className="project-sbs-img" />
@@ -691,7 +795,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         <h2 className="section-title reveal" ref={addToRefs}>{t('Automation Systems I Build')}</h2>
         
         <div className="expertise-grid reveal" ref={addToRefs}>
-          <div className="expertise-card">
+          <div className="expertise-card" onMouseMove={handleCardMouseMove}>
             <h3 className="expertise-title">Workflow Automation</h3>
             <p className="expertise-desc">Connecting APIs and automating complex business processes to eliminate manual data entry.</p>
             <div className="expertise-tech">
@@ -701,7 +805,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             </div>
           </div>
           
-          <div className="expertise-card">
+          <div className="expertise-card" onMouseMove={handleCardMouseMove}>
             <h3 className="expertise-title">Agentic AI</h3>
             <p className="expertise-desc">Building autonomous LLM agents capable of reasoning, tool use, and multi-step execution.</p>
             <div className="expertise-tech">
@@ -711,7 +815,7 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
             </div>
           </div>
           
-          <div className="expertise-card">
+          <div className="expertise-card" onMouseMove={handleCardMouseMove}>
             <h3 className="expertise-title">Custom Web Apps</h3>
             <p className="expertise-desc">Developing premium, scalable full-stack applications with modern frameworks.</p>
             <div className="expertise-tech">
@@ -779,12 +883,16 @@ Keep your answers concise, professional, and directly related to Bhushan's skill
         </div>
       
         <div className="github-contrib reveal" ref={addToRefs}>
-          <p className="contrib-label">{t('Contribution Activity')}</p>
-          <img
-            src={`https://ghchart.rshah.org/3c8b3d/Bhushan-git20`}
-            alt="GitHub contribution graph"
-            className="contrib-graph"
-          />
+          <p className="contrib-label" style={{ marginBottom: '1.5rem', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{t('Contribution Activity')}</p>
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', overflowX: 'auto', padding: '1rem' }}>
+            <GitHubCalendar 
+              username="Bhushan-git20" 
+              colorScheme="dark" 
+              blockSize={13} 
+              blockMargin={4} 
+              fontSize={14} 
+            />
+          </div>
         </div>
       
         <div className="github-repos reveal" ref={addToRefs}>

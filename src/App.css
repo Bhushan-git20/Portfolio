@@ -61,6 +61,27 @@ body {
 
 
 
+/* ── PRELOADER ── */
+.preloader {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--bg-main);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.preloader-hidden {
+  transform: translateY(-100%);
+}
+.preloader-counter {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: clamp(6rem, 15vw, 14rem);
+  color: var(--text-main);
+  line-height: .8;
+}
+
 /* ── HERO ── */
 .hero-bg-fluid-glass {
   position: absolute;
@@ -77,26 +98,70 @@ body {
   align-items: center; justify-content: center;
   background: var(--bg-main); position: relative; overflow: hidden;
 }
+.hero-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; width: 100%; height: 25vh;
+  background: linear-gradient(to bottom, transparent, var(--bg-main));
+  z-index: 1;
+  pointer-events: none;
+}
 .hero-intro {
-  position: relative;
+  position: absolute;
+  top: 100%;
+  left: 0; width: 100%;
+  margin-top: 1rem;
   z-index: 2;
   pointer-events: none;
   font-size: .7rem; letter-spacing: .35em; text-transform: uppercase;
-  color: var(--text-muted); margin-bottom: 1.5rem;
-  opacity: 0; animation: fadeUp .8s .3s cubic-bezier(0.16,1,0.3,1) forwards;
+  color: var(--text-muted);
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
 }
 .hero-name {
   position: relative;
   z-index: 2;
-  pointer-events: none;
+  pointer-events: auto; /* Enable hover */
   font-family: 'Bebas Neue', 'Impact', sans-serif;
-  font-size: clamp(5.5rem, 14vw, 12rem);
-  line-height: .88; text-align: center;
+  font-size: clamp(4rem, 11vw, 12rem);
+  line-height: 1; text-align: center;
+  cursor: default;
 }
 .hero-line { overflow: hidden; display: block; }
-.hero-letter {
-  display: inline-block; opacity: 0;
-  animation: letterDrop .6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.gsap-char {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+.gsap-char-inner {
+  display: inline-block;
+  position: relative;
+}
+.char-u {
+  display: inline-block;
+  white-space: pre;
+}
+.char-c {
+  position: absolute;
+  top: 0; left: 0;
+  display: inline-block;
+  white-space: pre;
+  color: var(--text-main);
+  clip-path: inset(0 100% 0 0);
+}
+.hero-text-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+.hero-text-content .hero-intro,
+.hero-text-content .hero-name,
+.hero-text-content .hero-headline {
+  color: #fff;
 }
 
 .scroll-hint {
@@ -178,13 +243,7 @@ footer { padding: 1.5rem 4rem; display: flex; justify-content: space-between; bo
 footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
 
 /* ── NEW ELEMENTS ── */
-.resume-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  padding: 0.8rem 2rem; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--bg-main); background: var(--text-main); text-decoration: none;
-  border: 1px solid var(--text-main); cursor: pointer; transition: all 0.3s;
-}
-.resume-btn:hover { background: transparent; color: var(--text-main); }
+
 
 .contact-form {
   width: 100%; max-width: 600px; margin: 3rem auto 0;
@@ -208,14 +267,25 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
 .form-submit:hover { background: transparent; color: var(--text-main); }
 @media (max-width: 600px) { .form-group { flex-direction: column; } }
 
-  .hero-headline {
-    position: relative;
+  .hero-meta {
+    position: absolute;
+    top: 100%;
+    left: 0; width: 100%;
+    margin-top: 12rem;
     z-index: 2;
-    pointer-events: none;
-    font-size: clamp(1rem, 2.2vw, 1.35rem);
-    color: #fff; max-width: 600px; text-align: center;
-    line-height: 1.5; margin-top: 2rem; letter-spacing: .01em;
-    opacity: 0; animation: fadeUp .8s 2.4s cubic-bezier(0.16,1,0.3,1) forwards;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .hero-headline {
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: #fff; text-align: center;
+    line-height: 1.5; letter-spacing: .01em;
+    text-transform: uppercase;
   }
   .hero-subtext {
     position: relative;
@@ -546,11 +616,14 @@ footer p { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; c
 .resume-label { font-size: .6rem; letter-spacing: .25em; text-transform: uppercase; color: var(--text-main); margin-bottom: .75rem; }
 .resume-btns { display: flex; gap: .6rem; flex-wrap: wrap; }
 .resume-btn {
-  font-size: .62rem; letter-spacing: .15em; text-transform: uppercase;
-  padding: .6rem 1.2rem; border: 1px solid var(--text-main);
-  color: #fff; text-decoration: none; opacity: 1; transition: border-color .25s;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: .6rem 1.2rem; border-radius: 99px;
+  background: var(--text-main);
+  color: var(--bg-main);
+  font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 600;
 }
-.resume-btn:hover { border-color: var(--text-main); }
 
 /* ── PIPELINE VISUALISER ── */
 .pipeline-track { display: flex; align-items: stretch; justify-content: space-between; position: relative; width: 100%; min-height: 120px; padding: 2rem 0; margin-bottom: 4rem; overflow-x: auto; }
