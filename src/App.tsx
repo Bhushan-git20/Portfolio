@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, useTransform, useScroll } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { useTransform, useScroll } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
 gsap.registerPlugin(ScrollTrigger);
 import { PillNav } from "./PillNav";
@@ -16,14 +15,8 @@ import Lenis from "lenis";
 import "@fontsource/bebas-neue";
 import "@fontsource/dm-sans";
 import { 
-  FiGithub, FiLinkedin, FiMail, FiExternalLink, FiCode, FiPhone, FiAward, 
-  FiCpu, FiDatabase, FiSettings, FiTerminal, FiGitMerge, FiTwitter, FiArrowUpRight
+  FiGithub, FiLinkedin, FiMail, FiExternalLink, FiPhone, FiArrowUpRight
 } from "react-icons/fi";
-import { 
-  SiPython, SiJavascript, SiTypescript, SiReact, SiTailwindcss, SiHtml5, SiCss, 
-  SiFastapi, SiNodedotjs, SiExpress, SiPostgresql, SiDocker, SiVercel, SiSupabase, SiGoogle, SiGmail
-} from "react-icons/si";
-import { FaJava, FaGitAlt, FaAws, FaRobot } from "react-icons/fa";
 import { GitHubCalendar } from 'react-github-calendar';
 import "./App.css";
 
@@ -387,7 +380,7 @@ export const Portfolio = () => {
           </dl>
         </div>
           <div className="about-photo reveal" ref={addToRefs} style={{ transitionDelay: "0.2s", perspective: "1000px" }}>
-            <Lanyard paused={activeSection !== "about"} position={[0, 0, 20]} gravity={[0, -40, 0]} frontImage={"/bhushan.png" as any} />
+            <Lanyard paused={false} position={[0, 0, 20]} gravity={[0, -40, 0]} frontImage={"/bhushan.png" as any} />
           </div>
       </section>
 

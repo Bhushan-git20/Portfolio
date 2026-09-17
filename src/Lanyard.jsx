@@ -240,11 +240,20 @@ function Band({
             position={[0, -1.8, -0.075]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
-            onPointerUp={e => (e.target.releasePointerCapture(e.pointerId), drag(false))}
-            onPointerDown={e => (
-              e.target.setPointerCapture(e.pointerId),
-              drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
-            )}
+            onPointerUp={e => {
+              const target = e.nativeEvent?.target;
+              if (target && typeof target.releasePointerCapture === 'function') {
+                try { target.releasePointerCapture(e.nativeEvent.pointerId); } catch (_) {}
+              }
+              drag(false);
+            }}
+            onPointerDown={e => {
+              const target = e.nativeEvent?.target;
+              if (target && typeof target.setPointerCapture === 'function') {
+                try { target.setPointerCapture(e.nativeEvent.pointerId); } catch (_) {}
+              }
+              drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
+            }}
           >
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial
