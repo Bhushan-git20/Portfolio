@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { useTransform, useScroll } from "framer-motion";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, useTransform, useScroll } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
