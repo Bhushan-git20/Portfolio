@@ -152,5 +152,6 @@ export const SYSTEMS = [
 ];
 
 export const RESUMES = [
-  { label: "AI Engineer", file: "/Bhushan-AI-Engineer.pdf" }
+  { label: "AI Engineer", file: "/Bhushan_AI.pdf" },
+  { label: "SDE", file: "/Bhushan-SDE.pdf" }
 ];
