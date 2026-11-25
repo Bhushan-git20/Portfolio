@@ -72,9 +72,9 @@ export const PROJECTS: Project[] = [
     featured: true,
     name: "MindCare",
     badge: "Published · GCCMIEA Dec 2025",
-    problem: "Student mental health support is fragmented — clinical tools feel cold, general apps lack depth, and nothing combines mood tracking, AI-guided support, and real assessments in one place built specifically for students.",
-    solution: "Built a full-stack wellness platform with PHQ-9 and GAD-7 clinical assessments, an AI chatbot (Gemini 2.5 Flash via Supabase Edge Functions) that suggests evidence-based coping strategies, mood-coded journaling with sentiment analysis, habit tracking, an anonymous peer community with content moderation, and an admin panel for counsellors. Research published at GCCMIEA International Conference, December 2025.",
-    result: "150+ test users during MCA capstone evaluation · 4.2/5 satisfaction score · Sub-2s load time · Full-stack system with 6 Supabase Edge Functions handling AI, moderation, and assessment scoring.",
+    problem: "Student wellness support is often fragmented — standalone mood trackers lack depth, general apps ignore campus contexts, and students need a unified platform combining self-reflection, AI-guided coping support, and validated wellness screeners.",
+    solution: "Built a full-stack student wellness platform with standardized PHQ-9 and GAD-7 screening tools, a 3-tier AI chatbot (Gemini 2.5 Flash via Supabase Edge Functions) suggesting evidence-based coping strategies, mood-coded journaling with sentiment analysis, habit tracking, an anonymous peer community with content moderation, and an admin panel for student counselors. Research published at GCCMIEA International Conference, December 2025.",
+    result: "Evaluated with 150+ student participants during MCA capstone testing (student wellness focus only; non-clinical evaluation with no real patients or healthcare users) · 4.2/5 satisfaction score · Sub-2s load time · 6 Supabase Edge Functions with PostgreSQL Row-Level Security.",
     tech: ["React", "TypeScript", "Supabase", "Gemini 2.5 Flash", "Vite"],
     link: "https://github.com/Bhushan-git20/mindful-pathways",
     image: "/mindcare.png"
@@ -146,8 +146,8 @@ export const SYSTEMS = [
     desc: "Telegram bot integration · score-filtered delivery · real-time alerts"
   },
   {
-    name: "AI-Powered Wellness Platform",
-    desc: "Gemini API + Supabase real-time · 150+ users · published research"
+    name: "AI Student Wellness Platform",
+    desc: "Gemini API + Supabase real-time · 150+ student participants · student wellness evaluation"
   }
 ];
 
